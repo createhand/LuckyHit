@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="TEAM_MT" >
+	
+<typeAlias alias="StadiumMt" type="kr.co.toto.base.persistence.domain.StadiumMt" />
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
+	
+<select id="select" parameterClass="String" resultClass="StadiumMt" >
+SELECT A.ST_CD,
+       A.ST_NAME,
+       A.TM_CD
+  FROM T_INFO_STADIUM A
+WHERE A.ST_CD = #stCD#
+</select>
+</sqlMap>

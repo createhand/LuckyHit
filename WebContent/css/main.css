@@ -1,0 +1,215 @@
+/* RESET 
+-------------------------------------------------------------- */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-size: 10px; vertical-align: baseline; background: transparent; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+:focus { outline: none; }
+ins { text-decoration: none; }
+del { text-decoration: line-through; }
+table { border-collapse: collapse; border-spacing: 0; }
+caption, th, td { text-align: left; font-weight: bold; }
+input,textarea { margin: 0; }
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,dl,input,textarea { font-family: Helvetica, Arial, FreeSans, sans-serif; }
+p { color: #333; }
+a { color: #999999; text-decoration: none; }
+html { -webkit-text-size-adjust: none; }
+body { background: #ddd; }
+input, textarea { font-size: 10px; line-height: 18px; }
+
+
+/* BODY */
+#body { background: #fff; }
+
+/* BUTTON */
+.button { background: #ddd; padding: 10px; }
+.button a { display: block; padding: 8px 0; background: #fff; font-size: 13px; font-weight: bold; color: #999; text-align: center; -webkit-border-radius: 4px; }
+input.button { margin-right: 10px; padding: 4px 15px 5px 15px; width: auto; background: url(http://golfweek.media.clients.ellingtoncms.com/static/golfweek/images/buttons.gif) repeat-x; border: 1px solid #ccc; font-size: 13px; line-height: 14px; font-family: 'Helvetica Neue', Arial, sans-serif; font-weight: bold; color: #777; text-align: center; cursor: pointer; -webkit-border-radius: 4px; }
+
+/* CALENDAR */
+table.calendar { margin: 10px 20px; width: 90%; font-size: 13px; }
+table.calendar th { padding: 10px 5px; font-size: 13px;border: none; color: #999; text-align: center; }
+table.calendar td { padding: 0; border: none;font-size: 13px; }
+table.calendar td a { display: block; margin: 0 3px 3px 0; font-size: 13px;padding: 10px 5px; background: #ccc; text-align: center; color: #555; -webkit-border-radius: 4px; }
+
+
+/* common */
+table.common { width:100%;line-height:13px;border-top: 1px solid #cccccc;border-left: 1px solid #cccccc;border-collapse: collapse;} 
+table.common th {background-color: #eeeeee;color:#678197;font-size: 14px;font-weight:bold;text-align:center;border-right: 1px solid #cccccc;border-bottom: 1px solid #cccccc;padding: 3px 0;text-align:center;height:30px;vertical-align: middle;}
+table.common th.no {width:10%;}
+table.common th.team {width:19%;}
+table.common th.pick {width:14%;}
+table.common th.detail {width:10%;}
+
+table.common td {color:#678197;font-size: 15px;text-align:center;border-right: 1px solid #cccccc;border-bottom: 1px solid #cccccc;padding: 3px 0;text-align:center;height:40px;vertical-align: middle;}
+table.common td.result {color:red;font-size: 15px;text-align:center;border-right: 1px solid #cccccc;border-bottom: 1px solid #cccccc;padding: 3px 0;}
+table.common td.result a {color:red;font-size: 15px;text-align:center;}
+table.common td.normal {font-size: 15px;text-align:center;}
+table.common td.normal a {font-size: 15px;text-align:center;}
+
+/* Calc */
+#mcTbl td {height:45px;font-size:13px;background-color: #fff;}
+#mcTbl .clickOff {background-color:white;cursor:hand;}
+#mcTbl .win {color:blue;font-weight: bold;font-size:13px;}
+#mcTbl .normal {font-size:13px;}
+#mcTbl #ratio {font-size:13px;}
+#mcTbl .clickOn {background-color:skyblue;cursor:hand;background-color: TOMATO; color: white;}
+#mcTbl .result, #myRatio {color:red;font-size:15px;}
+#common, #common font{font-size:15px;}
+
+/* CONTENT */
+.content { padding: 20px 10px; }
+.content h4 { margin-bottom: 5px; font-size: 18px; line-height: 20px; color: #777; }
+.content h5 { margin-bottom: 5px; font-size: 16px; line-height: 20px; color: #777; }
+.content p { margin-bottom: 20px; font-size: 14px; line-height: 20px; }
+.content p small { font-size: 12px; color: #999; }
+.content ul { list-style: disc; margin-bottom: 20px; padding-left: 17px; font-size: 14px; line-height: 20px; color: #444; }
+.content ol { list-style: decimal; margin-bottom: 20px; padding-left: 20px; font-size: 14px; line-height: 20px; color: #444; }
+.content ul.info_list { list-style: none; padding-left: 0; font-size: 15px; line-height: 20px; }
+.content ul.attributes { list-style: none; padding-left: 0; }
+.content ul.attributes li { margin: 3px 0; }
+.content ul.attributes li strong { display: none; }
+.content ul.attributes .yes { padding-left: 25px; background: url(http://golfweek.media.clients.ellingtoncms.com/static/golfweek/images/yes.png) 0 1px no-repeat; }
+.content ul.attributes .no { padding-left: 25px; background: url(http://golfweek.media.clients.ellingtoncms.com/static/golfweek/images/no.png) 0 1px no-repeat; color: #999; }
+.content ul.attributes .unknown { padding-left: 25px; background: url(http://golfweek.media.clients.ellingtoncms.com/static/golfweek/images/no.png) 0 1px no-repeat; color: #999; }
+body.list .content { display: none; }
+.content .more a { padding: 5px 20px; background: #999; color: #fff; -webkit-border-radius: 12px; }
+
+
+/* CONTENT INFO */
+.content_info { margin: 7px 0;}
+.content_info .byline { margin-bottom: 0; font-size: 12px; line-height: 18px; font-weight: bold; color: #777; }
+.content_info .byline a { color: #555; }
+.content_info .date { margin-bottom: 0; font-size: 12px; line-height: 18px; color: #777; }
+
+
+/* CONTENT LIST */
+.content_list h4 { padding: 5px 10px; background: #eee url(http://golfweek.media.clients.ellingtoncms.com/static/golfweek/images/navbar_bg.gif) left bottom repeat-x; border-bottom: 1px solid #fff; font-size: 13px; font-weight: bold; color: #777; text-align: center; }
+.content_list h4 a { font-weight: bold; color: #777; }
+.content_list h5 { padding: 5px 10px; background: #ddd; font-size: 13px; color: #777; }
+.content_list h5 a { color: #777; }
+.content_list p { padding: 10px; font-size: 13px; line-height: 18px; color: #777; }
+.content_list ul { font-size: 13px; line-height: 20px; border-bottom: 1px solid #fff; }
+.content_list ul li { border-bottom: 1px solid #ddd; overflow: hidden; background: url(http://golfweek.media.clients.ellingtoncms.com/static/golfweek/images/bracket_right.gif) center right no-repeat; }
+.content_list ul li a { display: block; padding: 5px 30px 5px 5px; color: #444; }
+.content_list ul li a small { display: block; margin-top: 2px; font-size: 14px; color: #777; }
+.content_list ul li a em { font-style: normal; font-size: 13px; color: #777; }
+.content_list ul li a .thumbnail { float: left; margin: 0 10px 10px 0; }
+.content_list ul li.on a { background-color: #eee; }
+.content_list ul li.list_title a { padding: 5px 10px; background: #bbb url(http://golfweek.media.clients.ellingtoncms.com/static/golfweek/images/list_title_bg.gif) repeat-x; font-size: 13px; font-weight: bold; color: #fff; text-align: center; text-shadow: 1px 1px 0 #999; }
+.content_list ul.static li a { padding: 0; }
+.content_list ul.static li { padding: 10px; color: #444; }
+.content_list ul.static li small { display: block; margin-top: 5px; font-size: 14px; color: #777; }
+.content_list .more a { padding: 5px 20px; background: #999; color: #fff; -webkit-border-radius: 12px; }
+.content_list ul.photos { margin-bottom: 10px; padding: 10px 0 0 10px; overflow: hidden; }
+.content_list ul.photos li { float: left; margin: 0; border: none; }
+.content_list ul.photos li a { float: left; padding: 2px; background: none; }
+.content_list ul.photos li a img { display: block; }
+.content_list li .open a { padding-left: 12px; border-left: 8px solid #69d620; font-weight: normal; }
+.content_list li .closed a { padding-left: 12px; border-left: 8px solid #d62820; font-style: normal; }
+
+
+/* CONTENT TABS */
+ul.content_tabs { list-style: none; padding: 0; background: #eee; border: 1px solid #ccc; -webkit-border-radius: 8px; -moz-border-radius: 8px; }
+ul.content_tabs li a { display: block; padding: 5px 0; border-top: 1px solid #ccc; font-weight: bold; text-align: center; color: #555; }
+ul.content_tabs li:first-child a { border: none; }
+
+
+/* CONTENT TITLE */
+.content_title { padding: 10px; background: #eee; border-top: 1px solid #ddd;border-bottom: 1px solid #ddd; overflow: hidden; }
+.content_title h2 { font-size: 18px; line-height: 20px; font-weight: bold; color: #555; }
+.content_title h2 a { color: #555; }
+.content_title h2 span { font-size: 18px; line-height: 20px; font-weight: bold; color: #555;cursor: hand; }
+.content_title h3 { margin-top: 0; font-size: 16px; line-height: 20px; font-weight: normal; color: #777; }
+.content_title h3 a { color: #777; }
+.content_title h4 { display: none; }
+.content_title ul { margin-top: 10px; font-size: 12px; overflow: hidden; }
+.content_title ul li { float: left; margin: 0 2px 2px 0; font-weight: bold; }
+.content_title ul li a { float: left; display: block; padding: 4px 10px; background: #bbb; color: #fff; -webkit-border-radius: 10px; }
+.content_title ul li strong { float: left; display: block; padding: 4px 10px; background: #fff; color: #999; -webkit-border-radius: 10px; }
+.content_title p.stars { display: block; margin-top: 5px; padding-top: 20px; width: 75px; height: 0; background-color: #fff; background-repeat: no-repeat; background-position: 8px 3px; overflow: hidden; -webkit-border-radius: 10px; }
+.content_title .date { margin-bottom: 0; text-align:right;font-size: 12px; line-height: 18px; color: #777; }
+
+
+/* FOOTER */
+#footer { padding: 20px 10px 30px 10px; background: #ddd; text-align: center; }
+#footer p { color: #999; }
+#footer p small { font-size: 11px; }
+
+
+/* HEADER */
+#header { position: relative; padding: 15px 0 7px 0; background: #18629d; text-align: center; height: 43px; }
+#header h1 a { display: block; padding-top: 5px; font-size:16px; color: #fff; overflow: hidden;}
+
+/* NAV */
+#nav { padding: 10px 0 0 0; background: #fff; width:100%; margin:auto; position: relative; text-align: center;}
+#nav ol { overflow: hidden; }
+#nav ol li { float: left; text-align: center; width: 20%;}
+#nav ol li a { display: block; float: left; margin: 5px 5px 10px 10px; border:5px solid #eee; padding-top: 54px; width: 48px; background: #999; font-weight: bold; color: #999; font-size: 11px;}
+#nav ol li.pick a { background: url(../images/icons/pick.png) no-repeat; }
+#nav ol li.calc a { background: url(../images/icons/calc.png) no-repeat; }
+#nav ol li.result a { background: url(../images/icons/result.png) no-repeat; }
+#nav ol li.bbs a { background: url(../images/icons/bbs.png) no-repeat; }
+#nav ol li.intro a { background: url(../images/icons/intro.png) no-repeat; }
+
+
+/* NAVBAR */
+.navbar { height: 30px; background: #eee url(../images/navbar_bg.gif) left bottom repeat-x; border-bottom: 1px solid #fff; overflow: hidden; }
+.navbar .pagination { position: relative; float: right; }
+.navbar .pagination li { float: left; margin: 0; }
+.navbar .pagination a, .pagination span { display: block; float: left; width: 40px; height: 30px; background: #bbb; overflow: hidden; text-indent: -200px; }
+.navbar .pagination .previous a, .pagination .previous span { background: url(../images/back.gif) no-repeat; }
+.navbar .pagination .next a, .pagination .next span { background: url(../images/forward.gif) no-repeat; }
+.navbar .breadcrumbs { float: left; padding: 5px 0 0 10px; font-size: 11px; overflow: hidden; }
+.navbar .breadcrumbs li { float: left; margin: 0 2px 2px 0; }
+.navbar .breadcrumbs li a { float: left; display: block; padding: 4px 10px; background: #fff; font-weight: bold; color: #999; -webkit-border-radius: 9px; }
+.navbar .breadcrumbs li span { float: left; display: block; padding: 4px 10px; font-weight: bold; color: #888; -webkit-border-radius: 10px; }
+
+
+/* INTRO */
+#intro {color:#678197;font-size: 15px;font-weight:bold; line-height:normal;margin:auto; padding:10px 0 10px 10px; vertical-align: middle;border: 5px solid #eee;}
+#intro a {color:#678197;font-size: 15px;font-weight:bold;}
+#intro .email {font-size:15px;}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  display:none;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/* floating layer */
+  .floating-menu {
+    font-family: sans-serif;
+    background: yellowgreen;
+    padding: 10px 0 0 0;
+   	height: 15%;
+    width: 100%;
+    z-index: 100;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+  }
+
+  .floating-menu a, 
+  .floating-menu h3 {
+    font-size: 0.9em;
+    display: block;
+    margin: 0 0.5em;
+    color: white;
+  }

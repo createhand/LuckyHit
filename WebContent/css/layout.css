@@ -1,0 +1,70 @@
+/** BASIC */
+
+html, body {
+	height: 100%;
+}
+
+/** LOGO */
+
+#logo {
+	float: left;
+	width: 190px;
+	height: 106px;
+	background: url(/images/homepage02.jpg) no-repeat left top;
+}
+
+#logo h1, #logo h2 {
+	text-indent: -9999em;
+	background: none;
+}
+
+/** MENU */
+
+#menu {
+	float: left;
+	width: 549px;
+	height: 106px;
+}
+
+/** SIDEBAR */
+
+#sidebar {
+	float: left;
+	width: 191px;
+}
+
+/** CONTENT */
+
+#content {
+	float: right;
+	width: 548px;
+}
+
+/** BOX1 */
+
+#box1 {
+	padding: 0px 16px 0px 18px;
+}
+
+/** BOX2 */
+
+#box2 {
+	padding: 0px 23px 0px 36px;
+}
+
+/** BOX3 */
+
+#box3 {
+	float: left;
+	width: 219px;
+	padding: 10px 0px 0px 36px;
+}
+
+/** BOX4 */
+
+#box4 {
+	float: left;
+	width: 219px;
+	padding: 10px 0px 0px 36px;
+}
+

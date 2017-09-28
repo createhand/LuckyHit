@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	<definition name=".ajaxTemplate" template="/WEB-INF/web/_layout/ajax.jsp">
+		<put-attribute name="content" value="/WEB-INF/web/_layout/flagment/blank.jsp" />
+	</definition>
+	<definition name=".devTemplate" template="/WEB-INF/web/_layout/devPage.jsp">
+		<put-attribute name="title" value="축구왕 김펠레 - 토토승무패, 스포츠토토, 박지성, 손흥민, 메시, 호날두, 반페르시, 미추, 기성용, 구자철, 지동원, 이청용, 김보경, EPL, 챔피언스리그, 챔스리그, 유로파, K리그" />
+		<put-attribute name="script" value="js/empty.js" />		
+		<put-attribute name="content" value="/WEB-INF/web/_layout/flagment/blank.jsp" />
+	</definition>
+	<definition name=".pageTemplate" template="/WEB-INF/web/_layout/page.jsp">
+		<put-attribute name="title" value="축구왕 김펠레 - 토토승무패, 스포츠토토, 박지성, 손흥민, 메시, 호날두, 반페르시, 미추, 기성용, 구자철, 지동원, 이청용, 김보경, EPL, 챔피언스리그, 챔스리그, 유로파, K리그" />
+		<put-attribute name="script" value="js/empty.js" />
+		<put-attribute name="header" value="/WEB-INF/web/_layout/flagment/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/web/_layout/flagment/footer.jsp" />
+		<put-attribute name="left" value="/WEB-INF/web/_layout/flagment/left.jsp" />
+		<put-attribute name="content" value="/WEB-INF/web/_layout/flagment/blank.jsp" />
+	</definition>
+	<definition name=".mobileTemplate" template="/WEB-INF/mobile/_layout/page.jsp">
+		<put-attribute name="title" value="축구왕 김펠레 - 토토승무패, 스포츠토토, 박지성, 손흥민, 메시, 호날두, 반페르시, 미추, 기성용, 구자철, 지동원, 이청용, 김보경, EPL, 챔피언스리그, 챔스리그, 유로파, K리그" />
+		<put-attribute name="script" value="js/empty.js" />
+		<put-attribute name="header" value="/WEB-INF/mobile/_layout/flagment/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/mobile/_layout/flagment/footer.jsp" />
+		<put-attribute name="left" value="/WEB-INF/mobile/_layout/flagment/left.jsp" />
+		<put-attribute name="content" value="/WEB-INF/mobile/_layout/flagment/blank.jsp" />
+	</definition>	
+    <definition name=".certTemplate" template="/WEB-INF/web/_layout/page.jsp">
+        <put-attribute name="title" value="축구왕 김펠레 - 토토승무패, 스포츠토토, 박지성, 손흥민, 메시, 호날두, 반페르시, 미추, 기성용, 구자철, 지동원, 이청용, 김보경, EPL, 챔피언스리그, 챔스리그, 유로파, K리그" />
+        <put-attribute name="script" value="js/empty.js" />
+        <put-attribute name="header" value="/WEB-INF/web/_layout/flagment/header.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/web/_layout/flagment/footer.jsp" />
+        <put-attribute name="left" value="/WEB-INF/web/_layout/flagment/cert_left.jsp" />
+        <put-attribute name="content" value="/WEB-INF/web/_layout/flagment/blank.jsp" />
+    </definition>	
+    <definition name=".lginTemplate" template="/WEB-INF/web/_layout/page.jsp">
+        <put-attribute name="title" value="축구왕 김펠레 - 토토승무패, 스포츠토토, 박지성, 손흥민, 메시, 호날두, 반페르시, 미추, 기성용, 구자철, 지동원, 이청용, 김보경, EPL, 챔피언스리그, 챔스리그, 유로파, K리그" />
+        <put-attribute name="script" value="js/empty.js" />
+        <put-attribute name="header" value="/WEB-INF/web/_layout/flagment/header.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/web/_layout/flagment/footer.jsp" />
+        <put-attribute name="left" value="/WEB-INF/web/_layout/flagment/lgin_left.jsp" />
+        <put-attribute name="content" value="/WEB-INF/web/_layout/flagment/blank.jsp" />
+    </definition>	
+    <definition name=".contTemplate" template="/WEB-INF/web/_layout/page.jsp">
+        <put-attribute name="title" value="축구왕 김펠레 - 토토승무패, 스포츠토토, 박지성, 손흥민, 메시, 호날두, 반페르시, 미추, 기성용, 구자철, 지동원, 이청용, 김보경, EPL, 챔피언스리그, 챔스리그, 유로파, K리그" />
+        <put-attribute name="script" value="js/empty.js" />
+        <put-attribute name="header" value="/WEB-INF/web/_layout/flagment/header.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/web/_layout/flagment/footer.jsp" />
+        <put-attribute name="left" value="/WEB-INF/web/_layout/flagment/left.jsp" />
+        <put-attribute name="content" value="/WEB-INF/web/_layout/flagment/blank.jsp" />
+    </definition>	
+</tiles-definitions>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+ 	<settings useStatementNamespaces="true"/>
+	<!-- 기본 테이블 sqlmap  시작-->
+	
+	<!-- 테이블 기본 쿼리 -->
+	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/MATCH_RECORD_MT.xml"/>
+	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/TEAM_MT.xml"/>
+	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/SEASON_MT.xml"/>
+	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/GAME_MT.xml"/>
+	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/GAME_PICK_MT.xml"/>
+	
+	<!-- 비즈니스 로직 쿼리 -->
+	<sqlMap resource="kr/co/toto/biz/game/persistence/sqlmap/GAME.xml"/>
+	<sqlMap resource="kr/co/toto/biz/record/persistence/sqlmap/RECORD.xml"/>
+	
+	<!-- 기본 테이블 sqlmap  끝-->
+	
+</sqlMapConfig>

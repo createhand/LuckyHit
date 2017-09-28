@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="TEAM_MT" >
+	
+<typeAlias alias="TeamMt" type="kr.co.toto.base.persistence.domain.TeamMt" />
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
+
+<select id="selectLatestSeasonInfo" parameterClass="String" resultClass="String" >
+  	SELECT 
+	  MAX(SN_CD) 
+	FROM T_INFO_TEAM_SEASON
+	WHERE LG_CD = #lgCd#
+</select>
+
+<select id="selectTeamSeasonInfo" parameterClass="HashMap" resultClass="tadata" >
+  	SELECT 
+	  * 
+	FROM T_INFO_TEAM_SEASON
+	WHERE 
+		LG_CD = #lgCd#
+	<isNotEmpty property="snCd" prepend="AND">
+		SN_CD = #snCd#
+	</isNotEmpty>
+	<isNotEmpty property="tmCd" prepend="AND">
+		TM_CD = #tmCd#
+	</isNotEmpty>		
+</select>
+
+<select id="select" parameterClass="String" resultClass="TeamMt" >
+SELECT A.TM_CD as tmCd,
+       A.TM_NAME as tmName,
+       A.TM_EN_NAME as tmEnName,
+       A.TM_MANAGER as tmManager,
+       A.TM_CITY as tmCity,
+       A.TM_WEBSITE as tmWebsite,
+       A.ST_CD as stCd,
+       A.LG_CD as lgCd
+  FROM T_INFO_TEAM A
+WHERE A.TM_CD = #tmCd#
+</select>
+
+
+<select id="selectList" parameterClass="map" resultClass="TeamMt" >
+SELECT A.TM_CD as tmCd,
+       A.TM_NAME as tmName,
+       A.TM_EN_NAME as tmEnName,
+       A.TM_MANAGER as tmManager,
+       A.TM_CITY as tmCity,
+       A.TM_WEBSITE as tmWebsite,
+       A.ST_CD as stCd,
+       A.LG_CD as lgCd,
+       A.TM_NAME_BET as tmNameBet,
+       A.TM_NAME_DAUM as tmNameDaum,
+       A.TM_CD_SPOJOY as tmCdSpojoy
+  FROM T_INFO_TEAM A
+  WHERE 1=1
+  <isNotEmpty property="league" prepend="AND">
+	A.LG_CD = #league#
+  </isNotEmpty>
+</select>
+
+
+<select id="selectTeamCodeByBetman" parameterClass="String" resultClass="String" >
+SELECT
+	TM_CD AS teamCode
+FROM T_INFO_TEAM
+WHERE TM_NAME_BET = #tmNm#
+OR TM_NAME_ALL LIKE '%$tmNm$%'
+</select>
+
+<select id="selectTeamCodeByDaum" parameterClass="String" resultClass="String" >
+SELECT
+	TM_CD AS teamCode
+FROM T_INFO_TEAM
+WHERE TM_NAME_DAUM = #tmNm#
+OR TM_NAME_ALL LIKE '%$tmNm$%'
+</select>
+
+<insert id="insertTeam" parameterClass="HashMap">
+INSERT INTO T_INFO_TEAM
+	(
+		TM_CD,
+		CP_CD, 
+		TM_NAME, 
+		TM_IMG_URL,
+		ST_CD, 
+		LG_CD, 
+		TM_NAME_BET, 
+		TM_NAME_DAUM, 
+		TM_NAME_ALL
+	) VALUES (
+		#tmCd#,
+		#cpCd#,
+		#tmName#,
+		#tmImgUrl#,
+		#stCd#,
+		#lgCd#,
+		#tmNameBet#,
+		#tmNameDaum#,
+		#tmNameAll#
+	)
+</insert>
+
+</sqlMap>

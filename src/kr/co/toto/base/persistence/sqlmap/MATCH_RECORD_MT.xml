@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="MATCH_RECORD_MT" >
+	
+<typeAlias alias="MatchRecordMt" type="kr.co.toto.base.persistence.domain.MatchRecordMt" />
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
+	
+<select id="select" parameterClass="String" resultClass="MatchRecordMt" >
+SELECT A.MC_CD as mcCd,
+       A.LG_CD as lgCd,
+       A.TM_CD_H as tmCdH,
+       A.TM_CD_A as tmCdA,
+       A.SCORE_H as scoreH,
+       A.SCORE_A as scoreA,
+       A.MC_RESULT as mcResult,
+       A.MC_DATE as mcDate,
+       A.MC_TIME as mcTime,
+       A.MC_DAY as mcDay,
+       A.ST_CD as stCd,
+       A.MODI_DATE,
+       A.CRET_DATE,
+       A.MC_END as mcEnd
+  FROM T_INFO_MATCH_RECORD A
+WHERE A.MC_CD = #mcCd#
+</select>  
+</sqlMap>

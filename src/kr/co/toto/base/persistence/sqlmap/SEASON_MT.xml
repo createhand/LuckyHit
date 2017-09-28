@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="SEASON" >
+
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />	
+
+<select id="selectSeason" parameterClass="HashMap" resultClass="HashMap" >
+SELECT 
+	A.SN_CD as snCd,
+    A.LG_CD as lgCd,
+    A.SN_KEY as snKey,
+    A.SN_NAME as snName
+  FROM 
+  	T_INFO_SEASON A
+WHERE 
+	A.SN_CD = #snCd#
+	AND A.LG_CD = #lgCd#
+</select>
+
+<insert id="insertSeason" parameterClass="HashMap">
+INSERT INTO T_INFO_SEASON 
+	(
+		SN_CD, 
+		LG_CD, 
+		SN_KEY, 
+		SN_NAME
+	) VALUES (
+		#snCd#,
+		#lgCd#,
+		#snKey#,
+		#snName#
+	)
+</insert>
+
+<insert id="insertTeamSeason" parameterClass="HashMap">
+INSERT INTO T_INFO_TEAM_SEASON 
+	(
+		SN_CD, 
+		LG_CD, 
+		TM_CD,
+		RANK, 
+		GAME, 
+		WIN, 
+		DRAW, 
+		LOSS, 
+		GF, 
+		GA, 
+		GD, 
+		PTS
+	) VALUES (
+		#snCd#,
+		#lgCd#,
+		#tmCd#,
+		#rank#,
+		#game#,
+		#win#,
+		#draw#,
+		#loss#,
+		#gf#,
+		#ga#,
+		#gd#,
+		#pts#
+	)
+	ON DUPLICATE KEY
+	UPDATE 
+		RANK = #rank#,
+		GAME = #game#,
+		WIN = #win#,
+		DRAW = #draw#,
+		LOSS = #loss#,
+		GF = #gf#,
+		GA = #ga#,
+		GD = #gd#,
+		PTS = #pts#
+</insert>
+
+<update id="updateTeamSeason" parameterClass="HashMap">
+UPDATE
+	T_INFO_TEAM_SEASON
+SET
+	<isNotEmpty property="game" prepend=",">
+	GAME = $game$
+	</isNotEmpty>
+	<isNotEmpty property="win" prepend=",">
+	WIN = $win$
+	</isNotEmpty>
+	<isNotEmpty property="draw" prepend=",">
+	DRAW = $draw$
+	</isNotEmpty>
+	<isNotEmpty property="loss" prepend=",">
+	LOSS = $loss$
+	</isNotEmpty>
+	<isNotEmpty property="gf" prepend=",">
+	GF = $gf$
+	</isNotEmpty>
+	<isNotEmpty property="ga" prepend=",">
+	GA = $ga$
+	</isNotEmpty>
+	<isNotEmpty property="gd" prepend=",">
+	GD = $gd$
+	</isNotEmpty>
+	<isNotEmpty property="pts" prepend=",">
+	PTS =  $pts$
+	</isNotEmpty>
+	RANK = $rank$
+WHERE 
+	SN_CD = #snCd#
+	AND LG_CD =#lgCd#
+</update>
+
+</sqlMap>

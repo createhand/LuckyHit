@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="GAME_MT" >
+	
+<typeAlias alias="GameMt" type="kr.co.toto.base.persistence.domain.GameMt" />
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
+	
+<select id="select" parameterClass="String" resultClass="GameMt" >
+select A.GM_CD as gmCd,
+       A.GM_TYPE as gmType,
+       A.GM_NAME as gmName,
+       A.GM_END_DATE as gmEndDate,
+       A.GM_TURN as gmTurn,
+       A.GM_END as gmEnd,
+       A.GM_SEQ as gmSeq,
+       A.MD_DATE as mdDate,
+       A.RG_DATE as rgDate
+  FROM T_INFO_GAME A
+WHERE A.GM_CD = #gmCd#
+</select>
+
+<select id="selectListNo" parameterClass="HashMap" resultClass="HashMap" >
+SELECT A.GM_CD as gmCd,
+       A.GM_LIST_NO as gmListNo,
+       A.MC_CD as mcCd,
+       A.GM_RT_WIN as gmRtWin,
+       A.GM_RT_DRAW gmRtDraw,
+       A.GM_RT_LOSE as gmRtLose
+  FROM T_INFO_GAME_LIST A
+WHERE A.GM_CD = #gmCd#
+	<isNotEmpty property="gmListNo" prepend="AND">
+	  A.GM_LIST_NO = #gmListNo#
+	</isNotEmpty>
+</select>
+
+<select id="selectEndCnt" parameterClass="String" resultClass="Integer" >
+SELECT COUNT(MC_CD) FROM T_INFO_MATCH_RECORD
+WHERE MC_CD IN (
+	SELECT MC_CD FROM T_INFO_GAME_LIST
+	WHERE GM_CD = #gmCd#
+)
+AND MC_END = 'Y'
+</select>
+
+<update id="updateGame" parameterClass="HashMap">
+UPDATE 
+	T_INFO_GAME
+SET 
+	GM_TYPE = #gmType#
+	, GM_NAME = #gmName#
+	, GM_END_DATE = #gmEndDate#
+	, GM_TURN = #gmTurn#
+	, GM_END = #gmEnd#
+	, MD_DATE = now() 
+WHERE GM_CD = #gmCd#
+</update>
+
+<insert id="insertGame" parameterClass="HashMap">
+INSERT INTO 
+	T_INFO_GAME
+	( GM_CD
+	,GM_TYPE
+	,GM_NAME
+	,GM_SEQ
+	,GM_END_DATE
+	,GM_TURN
+	,MD_DATE
+	,RG_DATE )
+VALUES
+	(#gmCd#
+	, #gmType#
+	, #gmName#
+	, #gmSeq#
+	, #gmEndDate#
+	, #gmTurn#
+	, now()
+	, now()
+	)
+</insert>
+
+<insert id="insertGameList" parameterClass="HashMap">
+INSERT INTO 
+	T_INFO_GAME_LIST
+	(GM_CD
+	, GM_LIST_NO
+	, MC_CD
+	, GM_RT_WIN
+	, GM_RT_DRAW
+	, GM_RT_LOSE
+	, MD_DATE
+	, RG_DATE )
+VALUES
+	(#gmCd# 
+	, #gmListNo#
+	, #mcCd# 
+	, #gmRtWin#
+	, #gmRtDraw#
+	, #gmRtLose#
+	, now()
+	, now()
+	)
+</insert>
+
+<update id="updateGameList" parameterClass="HashMap">
+UPDATE 
+	T_INFO_GAME_LIST
+SET 
+	GM_RT_WIN = #gmRtWin# 
+	, GM_RT_DRAW = #gmRtDraw# 
+	, GM_RT_LOSE = #gmRtLose# 
+	, MD_DATE = now() 
+WHERE
+	MC_CD = #mcCd#
+</update>
+
+</sqlMap>

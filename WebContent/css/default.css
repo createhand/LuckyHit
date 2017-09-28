@@ -1,0 +1,330 @@
+/** BASIC */
+
+body {
+	margin: 0px;
+	padding: 0px;
+	background: #E2E2E2 url(/images/homepage01.jpg) repeat-x left top;
+}
+
+/** FORMS */
+
+form {
+	margin: 0px;
+	padding: 0px;
+}
+
+fieldset {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+}
+
+label {
+	color: #84A3D1;
+}
+
+.text {
+	border: none;
+	background: #FFFFFF;
+}
+
+form ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+form li {
+}
+
+/** HEADINGS */
+
+h1, h2, h3 {
+	margin: 0px;
+	text-transform: lowercase;
+}
+
+h1 {
+	margin-bottom: 15px;
+	padding-left: 14px;
+	background: url(/images/homepage09.gif) no-repeat left center;
+	line-height: 70%;
+	font-size: 24px;
+	color: #FF6D02;
+}
+
+h2 {
+	margin-bottom: 15px;
+	font-size: 16px;
+	color: #012E6D;
+}
+
+h1 span, h2 span {
+	display: block;
+	font-size: 10px;
+	font-weight: normal;
+	color: #7E7E7E;
+}
+
+h3 {
+	margin-bottom: 6px;
+	font-size: 11px;
+	color: #012E6D;
+}
+
+/** TEXTS */
+
+body, th, td, input, textarea, select {
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #494949;
+}
+
+p, ul, ol, dl {
+	margin-top: 0px;
+	margin-bottom: 1.5em;
+	text-align: justify;
+}
+
+strong {
+	color: #012E6D;
+}
+
+.list1 {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+.list1 li {
+	padding-top: 1.5em;
+	background: url(/images/homepage06.gif) repeat-x left top;
+}
+
+.list1 li.first {
+	padding-top: 0px;
+	background: none;
+}
+
+.list1 h3 {
+	padding-left: 11px;
+	background: url(/images/homepage05.gif) no-repeat left center;
+	font-size: 9px;
+}
+
+/** LINKS */
+
+a {
+	color: #FF6D02;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+/** STYLES */
+
+.style1 {
+}
+
+.style1 a {
+}
+
+.style1 a:hover {
+}
+
+/** BACKGROUNDS */
+
+.bg1 {
+}
+
+/** MISC */
+
+.align-justify { text-align: justify; }
+.align-right { text-align: right; }
+
+img { border: none; }
+
+img.left {
+	float: left;
+	margin: 3px 30px 10px 0px;
+}
+
+img.right {
+	float: right;
+	margin: 3px 0px 10px 30px;
+}
+
+img.border {
+	padding: 4px;
+	border: 1px solid #CCCCCC;
+}
+
+hr { display: none; }
+
+.hr1 {
+	height: 1px;
+}
+
+/** WRAPPER */
+
+#wrapper {
+	width: 739px;
+	margin: 0px auto;
+	padding: 20px;
+	background: #FFFFFF;
+}
+
+/** HEADER */
+
+#header {
+	height: 106px;
+}
+
+/** CONTENT */
+
+#content {
+	background: url(/images/subpage02.jpg) no-repeat left top;
+}
+
+/** SIDEBAR */
+
+#sidebar {
+	background: url(/images/homepage04.jpg) no-repeat left top;
+}
+
+
+/** MENU */
+
+#menu {
+	background: url(/images/homepage03.jpg) no-repeat left top;
+}
+
+#menu ul {
+	margin: 0px;
+	padding: 78px 0px 0px 41px;
+	list-style: none;
+}
+
+#menu li {
+	float: left;
+	padding: 0px 13px 0px 15px;
+	background: url(/images/subpage01.gif) no-repeat left center;
+}
+
+#menu li.first {
+	background: none;
+}
+
+#menu a {
+	text-decoration: none;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+#menu a:hover {
+	text-decoration: underline;
+}
+
+/** LOGIN */
+
+#login {
+	height: 185px;
+	padding: 13px 24px 0px 24px;
+}
+
+#login h2 {
+	color: #FFFFFF;
+}
+
+#login li {
+	margin-bottom: 6px;
+}
+
+#login label {
+	display: block;
+	padding: 0px 0px 3px 0px;
+	font-weight: bold;
+}
+
+#login .text {
+	width: 140px;
+	height: 17px;
+	padding: 3px 0px 0px 3px;
+}
+
+#login .button {
+	float: left;
+	width: 54px;
+	height: 20px;
+	background: url(/images/subpage03.gif) no-repeat left top;
+	border: none;
+	font: bold 9px Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	color: #012E6D;
+}
+
+#login a {
+	float: left;
+	margin: 0px 0px 0px 8px;
+	padding: 5px 0px 5px 8px;
+	border-left: 1px solid #014CB6;
+	font-size: 10px;
+	color: #FF6D02;
+}
+
+/** SEARCH */
+
+#search {
+	height: 70px;
+}
+
+#search form {
+	padding: 10px 0px 0px 270px;
+}	
+
+#search .text {
+	float: left;
+	width: 143px;
+	height: 17px;
+}
+
+#search label {
+	float: left;
+	padding: 3px 10px 0px 0px;
+}
+
+#search #button2 {
+	float: left;
+	margin-left: 4px;
+}
+
+/** LINKS */
+
+#links {
+	height: 58px;
+	background: url(/images/homepage11.jpg) no-repeat left top;
+}
+
+#links p {
+	margin: 0px;
+	padding-top: 22px;
+	text-align: center;
+	color: #8096B6;
+}
+
+#links a {
+	color: #8096B6;
+}
+
+/** FOOTER */
+
+#footer {
+	text-align: center;
+}
+
+#footer p {
+	margin: 0px;
+	padding: 15px 0px 30px 0px;
+	text-align: center;
+	color: #7B7B7B;
+}

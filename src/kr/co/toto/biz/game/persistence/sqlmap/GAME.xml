@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="GAME" >
+	
+<typeAlias alias="GameDetailListDt" type="kr.co.toto.biz.game.persistence.domain.GameDetailListDt" />
+<typeAlias alias="HashMap" type="java.util.HashMap" />
+
+<select id="select" parameterClass="map" resultClass="GameDetailListDt" >
+SELECT
+	A.GM_CD AS gameCode,
+	A.GM_NAME AS gameName,
+	A.GM_TURN AS gameTurn,
+	B.GM_LIST_NO AS gameListNo,
+	B.MC_CD AS matchCode,
+	C.TM_CD_H AS homeTeamCode,
+	C.TM_CD_A AS awayTeamCode,
+	D.TM_NAME AS homeTeamName,
+	E.TM_NAME AS awayTeamName,
+	C.MC_DATE AS matchDate,
+	C.MC_TIME AS matchTime,
+	C.MC_DAY AS matchDay,
+	C.MC_END AS matchEnd,
+	C.ST_CD AS stadiumCode,
+	C.MC_RESULT AS matchResult,
+	C.SCORE_H AS scoreHome,
+	C.SCORE_A AS scoreAway,
+	C.LG_CD AS lgCd
+FROM 
+	T_INFO_GAME A,
+	T_INFO_GAME_LIST B,
+	T_INFO_MATCH_RECORD C,
+	T_INFO_TEAM D,
+	T_INFO_TEAM E
+WHERE 
+	A.GM_CD = B.GM_CD
+	AND B.MC_CD = C.MC_CD
+	AND C.TM_CD_H = D.TM_CD
+	AND C.TM_CD_A = E.TM_CD
+	AND A.GM_CD = #gmCd#
+ORDER BY B.GM_LIST_NO
+</select>
+
+<!-- 가장 최근에 수집된 게임(픽을 안올린 게임) -->
+<select id="latestGame" resultClass="HashMap" >
+SELECT 
+	MAX(A.GM_CD) AS gmCd,
+	MAX(A.GM_END_DATE) AS gmEndDate, 
+	MAX(A.GM_TURN) AS gmTurn,
+	MAX(A.GM_SEQ) AS gmSeq
+FROM T_INFO_GAME A
+WHERE 1=1
+<isNotEmpty property="gmEnd" prepend="AND">
+	AND A.GM_END = #gmEnd#
+</isNotEmpty>
+
+</select>
+
+<!-- 가장 최근에 픽을 올린 게임 -->
+<select id="latestPick" parameterClass="map" resultClass="HashMap">
+SELECT 
+	MAX(B.GM_CD) AS gmCd,
+	MAX(A.GM_END_DATE) AS gmEndDate, 
+	MAX(A.GM_TURN) AS gmTurn,
+	MAX(A.GM_SEQ) AS gmSeq
+FROM T_INFO_GAME A,
+	T_INFO_GAME_PICK B
+WHERE A.GM_CD = B.GM_CD
+<isNotEmpty property="gmEnd" prepend="AND">
+	A.GM_END = #gmEnd#
+</isNotEmpty>
+</select>
+
+<!-- 전체 게임 목록 -->
+<select id="selectGameList" parameterClass="map" resultClass="HashMap" >
+SELECT 
+	GM_CD AS gmCd,
+    GM_NAME AS gmName,
+    GM_TURN AS gmTurn,
+    GM_END_DATE AS gmEndDate,
+    GM_END AS gmEnd,
+    GM_SEQ AS gmSeq
+FROM 
+    T_INFO_GAME
+WHERE 1=1
+<isNotEmpty property="gmEnd" prepend="AND">
+	GM_END = #gmEnd#
+</isNotEmpty>
+<isNotEmpty property="gmCd" prepend="AND">
+	GM_CD = #gmCd#
+</isNotEmpty>
+ORDER BY GM_END_DATE DESC
+</select>
+
+<!-- 픽이 있는 게임 목록 -->
+<select id="selectPickGameList" parameterClass="map" resultClass="HashMap" >
+SELECT 
+	B.GM_CD AS gmCd,
+    B.GM_NAME AS gmName,
+    B.GM_TURN AS gmTurn,
+    B.GM_END_DATE AS gmEndDate,
+    B.GM_END AS gmEnd,
+    B.GM_SEQ AS gmSeq
+FROM
+	T_INFO_GAME_PICK A,
+	T_INFO_GAME B
+WHERE A.GM_CD = B.GM_CD
+AND A.GM_POST_NO = 1
+ORDER BY B.GM_END_DATE DESC
+</select>
+
+</sqlMap>

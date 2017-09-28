@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	
+	<!-- web template -->
+	<definition name="*.page" extends=".pageTemplate">
+		<put-attribute name="script" value="js/biz/{1}.js" />
+		<put-attribute name="content" value="/WEB-INF/web/biz/{1}.jsp" />
+	</definition>
+	<definition name="*/*.page" extends=".pageTemplate">
+		<put-attribute name="script" value="js/biz/{1}/{2}.js" />
+		<put-attribute name="content" value="/WEB-INF/web/biz/{1}/{2}.jsp" />
+	</definition>	
+	<definition name="*/*/*.page" extends=".pageTemplate">
+		<put-attribute name="script" value="js/biz/{1}/{2}/{3}.js" />
+		<put-attribute name="content" value="/WEB-INF/web/biz/{1}/{2}/{3}.jsp" />
+	</definition>
+	
+	<!-- mobile template -->
+	<definition name="*.mobile" extends=".mobileTemplate">
+		<put-attribute name="script" value="js/biz/{1}.js" />
+		<put-attribute name="content" value="/WEB-INF/mobile/biz/{1}.jsp" />
+	</definition>
+	<definition name="*/*.mobile" extends=".mobileTemplate">
+		<put-attribute name="script" value="js/mobile/{1}/{2}.js" />
+		<put-attribute name="content" value="/WEB-INF/mobile/biz/{1}/{2}.jsp" />
+	</definition>
+	<definition name="*/*/*.mobile" extends=".mobileTemplate">
+		<put-attribute name="script" value="js/mobile/{1}/{2}/{3}.js" />
+		<put-attribute name="content" value="/WEB-INF/mobile/biz/{1}/{2}/{3}.jsp" />
+	</definition>
+	
+	<!-- login template -->
+    <definition name="*.lgin" extends=".lginTemplate">
+        <put-attribute name="script" value="js/biz/{1}.js" />
+        <put-attribute name="content" value="/WEB-INF/web/biz/{1}.jsp" />
+    </definition>
+    <definition name="*/*.lgin" extends=".lginTemplate">
+        <put-attribute name="script" value="js/biz/{1}/{2}.js" />
+        <put-attribute name="content" value="/WEB-INF/web/biz/{1}/{2}.jsp" />
+    </definition>
+    <definition name="*/*/*.lgin" extends=".lginTemplate">
+        <put-attribute name="script" value="js/biz/{1}/{2}/{3}.js" />
+        <put-attribute name="content" value="/WEB-INF/web/biz/{1}/{2}/{3}.jsp" />
+    </definition>
+    
+    
+	<!-- dev template -->	
+	<definition name="*.dev" extends=".devTemplate">
+		<put-attribute name="script" value="js/biz/dev/{1}.js" />
+		<put-attribute name="content" value="/WEB-INF/web/biz/dev/{1}.jsp" />
+	</definition>
+</tiles-definitions>

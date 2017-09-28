@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="RECORD" >
+	
+<typeAlias alias="HashMap" type="java.util.HashMap" />
+<typeAlias alias="MatchRecordMt" type="kr.co.toto.base.persistence.domain.MatchRecordMt" />
+
+<!-- 
+1. 최근전적 경기목록
+2. 상대전적 경기목록
+-->
+<select id="latestRecordList" parameterClass="map" resultClass="HashMap" >
+SELECT
+	A.MC_CD AS mcCd,
+    A.LG_CD AS lgCd,
+    B.LG_NAME AS lgNm,    
+    A.TM_CD_H AS tmCdH,
+    C.TM_NAME AS tmNameH,
+    C.TM_NAME_BET AS tmNameBetH,
+    A.TM_CD_A AS tmCdA,
+    D.TM_NAME AS tmNameA,
+    D.TM_NAME_BET AS tmNameBetA,
+    A.SCORE_H AS scoreH,
+    A.SCORE_A AS scoreA,
+    A.MC_RESULT AS mcResult,
+    CASE WHEN(TM_CD_H = #tmCd#)
+    	THEN
+        	IF(A.MC_RESULT = 'H', 'W',IF(A.MC_RESULT = 'A', 'L', 'D'))
+        ELSE
+        	IF(A.MC_RESULT = 'H', 'L',IF(A.MC_RESULT = 'A', 'W', 'D'))
+        END AS 	winStr,
+    A.MC_DATE AS mcDate,
+    A.MC_DAY AS mcDay,
+    A.MC_TIME AS mcTime,
+    A.ST_CD AS stCd
+FROM 
+	T_INFO_MATCH_RECORD A,
+    T_INFO_LEAGUE B,
+    T_INFO_TEAM C,
+    T_INFO_TEAM D
+WHERE 
+	A.LG_CD = B.LG_CD
+    AND A.TM_CD_H = C.TM_CD
+    AND A.TM_CD_A = D.TM_CD
+    AND MC_END = 'Y'
+    
+    <isNotEmpty property="homeYn">
+    	<isEqual property="homeYn" compareValue="Y">  
+		AND A.TM_CD_H = #tmCd#
+			<isNotEmpty property="tmCdA" prepend="AND">
+			A.TM_CD_A = #tmCdA#
+			</isNotEmpty> 
+		</isEqual>
+		<isEqual property="homeYn" compareValue="N">  
+		AND A.TM_CD_A = #tmCd#
+			<isNotEmpty property="tmCdA" prepend="AND">
+			A.TM_CD_H = #tmCdA#
+			</isNotEmpty> 
+		</isEqual>
+	</isNotEmpty>
+	
+    <isEmpty property="homeYn">
+		AND (A.TM_CD_H = #tmCd# OR A.TM_CD_A = #tmCd#)		
+		<isNotEmpty property="tmCdA" prepend="AND">
+		(A.TM_CD_H = #tmCdA# OR A.TM_CD_A = #tmCdA#)
+		</isNotEmpty>		
+	</isEmpty>
+	
+	<isNotEmpty property="mcDate" prepend="AND">
+		A.MC_DATE &lt; #mcDate#
+	</isNotEmpty>
+ORDER BY A.MC_DATE DESC
+LIMIT 0, #queryCnt#
+</select>
+
+
+
+<!-- 
+승무패 : WWLDLW
+1. 최근전적목록
+2. 상대전적목록
+-->
+<select id="latestRecord" parameterClass="map" resultClass="String" >
+SELECT
+<![CDATA[
+	CASE WHEN(MC_RESULT = 'D') 
+    	THEN 
+        	'D'         
+        ELSE
+        	CASE WHEN((TM_CD_H = #tmCd# && MC_RESULT = 'H') || (TM_CD_A = #tmCd# && MC_RESULT = 'A'))
+            THEN 
+            	'W'
+            ELSE
+            	'L'
+            END        
+        END
+    AS matchResult
+]]>    
+FROM 
+	T_INFO_MATCH_RECORD
+WHERE 
+	(TM_CD_H = #tmCd# OR TM_CD_A = #tmCd#)
+	AND MC_END = 'Y'
+	<isNotEmpty property="tmCdA" prepend="AND">
+		(TM_CD_H = #tmCdA# OR TM_CD_A = #tmCdA#)
+	</isNotEmpty>
+	
+	<isNotEmpty property="mcDate" prepend="AND">
+		MC_DATE &lt; #mcDate#
+	</isNotEmpty>
+ORDER BY MC_DATE DESC
+LIMIT 0, #queryCnt#
+</select>
+
+
+
+<!-- 
+1. 최근골득실
+2. 상대골득실
+-->
+<select id="latestScore" parameterClass="map" resultClass="HashMap" >
+SELECT
+	IFNULL(SUM(IF(TM_CD_H = #tmCd#, SCORE_H, 0))
+    + SUM(IF(TM_CD_A = #tmCd#, SCORE_A, 0)),0)
+     AS totalGetScore,
+    IFNULL(SUM(IF(TM_CD_H = #tmCd#, SCORE_A, 0))
+    + SUM(IF(TM_CD_A = #tmCd#, SCORE_H, 0)),0)
+     AS totalLostScore
+FROM (
+  SELECT
+      TM_CD_H, TM_CD_A, SCORE_H, SCORE_A
+  FROM
+      T_INFO_MATCH_RECORD
+  WHERE
+      (TM_CD_H  = #tmCd# OR TM_CD_A = #tmCd#)
+      AND MC_END = 'Y'
+	  <isNotEmpty property="tmCdA" prepend="AND">
+		(TM_CD_H = #tmCdA# OR TM_CD_A = #tmCdA#)
+	  </isNotEmpty>      
+	  <isNotEmpty property="mcDate" prepend="AND">
+		MC_DATE &lt; #mcDate#
+	  </isNotEmpty>      
+  ORDER BY MC_DATE DESC
+  LIMIT 0, #queryCnt#
+  ) A  
+</select>
+
+<!-- 
+1. 홈 골득실
+2. 원정 골득실
+3. 홈 상대골득실
+4. 원정 상대골득실
+-->
+<select id="latestHomeAwayScore" parameterClass="map" resultClass="HashMap" >
+SELECT
+	SUM(SCORE_H) AS homeScore,
+    SUM(SCORE_A) AS awayScore
+FROM (
+  SELECT
+      TM_CD_H, TM_CD_A, SCORE_H, SCORE_A
+  FROM
+      T_INFO_MATCH_RECORD
+  WHERE
+  	  MC_END = 'Y'  	  
+  	  <isEqual property="homeYn" compareValue="Y">
+      	AND TM_CD_H  = #tmCd#
+      </isEqual>
+      <isEqual property="homeYn" compareValue="N">
+      	AND TM_CD_A  = #tmCd#
+      </isEqual>
+      <isNotEmpty property="homeAgainstYn" prepend="AND">      	
+      	(TM_CD_H  = #tmCd# AND TM_CD_A = #tmCdA#)
+      </isNotEmpty>
+      <isNotEmpty property="mcDate" prepend="AND">      	
+      	MC_DATE &lt; #mcDate#
+      </isNotEmpty>
+  ORDER BY MC_DATE DESC
+  LIMIT 0, 5
+  ) A
+</select>
+
+<select id="selectHitResult" parameterClass="map" resultClass="HashMap" >
+SELECT
+	A.GM_CD AS gmCd,
+    C.GM_LIST_NO AS gmListNo,
+    C.GM_POST_NO AS gmPostNo,
+    E.TM_NAME AS tmNameH,
+    E.TM_NAME_BET AS tmNameBetH,
+    F.TM_NAME AS tmNameA,
+    F.TM_NAME_BET AS tmNameBetA,
+    C.EXP_RESULT AS expResult,
+    D.MC_RESULT AS matchResult,
+    D.MC_END AS matchEnd
+FROM
+	T_INFO_GAME A,
+    (SELECT 
+		GM_CD, MAX(GM_POST_NO) AS GM_POST_NO
+    FROM
+        T_INFO_GAME_PICK
+    WHERE GM_CD = #gmCd#
+	<isNotEmpty property="gmPostNo">
+		AND GM_POST_NO = #gmPostNo#
+	</isNotEmpty>    
+    ) B,
+    T_INFO_GAME_PICK_LIST C,
+    T_INFO_MATCH_RECORD D,
+    T_INFO_TEAM E,
+    T_INFO_TEAM F
+WHERE A.GM_CD = #gmCd#
+	AND A.GM_CD = B.GM_CD
+	AND B.GM_CD = C.GM_CD
+    AND B.GM_POST_NO = C.GM_POST_NO
+    AND C.MC_CD = D.MC_CD
+    AND D.TM_CD_H = E.TM_CD
+    AND D.TM_CD_A = F.TM_CD
+</select>
+
+
+<insert id="insertRecord" parameterClass="HashMap">
+INSERT INTO 
+	T_INFO_MATCH_RECORD	(
+	MC_CD,
+	LG_CD,
+	TM_CD_H,
+	TM_CD_A,
+	SCORE_H,
+	SCORE_A,
+	MC_RESULT,
+	MC_DATE,
+	MC_TIME,
+	MC_DAY,
+	MC_END,
+	ST_CD,
+	MODI_DATE,
+	CRET_DATE )
+	VALUES ( 
+	#mcCd#,
+	#lgCd#,
+	#tmCdH#,
+	#tmCdA#,
+	#scoreH#,
+	#scoreA#,
+	#mcResult#,
+	#mcDate#,
+	#mcTime#,
+	#mcDay#,
+	#mcEnd#,
+	#stCd#,
+	now(),
+	now() )
+</insert>
+
+
+<update id="updateRecord" parameterClass="HashMap">
+UPDATE
+	T_INFO_MATCH_RECORD
+SET
+	SCORE_H = #scoreH#,
+	SCORE_A = #scoreA#,
+	MC_RESULT = #mcResult#,
+	MC_DATE = #mcDate#,
+	MC_TIME = #mcTime#,
+	MC_DAY = #mcDay#,
+	ST_CD = #stCd#,
+	MODI_DATE = now(), 
+	MC_END = #mcEnd# 
+WHERE MC_CD = #mcCd#
+</update>
+
+</sqlMap>

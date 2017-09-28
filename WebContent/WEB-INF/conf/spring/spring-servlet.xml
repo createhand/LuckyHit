@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<context:component-scan base-package="kr.co.toto" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+    <mvc:annotation-driven />
+
+    <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+				<property name="paramName" value="lang" />
+			</bean>
+		</mvc:interceptor>
+<!--
+		<mvc:interceptor>
+			<mvc:mapping path="/1**"/>
+			<bean class="kr.co.esmbc.inbk.comn.interceptor.LoginCheckInterceptor"/>
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/7**"/>
+			<bean class="kr.co.esmbc.inbk.comn.interceptor.LoginCheckInterceptor"/>
+		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/1**"/>
+			<bean class="kr.co.esmbc.inbk.comn.interceptor.InbkInterceptor"/>
+		</mvc:interceptor>
+-->		
+	</mvc:interceptors>
+    
+	<!-- tiles -->
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/conf/tiles/general-layout.xml</value>
+				<value>/WEB-INF/conf/tiles/tiles-content.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="defaultViewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename" value="views"/>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
+		<property name="order" value="1"/>
+	</bean>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="2000000"/>
+	</bean>
+
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:page_title</value>
+				<value>classpath:page_path</value>
+				<value>classpath:message_code</value>
+				<value>classpath:message_label</value>
+				<value>classpath:message_static</value>
+			</list>
+		</property>		
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+<!-- 
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="defaultLocale" value="ko" />
+		<property name="cookieName" value="clientlanguage"/>
+		<- in seconds. If set to -1, the cookie is not persisted (deleted when browser shuts down) ->
+		<property name="cookieMaxAge" value="100000" />
+	</bean>
+ -->	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="ko" />
+	</bean>
+</beans>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="GAME_PICK_MT" >
+
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
+
+<select id="selectPickList" parameterClass="map" resultClass="HashMap" >
+SELECT 
+	A.GM_CD as gmCd, 
+    A.MC_CD as mcCd, 
+    A.GM_LIST_NO as gmListNo,
+    C.TM_CD_H as tmCdH,
+    D.TM_NAME as homeTeam,
+    D.TM_NAME_BET as homeTeamBet,
+    C.TM_CD_A as tmCdA,
+    E.TM_NAME as awayTeam,    
+    E.TM_NAME_BET as awayTeamBet,
+	GROUP_CONCAT(A.EXP_RESULT ORDER BY GM_POST_NO SEPARATOR ':') as expResult,
+    C.MC_END as mcEnd,
+    C.MC_RESULT as mcResult,
+    C.MC_DATE as mcDate, 
+    C.MC_TIME as mcTime, 
+    C.MC_DAY as mcDay, 
+    C.ST_CD as stCd, 
+    C.MC_END as mcEnd, 
+    C.MC_RESULT as mcResult
+FROM 
+	T_INFO_GAME_PICK_LIST A,
+    T_INFO_GAME B,
+    T_INFO_MATCH_RECORD C,
+    T_INFO_TEAM D,
+    T_INFO_TEAM E
+WHERE A.GM_CD = B.GM_CD
+	AND A.MC_CD = C.MC_CD 
+	AND A.GM_CD = #gmCd#
+    AND C.TM_CD_H = D.TM_CD
+    AND C.TM_CD_A = E.TM_CD
+GROUP BY A.GM_CD, A.MC_CD, A.GM_LIST_NO
+ORDER BY GM_LIST_NO, GM_POST_NO
+</select>
+
+
+<select id="selectPick" parameterClass="map" resultClass="HashMap" >
+SELECT
+	A.GM_CD AS gmCd
+    , A.GM_POST_NO AS gmPostNo
+    , A.GM_POST_CONTENT AS gmPostContent    
+    , B.GM_NAME AS gmName
+    , B.GM_TURN AS gmTurn
+    , A.RG_DATE AS rgDate
+FROM
+	T_INFO_GAME_PICK A,
+    T_INFO_GAME B
+WHERE
+	A.GM_CD = B.GM_CD
+<isNotEmpty property="gmCd" prepend="AND">
+	A.GM_CD = #gmCd#
+</isNotEmpty>
+<isNotEmpty property="gmPostNo" prepend="AND">
+	A.GM_POST_NO = #gmPostNo#
+</isNotEmpty>
+</select>
+
+
+<select id="selectMaxPostNo" parameterClass="map" resultClass="String">
+SELECT 
+	IFNULL(MAX(GM_POST_NO),0) as maxPostNo 
+FROM 
+	T_INFO_GAME_PICK
+WHERE
+	1=1	
+<isNotEmpty property="gmCd" prepend="AND">
+	GM_CD = #gmCd#
+</isNotEmpty>	
+</select>
+
+<select id="selectGamePostList" parameterClass="map" resultClass="HashMap">
+SELECT
+	A.GM_NAME as gmName
+    , A.GM_CD as gmCd
+    , A.GM_TURN as gmTurn
+    , B.GM_POST_NO as gmPostNo
+FROM
+	T_INFO_GAME A,
+    T_INFO_GAME_PICK B   
+WHERE
+	A.GM_CD = B.GM_CD
+ORDER BY GM_TURN DESC, GM_POST_NO DESC
+</select>
+
+
+<insert id="insertPick" parameterClass="HashMap">
+INSERT INTO 
+	T_INFO_GAME_PICK
+	( GM_CD
+	,GM_POST_NO
+	,GM_POST_CONTENT
+	,MD_DATE
+	,RG_DATE )
+VALUES
+	( #gmCd# 
+	, #gmPostNo#
+	, #gmPostContent#
+	, now()
+	, now() )
+</insert>
+
+<insert id="insertPickList" parameterClass="HashMap">
+INSERT INTO 
+	T_INFO_GAME_PICK_LIST
+	( GM_CD
+	,GM_LIST_NO
+	,GM_POST_NO
+	,MC_CD
+	,EXP_RESULT
+	,H_LT_RECORD
+	,H_LT_AG_RECORD
+	,H_LT_GT_POINT
+	,H_LT_LS_POINT
+	,H_LT_GT_AG_POINT
+	,H_LT_LS_AG_POINT
+	,A_LT_RECORD
+	,A_LT_AG_RECORD
+	,A_LT_GT_POINT
+	,A_LT_LS_POINT
+	,A_LT_GT_AG_POINT
+	,A_LT_LS_AG_POINT
+	,MD_DATE
+	,RG_DATE )
+VALUES
+	( #gmCd# 
+	, #gmListNo#
+	, #gmPostNo#
+	, #mcCd#
+	, #expResult#
+	, #hLtRecord#
+	, #hLtAgRecord#
+	, #hLtGtPoint#
+	, #hLtLsPoint#
+	, #hLtGtAgPoint#
+	, #hLtLsAgPoint#
+	, #aLtRecord#
+	, #aLtAgRecord#
+	, #aLtGtPoint#
+	, #aLtLsPoint#
+	, #aLtGtAgPoint#
+	, #aLtLsAgPoint#
+	, now()
+	, now() )
+</insert>
+
+
+
+</sqlMap>
