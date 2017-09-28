@@ -74,7 +74,7 @@ public class GameCalcController extends AbstractController {
         	paramMap.put("gmCd", gmCd);
         	selectedGame = gameService.selectGameDetailList(paramMap);
         	
-        	gameList = gameService.selectGameList(new ParamMap(""));
+        	gameList = gameService.selectGameList(new TAData());
         	
         	returnMap = gameService.selectGameBetList(selectedGame, url);
         	selectedGame = (List<GameDetailListDt>)returnMap.get("gameDetailList");

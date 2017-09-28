@@ -47,6 +47,9 @@ public class GameDetailListDt {
 	
 	private TAData homeTeamSeaonInfo;
 	private TAData awayTeamSeaonInfo;
+	
+	private List<TAData> homeTeamAmzaingList;
+	private List<TAData> awayTeamAmzaingList;
 	public String getGameCode() {
 		return gameCode;
 	}
@@ -266,6 +269,18 @@ public class GameDetailListDt {
 	}
 	public void setAwayTeamSeaonInfo(TAData awayTeamSeaonInfo) {
 		this.awayTeamSeaonInfo = awayTeamSeaonInfo;
+	}
+	public List<TAData> getHomeTeamAmzaingList() {
+		return homeTeamAmzaingList;
+	}
+	public void setHomeTeamAmzaingList(List<TAData> homeTeamAmzaingList) {
+		this.homeTeamAmzaingList = homeTeamAmzaingList;
+	}
+	public List<TAData> getAwayTeamAmzaingList() {
+		return awayTeamAmzaingList;
+	}
+	public void setAwayTeamAmzaingList(List<TAData> awayTeamAmzaingList) {
+		this.awayTeamAmzaingList = awayTeamAmzaingList;
 	}
 	
 }

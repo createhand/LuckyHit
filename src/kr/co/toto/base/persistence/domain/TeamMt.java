@@ -13,7 +13,14 @@ public class TeamMt {
 	private String tmNameBet;
 	private String tmNameDaum;
 	private String tmCdSpojoy;
+	private String tmImgUrl;
 	
+	public String getTmImgUrl() {
+		return tmImgUrl;
+	}
+	public void setTmImgUrl(String tmImgUrl) {
+		this.tmImgUrl = tmImgUrl;
+	}
 	public String getTmCd() {
 		return tmCd;
 	}

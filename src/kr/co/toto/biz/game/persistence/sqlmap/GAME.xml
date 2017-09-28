@@ -4,6 +4,7 @@
 	
 <typeAlias alias="GameDetailListDt" type="kr.co.toto.biz.game.persistence.domain.GameDetailListDt" />
 <typeAlias alias="HashMap" type="java.util.HashMap" />
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
 
 <select id="select" parameterClass="map" resultClass="GameDetailListDt" >
 SELECT
@@ -71,7 +72,7 @@ WHERE A.GM_CD = B.GM_CD
 </select>
 
 <!-- 전체 게임 목록 -->
-<select id="selectGameList" parameterClass="map" resultClass="HashMap" >
+<select id="selectGameList" parameterClass="tadata" resultClass="HashMap" >
 SELECT 
 	GM_CD AS gmCd,
     GM_NAME AS gmName,
@@ -106,6 +107,41 @@ FROM
 WHERE A.GM_CD = B.GM_CD
 AND A.GM_POST_NO = 1
 ORDER BY B.GM_END_DATE DESC
+</select>
+
+
+<!-- 이변 경기 목록 -->
+<select id="selectAmazingList" parameterClass="String" resultClass="tadata" >
+	SELECT 
+		* 
+	FROM (
+	SELECT
+		A.GM_CD, 
+		A.MC_CD,
+		B.MC_DATE,
+		B.SCORE_H,
+		B.SCORE_A,		
+		A.GM_RT_WIN/(A.GM_RT_WIN+A.GM_RT_DRAW+A.GM_RT_LOSE)*100 as PRDT_WIN,
+		A.GM_RT_DRAW/(A.GM_RT_WIN+A.GM_RT_DRAW+A.GM_RT_LOSE)*100 as PRDT_DRAW,
+		A.GM_RT_LOSE/(A.GM_RT_WIN+A.GM_RT_DRAW+A.GM_RT_LOSE)*100 as PRDT_LOSS,
+		B.MC_RESULT,
+	   	C.TM_NAME_BET AS TM_NAME_H,
+	   	(SELECT TM_NAME_BET FROM T_INFO_TEAM WHERE TM_CD = B.TM_CD_A) AS TM_NAME_A,
+	   	B.TM_CD_H,
+	   	B.TM_CD_A
+	FROM 
+		T_INFO_GAME_LIST A
+		LEFT OUTER JOIN T_INFO_MATCH_RECORD B ON A.MC_CD = B.MC_CD
+		LEFT OUTER JOIN T_INFO_TEAM C ON B.TM_CD_H = C.TM_CD
+	WHERE 1=1
+	AND (B.TM_CD_H = #tmCd# OR B.TM_CD_A = #tmCd#)
+	AND B.MC_END = 'Y'
+	) A
+	WHERE 1=1
+	AND (PRDT_WIN > 70 AND MC_RESULT != 'H' AND (TM_CD_H = #tmCd# OR TM_CD_A = #tmCd#))
+	OR (PRDT_LOSS > 70 AND MC_RESULT != 'A' AND (TM_CD_H = #tmCd# OR TM_CD_A = #tmCd#))
+	ORDER BY A.MC_DATE DESC
+	LIMIT 0, 5
 </select>
 
 </sqlMap>

@@ -46,6 +46,18 @@ public class GameService {
     
 	
 	/**
+     * 해당 팀의 경기중 이변이 있던 경기 목록을 조회한다
+     * 
+     * @param 
+     * @return
+     * @throws BizException
+     * @throws Exception
+     */ 
+    public List<TAData> selectAmazingList(String tmCd) throws Exception {
+    	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
+    	return (List<TAData>)dao.selectList("GAME.selectAmazingList", tmCd);
+    }
+	/**
      * 전체 게임목록을 조회한다
      * 
      * @param 
@@ -137,7 +149,7 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<HashMap> selectGameList(ParamMap map) throws Exception {
+    public List<HashMap> selectGameList(TAData map) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
     	return (List<HashMap>)dao.selectList("GAME.selectGameList", map);
     }

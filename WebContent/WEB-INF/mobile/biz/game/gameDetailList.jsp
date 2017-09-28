@@ -103,6 +103,9 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		TAData homeTeamSeasonInfo = mr.getHomeTeamSeaonInfo();
 		TAData awayTeamSeasonInfo = mr.getAwayTeamSeaonInfo();
 		
+		List<TAData> homeTeamAmzaingList = mr.getHomeTeamAmzaingList(); 
+		List<TAData> awayTeamAmzaingList = mr.getAwayTeamAmzaingList();
+		
 		double winBet = (mr.getWinBetCnt()/totalBetCnt)*100;
 		double drawBet = (mr.getDrawBetCnt()/totalBetCnt)*100;
 		double loseBet = (mr.getLoseBetCnt()/totalBetCnt)*100;
@@ -126,16 +129,18 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						</select>
 					</td>
 				</tr>
-				<tr  id="gm<%=mr.getGameListNo() %>" class="off">
-					<td width="40%" class="clickOff">
+				<tr id="gm<%=mr.getGameListNo() %>" class="off">
+					<td width="40%" class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'W')">
+						<img src="<%=homeTeamInfo.getTmImgUrl() %>" width="70" height="70" alt="<%=mr.getHomeTeamName() %>"/><br/>
 						<%=mr.getHomeTeamName() %><br/><br/>
 						(<%=homeTeamSeasonInfo.getInt("RANK") %>위)<br/><br/>
 						<div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div>
 					</td>
-					<td class="clickOff">VS<br/>
+					<td class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'D')">VS<br/>
 					<div id="ratio"><fmt:formatNumber value="<%=drawBet %>" pattern="###.##" /></div>
 					</td>
-					<td width="40%" class="clickOff">
+					<td width="40%" class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'L')">
+						<img src="<%=awayTeamInfo.getTmImgUrl() %>" width="70" height="70" alt="<%=mr.getAwayTeamName() %>"/><br/>
 						<%=mr.getAwayTeamName() %><br/><br/>
 						(<%=awayTeamSeasonInfo.getInt("RANK") %>위)<br/><br/>
 						<div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div>
@@ -164,10 +169,24 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 					</td>
 				</tr>
 				<tr>
-					<td>11
+					<td>
+					<%
+						for(TAData amazingInfo : homeTeamAmzaingList) {
+							out.print(DateUtil.getDate2String(DateUtil.getDate(amazingInfo.getString("MC_DATE"), "yyyyMMdd"), "yyyy-MM-dd")+"<br/>"+amazingInfo.getInt("PRDT_WIN")+":"+amazingInfo.getInt("PRDT_DRAW")+":"+amazingInfo.getInt("PRDT_LOSS")+"<br/>");
+							out.print(amazingInfo.getString("TM_NAME_H")+"("+amazingInfo.getString("SCORE_H")+")"+":");
+							out.print("("+amazingInfo.getString("SCORE_A")+")"+amazingInfo.getString("TM_NAME_A")+"<br/><br/><br/>");
+						}
+					%>
 					</td>
 					<td>이변</td>
-					<td>22
+					<td>
+					<%
+						for(TAData amazingInfo : awayTeamAmzaingList) {
+							out.print(DateUtil.getDate2String(DateUtil.getDate(amazingInfo.getString("MC_DATE"), "yyyyMMdd"), "yyyy-MM-dd")+"<br/>"+amazingInfo.getInt("PRDT_WIN")+":"+amazingInfo.getInt("PRDT_DRAW")+":"+amazingInfo.getInt("PRDT_LOSS")+"<br/>");
+							out.print(amazingInfo.getString("TM_NAME_H")+"("+amazingInfo.getString("SCORE_H")+")"+":");
+							out.print("("+amazingInfo.getString("SCORE_A")+")"+amazingInfo.getString("TM_NAME_A")+"<br/><br/><br/>");
+						}
+					%>					
 						<input type="hidden" id="hLtRecord" name="hLtRecord" value="<%=hLtRecord%>" />
 						<input type="hidden" id="hLtAgRecord" name="hLtAgRecord" value="<%=hLtAgRecord%>" />
 						<input type="hidden" id="aLtRecord" name="aLtRecord" value="<%=aLtRecord%>" />
@@ -237,20 +256,26 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		</div>
 
   <nav class="floating-menu">
-  <%
+  <table class="subTable" style="width:100%;">
+<%
   	for(int i=0;i<list.size();i++) {
-  		
 		GameDetailListDt mr = (GameDetailListDt)list.get(i);
 		TeamMt homeTeamInfo = mr.getHomeTeamInfo();
 		TeamMt awayTeamInfo = mr.getAwayTeamInfo();
-  %>
-  
-  <%
+		if(i % 2 == 0) {
+			out.print("<tr>");
+		}
+		out.print("<td>"+mr.getGameListNo()+". "+homeTeamInfo.getTmNameBet()+" VS "+awayTeamInfo.getTmNameBet());
+		out.print("(<gm id='subGame_"+mr.getGameListNo()+"' class='subGame' style='font-color:red;'></gm>)</td>");
+		if(i % 2 == 1) {
+			out.print("</tr>");
+		}
   	}
-  %>
-<!--     <h3>Floating Menu</h3> -->
-    <a href="/css/">CSS</a>
-    <a href="/html/">HTML</a>
-    <a href="/coldfusion/">ColdFusion</a>
-    <a href="/database/">Database</a>
+%>
+	<tr>
+		<td colspan="2" class="result">
+			픽비율 : <gm id="subRatio" class="subGame"><fmt:formatNumber value="<%=totalBetCnt %>" pattern="#" /></gm>
+		</td>
+	</tr>
+  </table>
   </nav>

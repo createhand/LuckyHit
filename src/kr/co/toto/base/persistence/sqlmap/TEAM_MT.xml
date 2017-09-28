@@ -29,9 +29,12 @@
 <select id="select" parameterClass="String" resultClass="TeamMt" >
 SELECT A.TM_CD as tmCd,
        A.TM_NAME as tmName,
+       A.TM_NAME_BET as tmNameBet,
+       A.TM_NAME_DAUM as tmNameDaum,
        A.TM_EN_NAME as tmEnName,
        A.TM_MANAGER as tmManager,
        A.TM_CITY as tmCity,
+       A.TM_IMG_URL as tmImgUrl,
        A.TM_WEBSITE as tmWebsite,
        A.ST_CD as stCd,
        A.LG_CD as lgCd

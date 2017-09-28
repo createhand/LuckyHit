@@ -60,7 +60,7 @@ public class GameListController extends AbstractController {
     	String gmCd = paramMap.getString("gmCd");
     	
     	//전체 게임목록 조회
-    	List<HashMap> gameList = service.selectGameList(new ParamMap(""));
+    	List<HashMap> gameList = service.selectGameList(new TAData());
     	
     	if(gmCd.equals("")) {
 	    	//최근 게임회차
@@ -257,6 +257,9 @@ public class GameListController extends AbstractController {
 	    		tmp.setExpectMatchResultCode("A");
 	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getAwayTeamCode()).getTmName());
 	    	}
+	    	
+	    	tmp.setHomeTeamAmzaingList(service.selectAmazingList(tmp.getHomeTeamCode()));
+	    	tmp.setAwayTeamAmzaingList(service.selectAmazingList(tmp.getAwayTeamCode()));
 	    	
 //	    	returnList.add(tmp);
     	}
