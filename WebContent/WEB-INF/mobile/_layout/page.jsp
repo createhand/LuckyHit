@@ -13,7 +13,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="김펠레">
+<meta property="og:site_name" content="LuckyHit">
 <title><tiles:insertAttribute name="title"/></title>
  <!-- css -->
  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>css/main.css" media="screen" />

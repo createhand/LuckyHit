@@ -31,12 +31,13 @@ public class BizUtil {
         return 0;
     }	
 	
-	public String getWinstrTeam(String pStr) {
+	public String getConvertWinstrResult(String pStr) {
 		String winStr = "";
 		if(pStr == null) return winStr;
-		if(pStr.equals("H")) winStr = "승";
-		else if(pStr.equals("A")) winStr = "패";
-		else if(pStr.equals("D")) winStr = "무";
+		
+		if(pStr.indexOf(DomainConst.RECORD_WIN) > -1) winStr = "승";
+		if(pStr.indexOf(DomainConst.RECORD_DRAW) >-1 ) winStr += "무";
+		if(pStr.indexOf(DomainConst.RECORD_LOSE) > -1) winStr += "패";
 		return winStr;
 	}
 	
@@ -44,8 +45,8 @@ public class BizUtil {
 		String winStr = "";
 		if(pStr == null) return winStr;
 		if(pStr.equals(DomainConst.RECORD_WIN)) winStr = "승";
-		else if(pStr.equals(DomainConst.RECORD_LOSE)) winStr = "패";
 		else if(pStr.equals(DomainConst.RECORD_DRAW)) winStr = "무";
+		else if(pStr.equals(DomainConst.RECORD_LOSE)) winStr = "패";
 		return winStr;
 	}
 	

@@ -7,6 +7,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ page import="kr.co.toto.util.*" %>
+<%@page import="kr.co.toto.base.persistence.domain.DomainConst"%>
 <%@ page import="kr.co.toto.biz.game.persistence.domain.GameDetailListDt" %>
 <%@ page import="kr.co.toto.base.persistence.domain.GameMt" %>
 <%@ page import="org.springframework.web.servlet.support.RequestContext"%>
@@ -66,8 +67,8 @@
 		double loseBet = (dt.getLoseBetCnt()/totalBetCnt)*100;
 		if(gameMt.getGmEnd().equals("N")) dt.setMatchResult("");
 		String winClass = "normal", drawClass = "normal", loseClass = "normal";
-		if(dt.getMatchResult().equals(DomainConst.RECORD_HOME)) winClass="win";
-		if(dt.getMatchResult().equals(DomainConst.RECORD_AWAY)) loseClass="win";
+		if(dt.getMatchResult().equals(DomainConst.RECORD_WIN)) winClass="win";
+		if(dt.getMatchResult().equals(DomainConst.RECORD_LOSE)) loseClass="win";
 		if(dt.getMatchResult().equals(DomainConst.RECORD_DRAW)) drawClass="win";
 %>
 			<tr id="gm<%=dt.getGameListNo() %>" class="off">
@@ -75,7 +76,7 @@
 				<td class="clickOff"><span class="<%=winClass%>"><%=dt.getHomeTeamName() %><br/><div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div></span></td>
 				<td class="clickOff"><span class="<%=drawClass%>">VS<br/><div id="ratio"><fmt:formatNumber value="<%=drawBet %>" pattern="###.##" /></div></span></td>
 				<td class="clickOff"><span class="<%=loseClass%>"><%=dt.getAwayTeamName() %><br/><div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div></span></td>
-				<td class="result"><%=new BizUtil().getWinstrTeam(dt.getMatchResult()) %></td>
+				<td class="result"><%=new BizUtil().getWinstrResult(dt.getMatchResult()) %></td>
 			</tr>
 <%
 	}

@@ -22,8 +22,6 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 %>
 
 		<div id="content">
-			<h1>픽올리기</h1>
-			<hr />
 			<table class="common">
 			<form name="searchFrm" method="get">
 			<thead>
@@ -121,12 +119,11 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 							out.print(DateUtil.getDate2String(DateUtil.getDate(mr.getMatchTime(), "HHmm"), "HH:mm"));
 						}
 						%>
-						/ 
-						<select name="expResult">
-							<option value="H" <%=mr.getExpectMatchResultCode().toString().equals("H") ? "selected" : ""%>>승</option>
-							<option value="D" <%=mr.getExpectMatchResultCode().toString().equals("D") ? "selected" : ""%>>무</option>
-							<option value="A" <%=mr.getExpectMatchResultCode().toString().equals("A") ? "selected" : ""%>>패</option>
-						</select>
+						/ 예상 : 
+						<%=mr.getExpectMatchResultCode().toString().equals("W") ? "승" : ""%>
+						<%=mr.getExpectMatchResultCode().toString().equals("D") ? "무" : ""%>
+						<%=mr.getExpectMatchResultCode().toString().equals("L") ? "패" : ""%>
+						<input type="hidden" id="expResult" name="expResult">
 					</td>
 				</tr>
 				<tr id="gm<%=mr.getGameListNo() %>" class="off">
@@ -210,9 +207,9 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 					<td colspan="3">
 					<%
 						if(mr.getMatchEnd().equals("Y")) {
-							if(mr.getMatchResult().equals("H")) {
+							if(mr.getMatchResult().equals("W")) {
 								out.print(mr.getHomeTeamName());								
-							} else if(mr.getMatchResult().equals("A")) {
+							} else if(mr.getMatchResult().equals("L")) {
 								out.print(mr.getAwayTeamName());
 							} else {
 								out.print("무");
@@ -246,14 +243,15 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 			</tr>
 			<tr>
 				<td colspan="3">
-					<input type="submit" value="등록"/>
+					<input type="button" value="픽 등록" onclick="checkPick()";/>
 				</td>
 			</tr>
 			</tbody>
 			</table>
 			<input type="hidden" name="gmCd" value="<%=gameMt.getGmCd() %>" />
-			</form>						
+			</form>
 		</div>
+		<br/><br/><br/><br/><br/><br/><br/>
 
   <nav class="floating-menu">
   <table class="subTable" style="width:100%;">
@@ -275,6 +273,13 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 	<tr>
 		<td colspan="2" class="result">
 			픽비율 : <gm id="subRatio" class="subGame"><fmt:formatNumber value="<%=totalBetCnt %>" pattern="#" /></gm>
+			/
+			구입금액 : 10,000원
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="result">
+			<input type="button" value="픽 등록" onclick="checkPick()";/>
 		</td>
 	</tr>
   </table>

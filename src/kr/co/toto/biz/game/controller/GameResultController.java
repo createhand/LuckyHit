@@ -65,7 +65,9 @@ public class GameResultController extends AbstractController {
     	RecordService recordService = (RecordService) BeanFinder.getBean(RecordService.class);
     	ParamMap map = new ParamMap(params);
     	
-    	String gmCd = map.getString("gmCd");    	
+    	String gmCd = map.getString("gmCd");
+    	String gmPostNo = map.getString("gmPostNo");
+    	
     	List<String> errMsg = new ArrayList<String>();    	
     	List<HashMap> selectedGame = new ArrayList<HashMap>();
     	List<HashMap> gameList = new ArrayList<HashMap>();

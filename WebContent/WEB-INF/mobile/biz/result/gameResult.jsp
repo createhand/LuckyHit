@@ -1,3 +1,4 @@
+<%@page import="kr.co.toto.base.persistence.domain.DomainConst"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="org.apache.commons.lang.time.DateFormatUtils"%>
 <%@page import="org.springframework.web.servlet.support.RequestContextUtils"%>
@@ -10,25 +11,32 @@
 	List<HashMap> gameList = (List<HashMap>)request.getAttribute("gameList");
 	List<HashMap> selectedGame = (List<HashMap>)request.getAttribute("selectedGame");
 	String gmCd = (String)request.getAttribute("gmCd");
+	String gmPostNo = (String)request.getAttribute("gmPostNo");
+	if(gmPostNo == null) gmPostNo = "1";
 	String gmSeq = "";
 %>
 	<form name="frm" method="GET">
       <div class="content_title">
   		<h2 class="header">적중결과
-  		<select name="gmCd" onChange="getResult(this)">
+  		<select name="gmList" onChange="getResult(this)">
 <%
 			for(int i=0;i<gameList.size();i++) {
+				
 				HashMap obj = gameList.get(i);
 				String getGmCd = obj.get("gmCd").toString();
+				String getGmPostNo = obj.get("gmPostNo").toString();
 				if(gmCd.equals(getGmCd)) gmSeq = obj.get("gmSeq").toString();
+				
 %>  		
-				<option value="<%=getGmCd%>" <%=gmCd.equals(getGmCd) ? "selected" : ""%>>
-				<%=obj.get("gmEndDate").toString().substring(0, 4) %> <%=obj.get("gmName") %> <%=obj.get("gmTurn") %>회
+				<option value="<%=getGmCd%>@<%=obj.get("gmPostNo")%>" <%=gmCd.equals(getGmCd) && gmPostNo.equals(getGmPostNo) ? "selected" : ""%>>
+				<%=obj.get("gmEndDate").toString().substring(0, 4) %> <%=obj.get("gmName") %> <%=obj.get("gmTurn") %>회-<%=obj.get("gmPostNo") %> <%=obj.get("gmPostContent") %>
 				</option>
 <%
 			}
 %>
 		</select>
+		<input type="hidden" id="gmCd" name="gmCd" />
+		<input type="hidden" id="gmPostNo" name="gmPostNo" />
   		</h2>
       </div>
       <div class="content">
@@ -49,24 +57,37 @@
 <%
 	double accCnt = 0;
 	for(int i=0;i<selectedGame.size();i++) {
-		HashMap obj = selectedGame.get(i);
-		String expResult = obj.get("expResult").toString();
-		String mcResult = obj.get("matchResult").toString();
-		String result = "미적중";
-		String csStyle = "normal";
-		if(expResult.equals(mcResult)) {
-			accCnt++;
-			result = "적중";
-			csStyle = "result";
-		}
 		
+		HashMap obj = selectedGame.get(i);
+		
+		//예상 결과
+		String expResult = obj.get("expResult").toString();
+		//경기 결과
+		String mcResult = "";
+		//경기 종료여부
+		String matchEnd = obj.get("matchEnd").toString();
+		
+		String result = "예정";
+		String csStyle = "normal";
+		if(StringUtils.equals(matchEnd, DomainConst.YES)) {
+			
+			 mcResult = obj.get("matchResult").toString();
+			 
+			if(expResult.indexOf(mcResult) > -1) {
+				accCnt++;
+				result = "적중";
+				csStyle = "result";
+			} else {
+				result = "미적중";
+			}
+		}		
 %>
 			<tr>
 				<td><%=obj.get("gmListNo") %></td>
-				<td><%=obj.get("tmNameH") %></td>
-				<td><%=obj.get("tmNameA") %></td>
-				<td><%=new BizUtil().getWinstrTeam(expResult) %></td>
-				<td><%=new BizUtil().getWinstrTeam(mcResult) %></td>
+				<td><%=obj.get("tmNameBetH") %></td>
+				<td><%=obj.get("tmNameBetA") %></td>
+				<td><%=new BizUtil().getConvertWinstrResult(expResult) %></td>
+				<td><%=new BizUtil().getWinstrResult(mcResult) %></td>
 				<td class="<%=csStyle%>"><%=result%></td>
 			</tr>
 <%		

@@ -69,6 +69,9 @@ WHERE A.GM_CD = B.GM_CD
 <isNotEmpty property="gmEnd" prepend="AND">
 	A.GM_END = #gmEnd#
 </isNotEmpty>
+<isNotEmpty property="gmPostNo" prepend="AND">
+	B.GM_POST_NO = #gmPostNo#
+</isNotEmpty>
 </select>
 
 <!-- 전체 게임 목록 -->
@@ -97,6 +100,8 @@ ORDER BY GM_END_DATE DESC
 SELECT 
 	B.GM_CD AS gmCd,
     B.GM_NAME AS gmName,
+    A.GM_POST_NO AS gmPostNo,
+	A.GM_POST_CONTENT AS gmPostContent,
     B.GM_TURN AS gmTurn,
     B.GM_END_DATE AS gmEndDate,
     B.GM_END AS gmEnd,
@@ -105,7 +110,6 @@ FROM
 	T_INFO_GAME_PICK A,
 	T_INFO_GAME B
 WHERE A.GM_CD = B.GM_CD
-AND A.GM_POST_NO = 1
 ORDER BY B.GM_END_DATE DESC
 </select>
 
@@ -138,8 +142,8 @@ ORDER BY B.GM_END_DATE DESC
 	AND B.MC_END = 'Y'
 	) A
 	WHERE 1=1
-	AND (PRDT_WIN > 70 AND MC_RESULT != 'H' AND (TM_CD_H = #tmCd# OR TM_CD_A = #tmCd#))
-	OR (PRDT_LOSS > 70 AND MC_RESULT != 'A' AND (TM_CD_H = #tmCd# OR TM_CD_A = #tmCd#))
+	AND (PRDT_WIN > 70 AND MC_RESULT != 'W' AND (TM_CD_H = #tmCd# OR TM_CD_A = #tmCd#))
+	OR (PRDT_LOSS > 70 AND MC_RESULT != 'L' AND (TM_CD_H = #tmCd# OR TM_CD_A = #tmCd#))
 	ORDER BY A.MC_DATE DESC
 	LIMIT 0, 5
 </select>

@@ -53,11 +53,6 @@ public class DomainConst {
     
     public static final String RECORD_LOSE = "L";
     
-    /* 경기결과 */    
-    public static final String RECORD_HOME = "H";
-    
-    public static final String RECORD_AWAY = "A";
-    
     /* 조회조건 */
     public static final int RECORD_LATEST_CNT = 5;	// 최근경기 조회수
     

@@ -23,12 +23,7 @@ SELECT
     A.SCORE_H AS scoreH,
     A.SCORE_A AS scoreA,
     A.MC_RESULT AS mcResult,
-    CASE WHEN(TM_CD_H = #tmCd#)
-    	THEN
-        	IF(A.MC_RESULT = 'H', 'W',IF(A.MC_RESULT = 'A', 'L', 'D'))
-        ELSE
-        	IF(A.MC_RESULT = 'H', 'L',IF(A.MC_RESULT = 'A', 'W', 'D'))
-        END AS 	winStr,
+    A.MC_RESULT AS winStr,
     A.MC_DATE AS mcDate,
     A.MC_DAY AS mcDay,
     A.MC_TIME AS mcTime,
@@ -87,7 +82,7 @@ SELECT
     	THEN 
         	'D'         
         ELSE
-        	CASE WHEN((TM_CD_H = #tmCd# && MC_RESULT = 'H') || (TM_CD_A = #tmCd# && MC_RESULT = 'A'))
+        	CASE WHEN((TM_CD_H = #tmCd# && MC_RESULT = 'W') || (TM_CD_A = #tmCd# && MC_RESULT = 'L'))
             THEN 
             	'W'
             ELSE

@@ -234,10 +234,10 @@ public class GameListController extends AbstractController {
 	    	
 	    	//예상픽 결정
 	    	if(teamSum > DomainConst.EXPECTED_DRAW_RANGE_FROM) {
-	    		tmp.setExpectMatchResultCode("H");
+	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_WIN);
 	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getHomeTeamCode()).getTmName());
 	    	} else if(teamSum < DomainConst.EXPECTED_DRAW_RANGE_TO) {
-	    		tmp.setExpectMatchResultCode("A");
+	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_LOSE);
 	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getAwayTeamCode()).getTmName());
 	    	} else { 
 	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_DRAW);
@@ -245,16 +245,16 @@ public class GameListController extends AbstractController {
 	    	}
 	    	
 	    	if(latestPoint >= DomainConst.SIMPLE_ABS_RANGE_FROM) {
-	    		tmp.setExpectMatchResultCode("H");
+	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_WIN);
 	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getHomeTeamCode()).getTmName());
 	    	} else if(latestPoint <= DomainConst.SIMPLE_ABS_RANGE_TO) {
-	    		tmp.setExpectMatchResultCode("A");
+	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_LOSE);
 	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getAwayTeamCode()).getTmName());
 	    	} else if(aginstPoint >= DomainConst.SIMPLE_ABS_RANGE_FROM) {
-	    		tmp.setExpectMatchResultCode("H");
+	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_WIN);
 	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getHomeTeamCode()).getTmName());
 	    	} else if(aginstPoint <= DomainConst.SIMPLE_ABS_RANGE_TO) {
-	    		tmp.setExpectMatchResultCode("A");
+	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_LOSE);
 	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getAwayTeamCode()).getTmName());
 	    	}
 	    	

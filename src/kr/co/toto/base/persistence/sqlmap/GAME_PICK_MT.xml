@@ -15,7 +15,7 @@ SELECT
     C.TM_CD_A as tmCdA,
     E.TM_NAME as awayTeam,    
     E.TM_NAME_BET as awayTeamBet,
-	GROUP_CONCAT(A.EXP_RESULT ORDER BY GM_POST_NO SEPARATOR ':') as expResult,
+	A.EXP_RESULT as expResult,
     C.MC_END as mcEnd,
     C.MC_RESULT as mcResult,
     C.MC_DATE as mcDate, 
@@ -32,10 +32,10 @@ FROM
     T_INFO_TEAM E
 WHERE A.GM_CD = B.GM_CD
 	AND A.MC_CD = C.MC_CD 
-	AND A.GM_CD = #gmCd#
     AND C.TM_CD_H = D.TM_CD
     AND C.TM_CD_A = E.TM_CD
-GROUP BY A.GM_CD, A.MC_CD, A.GM_LIST_NO
+	AND A.GM_CD = #gmCd#
+	AND A.GM_POST_NO = #gmPostNo#
 ORDER BY GM_LIST_NO, GM_POST_NO
 </select>
 
