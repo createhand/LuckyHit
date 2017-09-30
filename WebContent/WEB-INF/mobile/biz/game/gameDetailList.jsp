@@ -273,8 +273,8 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 	<tr>
 		<td colspan="2" class="result">
 			픽비율 : <gm id="subRatio" class="subGame"><fmt:formatNumber value="<%=totalBetCnt %>" pattern="#" /></gm>
-			/
-			구입금액 : 10,000원
+<!-- 			/ -->
+<!-- 			구입금액 : 10,000원 -->
 		</td>
 	</tr>
 	<tr>

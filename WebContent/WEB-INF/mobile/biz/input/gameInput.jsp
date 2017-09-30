@@ -22,8 +22,8 @@
 <option value="uefacl">UEFA챔스</option>
 <option value="uefacup">유로파</option>
 </select>
-경기일자(From)<input type="text" name="stDt" id="stDt"/>~
-경기일자(To)<input type="text" name="enDt" id="enDt"/><br/>
+경기일자(From)<input type="text" name="stDt" id="stDt" value="<%=DateUtil.getToday("yyyyMM")%>01"/>~
+경기일자(To)<input type="text" name="enDt" id="enDt" value="<%=DateUtil.getCurrentDate()%>"/><br/>
 <input type="submit" id="submitBtn" name="submitBtn" value="수집"/>
 </form>
 <br/>

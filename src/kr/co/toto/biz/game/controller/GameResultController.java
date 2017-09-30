@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.helper.HttpConnection;
 import org.jsoup.nodes.Document;
@@ -88,8 +89,11 @@ public class GameResultController extends AbstractController {
         	System.out.println(e);
         	errMsg.add(e.toString());
         }
-    	
+    	if(StringUtils.isBlank(gmPostNo)) {
+    		gmPostNo = String.valueOf((Integer)selectedGame.get(0).get("gmPostNo"));
+    	}
         model.addAttribute("selectedGame", selectedGame);
+        model.addAttribute("gmPostNo", gmPostNo);
     	model.addAttribute("gameList", gameList);
     	model.addAttribute("gmCd", gmCd);
         return getViewName(request);

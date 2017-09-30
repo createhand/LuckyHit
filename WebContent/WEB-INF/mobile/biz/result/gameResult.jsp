@@ -12,7 +12,6 @@
 	List<HashMap> selectedGame = (List<HashMap>)request.getAttribute("selectedGame");
 	String gmCd = (String)request.getAttribute("gmCd");
 	String gmPostNo = (String)request.getAttribute("gmPostNo");
-	if(gmPostNo == null) gmPostNo = "1";
 	String gmSeq = "";
 %>
 	<form name="frm" method="GET">
