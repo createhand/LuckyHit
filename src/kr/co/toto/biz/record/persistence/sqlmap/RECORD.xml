@@ -185,7 +185,9 @@ SELECT
     F.TM_NAME_BET AS tmNameBetA,
     C.EXP_RESULT AS expResult,
     D.MC_RESULT AS matchResult,
-    D.MC_END AS matchEnd
+    D.MC_END AS matchEnd,
+    D.MC_DATE AS matchDate,
+    D.MC_TIME AS matchTime
 FROM
 	T_INFO_GAME A,
     (SELECT 

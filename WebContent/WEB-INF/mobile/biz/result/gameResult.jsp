@@ -10,6 +10,7 @@
 <%
 	List<HashMap> gameList = (List<HashMap>)request.getAttribute("gameList");
 	List<HashMap> selectedGame = (List<HashMap>)request.getAttribute("selectedGame");
+	HashMap selectGameInfo = (HashMap)request.getAttribute("selectGameInfo");
 	String gmCd = (String)request.getAttribute("gmCd");
 	String gmPostNo = (String)request.getAttribute("gmPostNo");
 	String gmSeq = "";
@@ -42,6 +43,9 @@
 		  <div class="content_info">
 		  <table class="common">
 		  	<thead>
+		  	<tr>
+		  		<th colspan="6" style="color: TOMATO;">등록시간 : <%=selectGameInfo.get("regDt") %></th>
+		  	</tr>
 			<tr>
 				<th>번호</th>
 				<th>홈</th>

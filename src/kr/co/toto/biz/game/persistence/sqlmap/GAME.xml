@@ -105,7 +105,8 @@ SELECT
     B.GM_TURN AS gmTurn,
     B.GM_END_DATE AS gmEndDate,
     B.GM_END AS gmEnd,
-    B.GM_SEQ AS gmSeq
+    B.GM_SEQ AS gmSeq,
+    DATE_FORMAT(A.RG_DATE, '%Y-%m-%d %H:%i:%s') as regDt
 FROM
 	T_INFO_GAME_PICK A,
 	T_INFO_GAME B

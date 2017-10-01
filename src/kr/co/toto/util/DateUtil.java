@@ -561,14 +561,31 @@ public class DateUtil {
 	 * @param		: String
 	 * @return		: int
 	 */
-	public static int getDayDiff(String stDate, String enDate) {
+	public static int getDayDiff(String stDate, String enDate, String format) {
 		GregorianCalendar stCalandar = new GregorianCalendar();
 		GregorianCalendar enCalandar = new GregorianCalendar();
-		stCalandar.set(Integer.parseInt(stDate.substring(0,4)), Integer.parseInt(stDate.toString().substring(4,6))-1, Integer.parseInt(stDate.toString().substring(6,8)));
-		enCalandar.set(Integer.parseInt(enDate.substring(0,4)), Integer.parseInt(enDate.toString().substring(4,6))-1, Integer.parseInt(enDate.toString().substring(6,8)));
+		int difDay = 0;
+		long diffSec = 0;
+		if(format.equals("yyyyMMdd")) {
+			stCalandar.set(Integer.parseInt(stDate.substring(0,4)), Integer.parseInt(stDate.toString().substring(4,6))-1, Integer.parseInt(stDate.toString().substring(6,8)));
+			enCalandar.set(Integer.parseInt(enDate.substring(0,4)), Integer.parseInt(enDate.toString().substring(4,6))-1, Integer.parseInt(enDate.toString().substring(6,8)));
+			diffSec = (enCalandar.getTimeInMillis() - stCalandar.getTimeInMillis())/1000;
+			difDay = (int)diffSec/(60*60*24);
+			
+		} else if(format.equals("yyyyMMddHHmm")) {
+			stCalandar.set(Integer.parseInt(stDate.substring(0,4)), Integer.parseInt(stDate.toString().substring(4,6))-1, Integer.parseInt(stDate.toString().substring(6,8)), Integer.parseInt(stDate.toString().substring(8,10)), Integer.parseInt(stDate.toString().substring(10,12)));
+			enCalandar.set(Integer.parseInt(enDate.substring(0,4)), Integer.parseInt(enDate.toString().substring(4,6))-1, Integer.parseInt(enDate.toString().substring(6,8)), Integer.parseInt(enDate.toString().substring(8,10)), Integer.parseInt(enDate.toString().substring(10,12)));
+			diffSec = (enCalandar.getTimeInMillis() - stCalandar.getTimeInMillis())/1000;
+			difDay = (int)diffSec/60;
+			
+		} else if(format.equals("yyyyMMddHHmmss")) {
+			stCalandar.set(Integer.parseInt(stDate.substring(0,4)), Integer.parseInt(stDate.toString().substring(4,6))-1, Integer.parseInt(stDate.toString().substring(6,8)), Integer.parseInt(stDate.toString().substring(8,10)), Integer.parseInt(stDate.toString().substring(10,12)), Integer.parseInt(stDate.toString().substring(12,14)));
+			enCalandar.set(Integer.parseInt(enDate.substring(0,4)), Integer.parseInt(enDate.toString().substring(4,6))-1, Integer.parseInt(enDate.toString().substring(6,8)), Integer.parseInt(enDate.toString().substring(8,10)), Integer.parseInt(enDate.toString().substring(10,12)), Integer.parseInt(stDate.toString().substring(12,14)));
+			diffSec = (enCalandar.getTimeInMillis() - stCalandar.getTimeInMillis())/1000;
+			difDay = (int)diffSec;
+		}
 		
-		long diffSec = (enCalandar.getTimeInMillis() - stCalandar.getTimeInMillis())/1000;
-		int difDay = (int)diffSec/(60*60*24);
+		
 		
 		return difDay;
 	}
