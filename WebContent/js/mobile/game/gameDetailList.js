@@ -9,7 +9,7 @@ function getSubGameList(no, select) {
 	}
 	
 	expResultList[no-1].value = nowBet;
-	$('#subGame_'+no).text(nowBet);
+	$('#subGame_'+no).html("<div style='display:inline; color:red;font-size:15px;'>"+nowBet+"</div>");
 }
 
 function getResult(obj) {

@@ -205,6 +205,19 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 				</tr>
 				<tr>
 					<td colspan="3">
+						<%=homeTeamInfo.getTmNameDaum() %> :
+						<a href="https://search.naver.com/search.naver?where=news&ie=UTF-8&query=<%=homeTeamInfo.getTmNameDaum() %>&x=0&y=0" target=_blank>다음뉴스 검색</a>
+						/
+						<a href="http://search.daum.net/search?w=tot&DA=25A&rtmaxcoll=NNS&q=<%=homeTeamInfo.getTmNameDaum() %>" target=_blank>네이버뉴스 검색</a>
+						<br/><br/>
+						<%=awayTeamInfo.getTmNameDaum() %> :
+						<a href="https://search.naver.com/search.naver?where=news&ie=UTF-8&query=<%=awayTeamInfo.getTmNameDaum() %>&x=0&y=0" target=_blank>다음뉴스 검색</a>
+						/
+						<a href="http://search.daum.net/search?w=tot&DA=25A&rtmaxcoll=NNS&q=<%=awayTeamInfo.getTmNameDaum() %>" target=_blank>네이버뉴스 검색</a>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="background-color: AliceBlue">
 					<%
 						if(mr.getMatchEnd().equals("Y")) {
 							if(mr.getMatchResult().equals("W")) {
@@ -263,7 +276,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		if(i % 2 == 0) {
 			out.print("<tr>");
 		}
-		out.print("<td>"+mr.getGameListNo()+". "+homeTeamInfo.getTmNameBet()+" VS "+awayTeamInfo.getTmNameBet());
+		out.print("<td style=\"font-size:15px;\">"+mr.getGameListNo()+". "+homeTeamInfo.getTmNameBet()+" VS "+awayTeamInfo.getTmNameBet());
 		out.print("(<gm id='subGame_"+mr.getGameListNo()+"' class='subGame' style='font-color:red;'></gm>)</td>");
 		if(i % 2 == 1) {
 			out.print("</tr>");
@@ -271,7 +284,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
   	}
 %>
 	<tr>
-		<td colspan="2" class="result">
+		<td colspan="2" class="result" style="font-size:15px;">
 			픽비율 : <gm id="subRatio" class="subGame"><fmt:formatNumber value="<%=totalBetCnt %>" pattern="#" /></gm>
 <!-- 			/ -->
 <!-- 			구입금액 : 10,000원 -->
