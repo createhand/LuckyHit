@@ -5,7 +5,7 @@
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
   <div id="header">
-      <h1><a href="/gamePickList.do"></a></h1>
+      <h1><a href="/gamePickList.do">LuckyHit</a></h1> <br/>운빨! 
   </div>
   <div id="nav">
     <ol>

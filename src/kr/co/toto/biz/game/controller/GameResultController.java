@@ -92,8 +92,10 @@ public class GameResultController extends AbstractController {
         	}
         	
         	for(HashMap pickInfo : gameList) {
-        		if(StringUtils.equals(gmPostNo, String.valueOf((Integer)pickInfo.get("gmPostNo")))) {
+        		if(StringUtils.equals(gmPostNo, String.valueOf((Integer)pickInfo.get("gmPostNo"))) &&
+        				StringUtils.equals(gmCd, String.valueOf((String)pickInfo.get("gmCd")))) {
         			selectGameInfo = pickInfo;
+        			break;
         		}
         	}
         	
@@ -115,15 +117,15 @@ public class GameResultController extends AbstractController {
         			String nowTime = DateUtil.getCurrentDateTime().substring(0, 12);
         			int aftTime = DateUtil.getDayDiff(mcDate+mcTime, nowTime, "yyyyMMddHHmm");
         			
-        			//경기시작 후 100분이상 경과된 경기
-        			if(aftTime > 125) {
+        			//경기시작 후 120분이상 경과된 경기
+        			if(aftTime > 120) {
         				endCnt++;
         			}
         		}
         	}
         	
         	if(endCnt > 0) {
-	        	//종려된 경기 수집일자 범위
+	        	//종료된 경기 수집일자 범위
 	        	String endMatchStDt = selectGameInfo.get("gmEndDate").toString();
 	        	
 	        	//경기결과 수집
