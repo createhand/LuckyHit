@@ -9,13 +9,24 @@
 <%
 	Integer mResult = (Integer)request.getAttribute("mResult");
 	Integer sResult = (Integer)request.getAttribute("sResult");
-	List<String> errMsg = (List<String>)request.getAttribute("errMsg");
+	List<String> errMsgList = (List<String>)request.getAttribute("errMsg");
+	String errMsg = "";
+	
+	for(int i=0;i<errMsgList.size();i++) {
+		errMsg = errMsgList.get(i)+"\\n";
+	}
 %>
-<%//=mResult.intValue()%> 건 입력되었습니다.<br/>
-<%//=mResult.intValue()%> 건 수정되었습니다.<br/><br/><br/>
-오류메시지<br/>
+<script>
 <%
-// 	for(int i=0;i<errMsg.size();i++) {
-// 		out.print(errMsg.get(i)+"<br/>");
-// 	}
+	if(StringUtils.isNotBlank(errMsg)) {
+%>		
+		alert("오류메시지 : <%=errMsg%>");
+<%		
+	} else {
 %>
+		alert("정상적으로 등록되었습니다.");
+<%		
+	}
+%>
+location.href = "gameResult.do"
+</script>

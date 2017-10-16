@@ -12,7 +12,7 @@
   		</h2>
       </div>
 <div class="content">
-	<iframe src="http://kimpele.com/gnuboard4/bbs/board.php?bo_table=notice" style="border:0px;width: 100%;height:100%;padding: 0px;margin: 0px;"></iframe>
+....
 </div>
 
       <div class="content_title">
@@ -24,7 +24,7 @@
 	<div class="content_info">
 		<div id="intro">
 		건의사항이나 문의사항은 아래메일 주소로 연락주세요~<br/>
-		<div class="email">문의 : help@kimpele.com</div>
+		<div class="email">문의 : createhand@naver.com</div>
 		</div>		
 	</div>
 </div>

@@ -9,13 +9,24 @@
 <%
 	Integer iResult = (Integer)request.getAttribute("iResult");
 	Integer uResult = (Integer)request.getAttribute("uResult");
-	List<String> errMsg = (List<String>)request.getAttribute("errMsg");
+	List<String> errMsgList = (List<String>)request.getAttribute("errMsg");
+	String msg = iResult.intValue() + " 건 입력되었습니다.\\n";
+	msg += uResult.intValue() + " 건 수정되었습니다.\\n";
+	String errMsg = "";
+	
+	for(int i=0;i<errMsgList.size();i++) {
+		errMsg = errMsgList.get(i)+"\\n";
+	}
+	
 %>
-<%=iResult.intValue()%> 건 입력되었습니다.<br/>
-<%=uResult.intValue()%> 건 수정되었습니다.<br/><br/><br/>
-오류메시지<br/>
+<script>
+alert("<%=msg%>");
 <%
-	for(int i=0;i<errMsg.size();i++) {
-		out.print(errMsg.get(i)+"<br/>");
+	if(StringUtils.isNotBlank(errMsg)) {
+%>		
+		alert("오류메시지 : <%=errMsg%>");
+<%		
 	}
 %>
+location.href = "recordInput.do"
+</script>
