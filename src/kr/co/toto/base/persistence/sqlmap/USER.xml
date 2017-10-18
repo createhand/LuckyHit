@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="USER" >
+	
+<typeAlias alias="GameDetailListDt" type="kr.co.toto.biz.game.persistence.domain.GameDetailListDt" />
+<typeAlias alias="HashMap" type="java.util.HashMap" />
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
+
+<select id="selectUser" parameterClass="String" resultClass="tadata" >
+SELECT
+	*
+FROM 
+	T_INFO_USER
+WHERE 
+	USER_ID = #userId#
+</select>
+
+<insert id="insertUser" parameterClass="tadata">
+INSERT INTO T_INFO_USER (
+		USER_ID,
+		USER_NM,
+		USER_EML,
+		USER_PWD
+	) VALUES (
+		#userId#,
+		#userNm#,
+		#userEml#,
+		#userPwd# 
+	)
+</insert>
+
+</sqlMap>
