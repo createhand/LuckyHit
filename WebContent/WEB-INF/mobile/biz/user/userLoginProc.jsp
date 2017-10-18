@@ -17,13 +17,12 @@
 		session.setAttribute("userId", userInfo.getString("USER_ID"));
 		session.setAttribute("userNm", userInfo.getString("USER_NM"));
 	}
-	
 %>
 <script>
 	if(<%=isLogin%>) {
 		location.href = "<%=request.getContextPath() %>myPage.do";
 	} else {
 		alert("<%=errMsg%>");
-		location.href = "<%=request.getContextPath() %>userLogin.do";
+		history.back();
 	}
 </script>

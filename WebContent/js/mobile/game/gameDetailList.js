@@ -22,17 +22,17 @@ function checkPick() {
 	var expResultList = document.getElementsByName("expResult");
 	
 	for(var i=0;i<expResultList.length;i++) {
-		alert(expResultList[i].value);
 		if(isBlank(expResultList[i].value)) {
 			alert((i+1)+"번째 픽이 선택되지 않았습니다.");
 			return;
 		}
 	}
 	
-	alert(document.getElementById("pubYnChk"));
-	
-	
-	//document.frm.submit();
+	if(!isNull(document.getElementById("pubYnChk"))
+			&& document.getElementById("pubYnChk").checked) {
+		document.getElementById("pubYn").value = "1";
+	}
+	document.frm.submit();
 }
 
 

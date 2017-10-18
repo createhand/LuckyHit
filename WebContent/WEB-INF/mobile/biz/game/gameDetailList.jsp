@@ -263,7 +263,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 			</table>
 			<input type="hidden" name="gmCd" value="<%=gameMt.getGmCd() %>" />
 			<input type="hidden" name="userId" value="<%=userId %>" />
-			<input type="hidden" name="pubYn" value="0" />
+			<input type="hidden" name="pubYn" id="pubYn" value="0" />
 			</form>
 		</div>
 		<br/><br/><br/><br/><br/><br/><br/>
@@ -298,7 +298,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 <%
 	if(StringUtils.isNotBlank(userId)) {
 %>
-					/ <input type="checkbox"  name="pubYnChk" value="1" /> 비공개픽
+					/ <input type="checkbox"  name="pubYnChk" id="pubYnChk"/> 비공개픽
 <%		
 	}
 %>					
