@@ -22,8 +22,8 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 %>
 
 		<div id="content">
-			<table class="common">
 			<form name="searchFrm" method="get">
+			<table class="common">
 			<thead>
 				<tr>
 					<th colspan="3">
@@ -53,6 +53,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 			</thead>
 			</table>
 			</form>
+			
 			<form name="frm" action="/gamePicking.do" method="post">
 			<table id="mcTbl" class="common">
 			<tbody>
@@ -205,15 +206,19 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 				</tr>
 				<tr>
 					<td colspan="3">
-						<%=homeTeamInfo.getTmNameDaum() %> :
-						<a href="https://search.naver.com/search.naver?where=news&ie=UTF-8&query=<%=homeTeamInfo.getTmNameDaum() %>&x=0&y=0" target=_blank>다음뉴스 검색</a>
+						<%=homeTeamInfo.getTmName() %> :
+						<a href="https://search.naver.com/search.naver?query=<%=homeTeamInfo.getTmName() %>" target=_blank>네이버 뉴스 검색</a>
 						/
-						<a href="http://search.daum.net/search?w=tot&DA=25A&rtmaxcoll=NNS&q=<%=homeTeamInfo.getTmNameDaum() %>" target=_blank>네이버뉴스 검색</a>
+						<a href="https://search.daum.net/search?q=<%=homeTeamInfo.getTmName() %>" target=_blank>다음 뉴스 검색</a>
+						/
+						<a href="https://www.google.co.kr/search?q=<%=homeTeamInfo.getTmName() %>&ie=UTF-8" target=_blank>구글 검색</a>
 						<br/><br/>
-						<%=awayTeamInfo.getTmNameDaum() %> :
-						<a href="https://search.naver.com/search.naver?where=news&ie=UTF-8&query=<%=awayTeamInfo.getTmNameDaum() %>&x=0&y=0" target=_blank>다음뉴스 검색</a>
+						<%=awayTeamInfo.getTmName() %> :
+						<a href="https://search.naver.com/search.naver?query=<%=awayTeamInfo.getTmName() %>&x=0&y=0" target=_blank>네이버 뉴스 검색</a>
 						/
-						<a href="http://search.daum.net/search?w=tot&DA=25A&rtmaxcoll=NNS&q=<%=awayTeamInfo.getTmNameDaum() %>" target=_blank>네이버뉴스 검색</a>
+						<a href="https://search.daum.net/search?q=<%=awayTeamInfo.getTmName() %>" target=_blank>다음 뉴스 검색</a>
+						/
+						<a href="https://www.google.co.kr/search?q=<%=awayTeamInfo.getTmName() %>&ie=UTF-8" target=_blank>구글 검색</a>
 					</td>
 				</tr>
 				<tr>
@@ -254,14 +259,11 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 					<textarea name="gmPostContent" rows="10" cols="30"></textarea>
 				</td>
 			</tr>
-			<tr>
-				<td colspan="3">
-					<input type="button" value="픽 등록" onclick="checkPick()";/>
-				</td>
-			</tr>
 			</tbody>
 			</table>
 			<input type="hidden" name="gmCd" value="<%=gameMt.getGmCd() %>" />
+			<input type="hidden" name="userId" value="<%=userId %>" />
+			<input type="hidden" name="pubYn" value="0" />
 			</form>
 		</div>
 		<br/><br/><br/><br/><br/><br/><br/>
@@ -292,7 +294,15 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 	</tr>
 	<tr>
 		<td colspan="2" class="result">
-			<input type="button" value="픽 등록" onclick="checkPick()";/>
+			<input type="button" value="픽 등록" onclick="checkPick();"/>
+<%
+	if(StringUtils.isNotBlank(userId)) {
+%>
+					/ <input type="checkbox"  name="pubYnChk" value="1" /> 비공개픽
+<%		
+	}
+%>					
+			
 		</td>
 	</tr>
   </table>

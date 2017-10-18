@@ -95,12 +95,16 @@ INSERT INTO
 	( GM_CD
 	,GM_POST_NO
 	,GM_POST_CONTENT
+	,PUB_YN
+	,USER_ID
 	,MD_DATE
 	,RG_DATE )
 VALUES
 	( #gmCd# 
 	, #gmPostNo#
 	, #gmPostContent#
+	, #pubYn#
+	, #userId#
 	, now()
 	, now() )
 </insert>

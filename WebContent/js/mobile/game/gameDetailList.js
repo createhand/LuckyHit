@@ -21,13 +21,18 @@ function checkPick() {
 	
 	var expResultList = document.getElementsByName("expResult");
 	
-	for(var i=0;i<expResultList;i++) {
-		if(isNull(expResultList[i]) || expResultList[i] == "") {
+	for(var i=0;i<expResultList.length;i++) {
+		alert(expResultList[i].value);
+		if(isBlank(expResultList[i].value)) {
 			alert((i+1)+"번째 픽이 선택되지 않았습니다.");
 			return;
 		}
 	}
-	document.frm.submit();
+	
+	alert(document.getElementById("pubYnChk"));
+	
+	
+	//document.frm.submit();
 }
 
 

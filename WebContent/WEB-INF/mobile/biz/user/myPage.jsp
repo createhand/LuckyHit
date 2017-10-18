@@ -7,26 +7,8 @@
 <%@ page import="org.springframework.web.servlet.support.RequestContext"%>
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
 <%
-	Integer mResult = (Integer)request.getAttribute("mResult");
-	Integer sResult = (Integer)request.getAttribute("sResult");
-	List<String> errMsgList = (List<String>)request.getAttribute("errMsg");
-	String errMsg = "";
-	
-	for(int i=0;i<errMsgList.size();i++) {
-		errMsg = errMsgList.get(i)+"\\n";
-	}
 %>
-<script>
-<%
-	if(StringUtils.isNotBlank(errMsg)) {
-%>		
-		alert("오류메시지 : <%=errMsg%>");
-<%		
-	} else {
-%>
-		alert("정상적으로 등록되었습니다.");
-<%		
-	}
-%>
-location.href = "gameResult.do"
-</script>
+
+마이 페이지
+-내 픽목록
+-적중내역

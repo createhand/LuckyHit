@@ -13,7 +13,7 @@
 	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/SEASON_MT.xml"/>
 	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/GAME_MT.xml"/>
 	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/GAME_PICK_MT.xml"/>
-	
+	<sqlMap resource="kr/co/toto/base/persistence/sqlmap/USER.xml"/>
 	<!-- 비즈니스 로직 쿼리 -->
 	<sqlMap resource="kr/co/toto/biz/game/persistence/sqlmap/GAME.xml"/>
 	<sqlMap resource="kr/co/toto/biz/record/persistence/sqlmap/RECORD.xml"/>

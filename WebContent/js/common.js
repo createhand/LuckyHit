@@ -6,6 +6,14 @@ function isNull(obj) {
 	} 
 }
 
+function isBlank(obj) {
+	if(obj == null || obj == undefined || obj == "null" || obj == "undefined" || obj == "") {
+		return true;
+	} else {
+		return false;
+	} 
+}
+
 function replaceStr(src, des, str) {
 	//src : original string
 	//des : target string

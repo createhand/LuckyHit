@@ -11,7 +11,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +40,7 @@ import kr.co.toto.util.ParamMap;
 public class GamePickController extends AbstractController {
 	
     /**
-     * 게임픽 포스팅
+     * 게임픽 등록
      * @param request
      * @param response
      * @param model
@@ -55,10 +57,18 @@ public class GamePickController extends AbstractController {
     	
     	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
     	
+    	//게임CD
     	String gmCd = request.getParameter("gmCd");
+    	//픽내용
     	String gmPostContent = request.getParameter("gmPostContent");
     	gmPostContent = gmPostContent.replace("\r\n","<br/>");
+    	//픽번호
     	int gmPostNo = Integer.parseInt(gameService.selectMaxPostNo(new ParamMap(params)))+1;
+    	//공개여부
+    	String pubYn = request.getParameter("pubYn");
+    	if(StringUtils.isBlank(pubYn)) pubYn = "0";
+    	//사용자ID
+    	String userId = request.getParameter("userId");
     	
        	String expResult[] = request.getParameterValues("expResult");    	
     	String gmListNo[] = request.getParameterValues("gmListNo");
@@ -83,7 +93,8 @@ public class GamePickController extends AbstractController {
     	gamePick.put("gmCd", gmCd);
     	gamePick.put("gmPostNo", String.valueOf(gmPostNo));
     	gamePick.put("gmPostContent", gmPostContent);
-    	
+    	gamePick.put("pubYn", pubYn);
+    	gamePick.put("userId", userId);
     	
     	List<HashMap<String, String>> gamePickList = new ArrayList<HashMap<String, String>>();
     	
