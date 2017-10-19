@@ -67,6 +67,9 @@ public class GameResultController extends AbstractController {
     	RecordService recordService = (RecordService) BeanFinder.getBean(RecordService.class);
     	ParamMap map = new ParamMap(params);
     	
+    	//공개픽만 조회
+    	map.put("pubYn", "0");
+    	
     	String gmCd = map.getString("gmCd");
     	String gmPostNo = map.getString("gmPostNo");
     	

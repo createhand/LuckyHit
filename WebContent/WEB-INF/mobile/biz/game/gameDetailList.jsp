@@ -110,8 +110,31 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		double loseBet = (mr.getLoseBetCnt()/totalBetCnt)*100;
 		
 %>
+				<tr id="gm<%=mr.getGameListNo() %>" class="off">
+					<td width="40%" class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'W')">
+						<%=mr.getHomeTeamName() %><br/>
+						<div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div>
+					</td>
+					<td class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'D')">VS<br/>
+					<div id="ratio"><fmt:formatNumber value="<%=drawBet %>" pattern="###.##" /></div>
+					</td>
+					<td width="40%" class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'L')">
+						<%=mr.getAwayTeamName() %><br/>
+						<div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div>
+					</td>
+				</tr>
 				<tr>
-					<td colspan="3">
+					<td colspan="3" onClick="viewDetail('<%=mr.getGameListNo() %>');">상세정보</td>
+				</tr>
+				<!--  
+				<tr>
+					<td colspan="3" style="height: 0px;padding: 0 0 0 0;margin: 0 0 0 0; border : 0px;">
+						<table id="mcDetail<%=mr.getGameListNo() %>" style="width:100%;display: block;">
+						-->
+						<!--  inner table start -->
+						
+				<tr id="mcDate<%=mr.getGameListNo() %>" style="page-break-inside: avoid; page-break-after: avoid;">
+					<td colspan="3" width="100%">
 						<%=mr.getGameListNo()%>.
 						<%=DateUtil.getDate2String(DateUtil.getDate(mr.getMatchDate(), "yyyyMMdd"), "yyyy-MM-dd")%>
 						(<%=new BizUtil().getDayStr(Integer.parseInt(mr.getMatchDay()))%>)
@@ -127,24 +150,24 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						<input type="hidden" id="expResult" name="expResult">
 					</td>
 				</tr>
-				<tr id="gm<%=mr.getGameListNo() %>" class="off">
-					<td width="40%" class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'W')">
+				<tr id="mcTeam<%=mr.getGameListNo() %>" >
+					<td width="40%">
 						<img src="<%=homeTeamInfo.getTmImgUrl() %>" width="70" height="70" alt="<%=mr.getHomeTeamName() %>"/><br/>
 						<%=mr.getHomeTeamName() %><br/><br/>
 						(<%=homeTeamSeasonInfo.getInt("RANK") %>위)<br/><br/>
 						<div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div>
 					</td>
-					<td class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'D')">VS<br/>
+					<td>VS<br/>
 					<div id="ratio"><fmt:formatNumber value="<%=drawBet %>" pattern="###.##" /></div>
 					</td>
-					<td width="40%" class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'L')">
+					<td width="40%">
 						<img src="<%=awayTeamInfo.getTmImgUrl() %>" width="70" height="70" alt="<%=mr.getAwayTeamName() %>"/><br/>
 						<%=mr.getAwayTeamName() %><br/><br/>
 						(<%=awayTeamSeasonInfo.getInt("RANK") %>위)<br/><br/>
 						<div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div>
 					</td>
 				</tr>
-				<tr>
+				<tr id="mcLatest<%=mr.getGameListNo() %>" >
 					<td>
 						<%=hLtRecord%><br/><br/>
 						득:<%=homeScore.get("totalGetScore") %>/실:<%=homeScore.get("totalLostScore") %>
@@ -155,7 +178,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						득:<%=awayScore.get("totalGetScore") %>/실:<%=awayScore.get("totalLostScore") %>
 					</td>
 				</tr>
-				<tr>
+				<tr id="mcVersus<%=mr.getGameListNo() %>" >
 					<td>
 						<%=hLtAgRecord%><br/><br/>
 						득:<%=homeTeamAgainstScore.get("totalGetScore") %>/실:<%=homeTeamAgainstScore.get("totalLostScore") %>
@@ -166,7 +189,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						득:<%=awayTeamAgainstScore.get("totalGetScore") %>/실:<%=awayTeamAgainstScore.get("totalLostScore") %>
 					</td>
 				</tr>
-				<tr>
+				<tr id="mcAmaz<%=mr.getGameListNo() %>" >
 					<td>
 					<%
 						for(TAData amazingInfo : homeTeamAmzaingList) {
@@ -204,7 +227,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						<input type="hidden" id="mcCd" name="mcCd" value="<%=mr.getMatchCode()%>" />
 					</td>
 				</tr>
-				<tr>
+				<tr id="mcNews<%=mr.getGameListNo() %>" >
 					<td colspan="3">
 						<%=homeTeamInfo.getTmName() %> :
 						<a href="https://search.naver.com/search.naver?query=<%=homeTeamInfo.getTmName() %>" target=_blank>네이버 뉴스 검색</a>
@@ -221,7 +244,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						<a href="https://www.google.co.kr/search?q=<%=awayTeamInfo.getTmName() %>&ie=UTF-8" target=_blank>구글 검색</a>
 					</td>
 				</tr>
-				<tr>
+				<tr id="mcResult<%=mr.getGameListNo() %>" >
 					<td colspan="3" style="background-color: AliceBlue">
 					<%
 						if(mr.getMatchEnd().equals("Y")) {
@@ -239,6 +262,13 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 					%>
 					</td>
 				</tr>
+				
+				<!--  inner table end -->
+				<!-- 
+						</table>
+					</td>
+				</tr>
+				-->
 <%		
 	}
 %>
@@ -286,24 +316,25 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
   	}
 %>
 	<tr>
-		<td colspan="2" class="result" style="font-size:15px;">
+		<td colspan="2" class="result">
 			픽비율 : <gm id="subRatio" class="subGame"><fmt:formatNumber value="<%=totalBetCnt %>" pattern="#" /></gm>
 <!-- 			/ -->
 <!-- 			구입금액 : 10,000원 -->
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2" class="result">
-			<input type="button" value="픽 등록" onclick="checkPick();"/>
 <%
 	if(StringUtils.isNotBlank(userId)) {
 %>
-					/ <input type="checkbox"  name="pubYnChk" id="pubYnChk"/> 비공개픽
+		<td class="result" style="font-size:15px; background-color: Azure;" onclick="checkPick();">픽등록</td>
+		<td class="result" style="font-size:15px; background-color: Azure;"><input type="checkbox"  name="pubYnChk" id="pubYnChk"/> 비공개픽</td>
 <%		
+	} else {
+%>
+		<td colspan="2" style="font-size:15px; background-color: Azure;" class="result" onclick="checkPick();">픽등록</td>
+<%
 	}
 %>					
-			
-		</td>
 	</tr>
   </table>
   </nav>

@@ -72,6 +72,12 @@ WHERE A.GM_CD = B.GM_CD
 <isNotEmpty property="gmPostNo" prepend="AND">
 	B.GM_POST_NO = #gmPostNo#
 </isNotEmpty>
+<isNotEmpty property="userId" prepend="AND">
+	B.USER_ID = #userId#
+</isNotEmpty>
+<isNotEmpty property="pubYn" prepend="AND">
+	B.PUB_YN = #pubYn#
+</isNotEmpty>
 </select>
 
 <!-- 전체 게임 목록 -->
@@ -111,6 +117,13 @@ FROM
 	T_INFO_GAME_PICK A,
 	T_INFO_GAME B
 WHERE A.GM_CD = B.GM_CD
+<isNotEmpty property="pubYn">
+			 AND PUB_YN = #pubYn#
+</isNotEmpty>
+<isNotEmpty property="userId">
+			 AND USER_ID = #userId#
+</isNotEmpty>
+
 ORDER BY B.GM_CD DESC, GM_POST_NO DESC
 </select>
 

@@ -35,9 +35,32 @@ function checkPick() {
 	document.frm.submit();
 }
 
+function viewDetail(no) {
+	
+	//var dateObj = document.getElementById("mcDetail"+no);
+	var dateObj = document.getElementById("mcDate"+no);
+	var view = "none";
+	
+	if(dateObj.style.display == "none") {
+		view = "block";
+	}
+	
+	//document.getElementById("mcDetail"+no).style.display = view;
+	
+	document.getElementById("mcDate"+no).style.display = view;
+//	document.getElementById("mcTeam"+no).style.display = view;
+//	document.getElementById("mcLatest"+no).style.display = view;
+//	document.getElementById("mcVersus"+no).style.display = view;
+//	document.getElementById("mcAmaz"+no).style.display = view;
+//	document.getElementById("mcNews"+no).style.display = view;
+//	document.getElementById("mcResult"+no).style.display = view;
+	
+}
+
 
 //복수 픽 선택
 $(function() {
+	
 	$('#mcTbl td').click(function() {
 		var elem = $(this);
 		var parent = elem.parent();

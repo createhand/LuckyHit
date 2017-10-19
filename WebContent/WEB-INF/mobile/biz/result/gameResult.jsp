@@ -17,7 +17,7 @@
 %>
 	<form name="frm" method="GET">
       <div class="content_title">
-  		<h2 class="header">적중결과
+  		<h2 class="header">공개픽
   		<select name="gmList" onChange="getResult(this)">
 <%
 			for(int i=0;i<gameList.size();i++) {

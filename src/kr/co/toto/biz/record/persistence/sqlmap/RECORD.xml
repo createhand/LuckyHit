@@ -197,7 +197,13 @@ FROM
     WHERE GM_CD = #gmCd#
 	<isNotEmpty property="gmPostNo">
 		AND GM_POST_NO = #gmPostNo#
-	</isNotEmpty>    
+	</isNotEmpty>
+	<isNotEmpty property="userId">
+		AND USER_ID = #userId#
+	</isNotEmpty>
+	<isNotEmpty property="pubYn">
+		AND PUB_YN = #pubYn#
+	</isNotEmpty>		
     ) B,
     T_INFO_GAME_PICK_LIST C,
     T_INFO_MATCH_RECORD D,

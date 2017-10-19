@@ -15,10 +15,10 @@
       <h1 style="color:white;font-size:16px;">LuckyHit</h1><br/>
       <h1 style="color:white;">운빨!</h1><br/>
 <%
-	if(StringUtils.isNotBlank(userNm)) {
+	if(nowLogin) {
 %>
 		<h1 style="color:white;text-align:right ;" onClick="logout();"><%=userNm %>(<%=userId %>)</h1>
-<%		
+<%
 	}
 %>
   </div>
@@ -38,9 +38,16 @@
 %>      
       </li>
       <li class="calc"><a href="<%=request.getContextPath() %>gameCalc.do" accesskey="2">계산기</a></li>
-      <li class="result"><a href="<%=request.getContextPath() %>gameResult.do" accesskey="3">적중결과</a></li>
-      <li class="bbs"><a href="<%=request.getContextPath() %>gameDetailList.do" accesskey="4">게임픽</a></li>
-<%--       <li class="intro"><a href="<%=request.getContextPath() %>/introPage.do" accesskey="5">공지사항</a></li>       --%>
-      <li class="intro"><a href="<%=request.getContextPath() %>gameInput.do" accesskey="4">게임수집</a></li>
+      <li class="result"><a href="<%=request.getContextPath() %>gameResult.do" accesskey="3">공개픽</a></li>
+      <li class="bbs"><a href="<%=request.getContextPath() %>gameDetailList.do" accesskey="4">픽올리기</a></li>
+      <li class="intro"><a href="<%=request.getContextPath() %>introPage.do" accesskey="5">게시판</a></li>
+<%
+//관리자 게임수집 링크
+	if(nowLogin && (userId.equals("createhand") || userId.equals("usuyoung"))) {
+%>      
+<%--       <li class="intro"><a href="<%=request.getContextPath() %>gameInput.do" accesskey="6">게임수집</a></li> --%>
+<%
+	}
+%>      
     </ol>
   </div>

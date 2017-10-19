@@ -11,7 +11,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns/fb#" xmlns:fb="http://www.facebook.com/2008/fbml" lang="ko-KR">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="LuckyHit">
 <title><tiles:insertAttribute name="title"/></title>

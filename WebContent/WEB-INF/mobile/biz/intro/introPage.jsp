@@ -23,7 +23,7 @@
 <div class="content">
 	<div class="content_info">
 		<div id="intro">
-		건의사항이나 문의사항은 아래메일 주소로 연락주세요~<br/>
+		요청이나 문의사항은 아래 메일주소로 연락주세요~<br/>
 		<div class="email">문의 : createhand@naver.com</div>
 		</div>		
 	</div>
