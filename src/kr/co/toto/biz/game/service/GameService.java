@@ -155,16 +155,29 @@ public class GameService {
     }
     
     /**
-     * 픽이 있는 게임 목록 조
+     * 픽이 있는 게임 목록 조회한다
      * 
      * @param 
      * @return
      * @throws BizException
      * @throws Exception
      */ 
-    public List<HashMap> selectPickGameList(ParamMap map) throws Exception {
+    public List<TAData> selectPickGameList(ParamMap map) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (List<HashMap>)dao.selectList("GAME.selectPickGameList", map);
+    	return (List<TAData>)dao.selectList("GAME.selectPickGameList", map);
+    }
+    
+    /**
+     * 픽이 있는 게임 목록 카운트
+     * 
+     * @param 
+     * @return
+     * @throws BizException
+     * @throws Exception
+     */ 
+    public int selectPickGameListCount(ParamMap map) throws Exception {
+    	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
+    	return (Integer)dao.select("GAME.selectPickGameListCount", map);
     }
     
     /**

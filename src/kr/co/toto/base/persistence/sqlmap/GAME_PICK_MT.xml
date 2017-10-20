@@ -94,6 +94,7 @@ INSERT INTO
 	T_INFO_GAME_PICK
 	( GM_CD
 	,GM_POST_NO
+	,GM_POST_TITLE
 	,GM_POST_CONTENT
 	,PUB_YN
 	,USER_ID
@@ -102,6 +103,7 @@ INSERT INTO
 VALUES
 	( #gmCd# 
 	, #gmPostNo#
+	, #gmPostTitle#
 	, #gmPostContent#
 	, #pubYn#
 	, #userId#

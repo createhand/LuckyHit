@@ -9,7 +9,9 @@
 <%@ page import="org.springframework.web.servlet.support.RequestContext"%>
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
 <%
-	List<TAData> pickList = (List<TAData>)request.getAttribute("pickList");
+	List<HashMap> pickList = (List<HashMap>)request.getAttribute("pickList");
+	List<HashMap> selectedGame = (List<HashMap>)request.getAttribute("selectedGame");
+	HashMap selectGameInfo = (HashMap)request.getAttribute("selectGameInfo");
 
 	//페이징 관련
 	int  totalCount = (Integer)request.getAttribute("totalCount");
@@ -24,6 +26,25 @@
 	<form name="frm" method="GET">
       <div class="content_title">
   		<h2 class="header">공개픽
+<!--   		<select name="gmList" onChange="getResult(this)"> -->
+<%
+// 			for(int i=0;i<pickList.size();i++) {
+				
+// 				HashMap obj = pickList.get(i);
+// 				String getGmCd = obj.get("gmCd").toString();
+// 				String getGmPostNo = obj.get("gmPostNo").toString();
+// 				if(gmCd.equals(getGmCd)) gmSeq = obj.get("gmSeq").toString();
+				
+%>  		
+<%-- 				<option value="<%=getGmCd%>@<%=obj.get("gmPostNo")%>" <%=gmCd.equals(getGmCd) && gmPostNo.equals(getGmPostNo) ? "selected" : ""%>> --%>
+<%-- 				<%=obj.get("gmEndDate").toString().substring(0, 4) %> <%=obj.get("gmName") %> <%=obj.get("gmTurn") %>회-<%=obj.get("gmPostNo") %> <%=obj.get("gmPostTitle") %> --%>
+<!-- 				</option> -->
+<%
+// 			}
+%>
+<!-- 		</select> -->
+		<input type="hidden" id="gmCd" name="gmCd" value="<%=gmCd %>" />
+		<input type="hidden" id="gmPostNo" name="gmPostNo" value="<%=gmPostNo %>" />
 		<input type="hidden" id="pageNo" name="pageNo" value="<%=pageNo %>" />
   		</h2>
       </div>
@@ -31,10 +52,13 @@
 		  <div class="content_info">
 		  <table class="common">
 		  	<thead>
+		  	<tr>
+		  		<th colspan="6" style="color: TOMATO;">등록시간 : <%=selectGameInfo.get("regDt") %></th>
+		  	</tr>
 			<tr>
 				<th>번호</th>
-				<th>제목</th>
-				<th>작성자</th>
+				<th>홈</th>
+				<th>원정</th>
 				<th>예측</th>
 				<th>결과</th>
 				<th>적중</th>
@@ -43,11 +67,40 @@
 			<tbody>
 				<tr>			
 <%
-	for(TAData pickInfo : pickList) {
+	double accCnt = 0;
+	for(int i=0;i<selectedGame.size();i++) {
+		
+		HashMap obj = selectedGame.get(i);
+		
+		//예상 결과
+		String expResult = obj.get("expResult").toString();
+		//경기 결과
+		String mcResult = "";
+		//경기 종료여부
+		String matchEnd = obj.get("matchEnd").toString();
+		
+		String result = "예정";
+		String csStyle = "normal";
+		if(StringUtils.equals(matchEnd, DomainConst.YES)) {
+			
+			 mcResult = obj.get("matchResult").toString();
+			 
+			if(expResult.indexOf(mcResult) > -1) {
+				accCnt++;
+				result = "적중";
+				csStyle = "result";
+			} else {
+				result = "미적중";
+			}
+		}		
 %>
 			<tr>
-				<td><%=pickInfo.getString("RNUM") %></td>
-				<td><%=pickInfo.getString("RNUM") %></td>
+				<td><%=obj.get("gmListNo") %></td>
+				<td><%=obj.get("tmNameBetH") %></td>
+				<td><%=obj.get("tmNameBetA") %></td>
+				<td><%=new BizUtil().getConvertWinstrResult(expResult) %></td>
+				<td><%=new BizUtil().getWinstrResult(mcResult) %></td>
+				<td class="<%=csStyle%>"><%=result%></td>
 			</tr>
 <%		
 	}	

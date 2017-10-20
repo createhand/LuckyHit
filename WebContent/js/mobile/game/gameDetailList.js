@@ -1,5 +1,33 @@
-function getSubGameList(no, select) {
-	var expResultList = document.getElementsByName("expResult");
+function getSubGameList(obj, no, select) {
+	
+	//화면표시 및 픽률 계산
+	var elem = $(obj);
+	var parent = elem.parent();
+	var selectedRatio = elem.find("div").text();
+	var totalBetCnt = $('#totalBetCnt').text();
+	var myRatio = $('#myRatio').text();
+
+   	if(elem.find("div").attr("id") != "ratio") return;
+    
+   	//ratio
+   	var nowRatio;
+   	
+   	var expResultList = document.getElementsByName("expResult");
+   	
+   	if(elem.attr("class") == "clickOff") {
+   		//class on
+   		elem.attr("class", "clickOn");
+   		nowRatio = $('#myRatio').text() * (selectedRatio/100);
+   	} else if(elem.attr("class") == "clickOn") {
+   		//class off
+    	elem.attr("class", "clickOff");
+    	nowRatio = $('#myRatio').text() / (selectedRatio/100);
+   	}
+   	
+   	$('#myRatio').text(nowRatio);
+   	$('#subRatio').text(nowRatio);
+
+   	//하단 픽목록 요약 영역에 표시
 	var nowBet = expResultList[no-1].value;
 	
 	if(nowBet.indexOf(select) < 0) {
@@ -11,6 +39,18 @@ function getSubGameList(no, select) {
 	expResultList[no-1].value = nowBet;
 	$('#subGame_'+no).html("<div style='display:inline; color:red;font-size:15px;'>"+nowBet+"</div>");
 }
+
+/*
+function getPickRatio(obj) {
+	obj[0].value
+}
+
+function getPickCnt(str) {
+	var cnt = 0;
+	if(str.str.indexOf("D") > -1) cnt++;
+	
+}
+*/
 
 function getResult(obj) {
 	searchFrm.action = 'gameDetailList.do';
@@ -26,6 +66,12 @@ function checkPick() {
 			alert((i+1)+"번째 픽이 선택되지 않았습니다.");
 			return;
 		}
+	}
+	
+	if(isBlank(document.getElementById("gmPostTitle").value)) {
+		alert("하단에 픽 제목을 입력해야 합니다.");
+		document.getElementById("gmPostTitle").focus();
+		return;
 	}
 	
 	if(!isNull(document.getElementById("pubYnChk"))
@@ -60,7 +106,7 @@ function viewDetail(no) {
 
 //복수 픽 선택
 $(function() {
-	
+/*	
 	$('#mcTbl td').click(function() {
 		var elem = $(this);
 		var parent = elem.parent();
@@ -72,6 +118,8 @@ $(function() {
 	    
 	   	//ratio
 	   	var nowRatio;
+	   	
+	   	var expResultList = document.getElementsByName("expResult");
 	   	
 	   	if(elem.attr("class") == "clickOff") {
 	   		//class on
@@ -87,4 +135,5 @@ $(function() {
 	   	$('#subRatio').text(nowRatio);
 	   	
 	 });
+*/
 });

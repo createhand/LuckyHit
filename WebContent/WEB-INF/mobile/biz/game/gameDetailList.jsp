@@ -110,30 +110,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		double loseBet = (mr.getLoseBetCnt()/totalBetCnt)*100;
 		
 %>
-				<tr id="gm<%=mr.getGameListNo() %>" class="off">
-					<td width="40%" class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'W')">
-						<%=mr.getHomeTeamName() %><br/>
-						<div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div>
-					</td>
-					<td class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'D')">VS<br/>
-					<div id="ratio"><fmt:formatNumber value="<%=drawBet %>" pattern="###.##" /></div>
-					</td>
-					<td width="40%" class="clickOff" onclick="getSubGameList('<%=mr.getGameListNo() %>', 'L')">
-						<%=mr.getAwayTeamName() %><br/>
-						<div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" onClick="viewDetail('<%=mr.getGameListNo() %>');">상세정보</td>
-				</tr>
-				<!--  
-				<tr>
-					<td colspan="3" style="height: 0px;padding: 0 0 0 0;margin: 0 0 0 0; border : 0px;">
-						<table id="mcDetail<%=mr.getGameListNo() %>" style="width:100%;display: block;">
-						-->
-						<!--  inner table start -->
-						
-				<tr id="mcDate<%=mr.getGameListNo() %>" style="page-break-inside: avoid; page-break-after: avoid;">
+				<tr id="mcDate<%=mr.getGameListNo() %>">
 					<td colspan="3" width="100%">
 						<%=mr.getGameListNo()%>.
 						<%=DateUtil.getDate2String(DateUtil.getDate(mr.getMatchDate(), "yyyyMMdd"), "yyyy-MM-dd")%>
@@ -150,17 +127,17 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						<input type="hidden" id="expResult" name="expResult">
 					</td>
 				</tr>
-				<tr id="mcTeam<%=mr.getGameListNo() %>" >
-					<td width="40%">
+				<tr id="gm<%=mr.getGameListNo() %>" class="off">
+					<td width="40%" class="clickOff" onclick="getSubGameList(this, '<%=mr.getGameListNo() %>', 'W')">
 						<img src="<%=homeTeamInfo.getTmImgUrl() %>" width="70" height="70" alt="<%=mr.getHomeTeamName() %>"/><br/>
 						<%=mr.getHomeTeamName() %><br/><br/>
 						(<%=homeTeamSeasonInfo.getInt("RANK") %>위)<br/><br/>
 						<div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div>
 					</td>
-					<td>VS<br/>
+					<td class="clickOff" onclick="getSubGameList(this, '<%=mr.getGameListNo() %>', 'D')">VS<br/>
 					<div id="ratio"><fmt:formatNumber value="<%=drawBet %>" pattern="###.##" /></div>
 					</td>
-					<td width="40%">
+					<td width="40%" class="clickOff" onclick="getSubGameList(this, '<%=mr.getGameListNo() %>', 'L')">
 						<img src="<%=awayTeamInfo.getTmImgUrl() %>" width="70" height="70" alt="<%=mr.getAwayTeamName() %>"/><br/>
 						<%=mr.getAwayTeamName() %><br/><br/>
 						(<%=awayTeamSeasonInfo.getInt("RANK") %>위)<br/><br/>
@@ -262,13 +239,6 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 					%>
 					</td>
 				</tr>
-				
-				<!--  inner table end -->
-				<!-- 
-						</table>
-					</td>
-				</tr>
-				-->
 <%		
 	}
 %>
@@ -282,11 +252,19 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 				<td colspan="3"><br/><br/><br/></td>
 			</tr>
 			<tr>
-				<th colspan="3">포스팅 내용</th>
+				<th colspan="3">픽 제목</th>
 			</tr>
 			<tr>
 				<td colspan="3">
-					<textarea name="gmPostContent" rows="10" cols="30"></textarea>
+					<input type="text" name="gmPostTitle" id="gmPostTitle" placeholder="픽을 구분할 수 있는 간단한 제목을 입력해주세요(필수)" style="width:100%;" />
+				</td>
+			</tr>
+			<tr>
+				<th colspan="3">픽 내용</th>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<textarea name="gmPostContent" rows="10" cols="30" placeholder="픽에 대한 내용을 등록해주세요(옵션)" style="width:100%;"></textarea>
 				</td>
 			</tr>
 			</tbody>
@@ -326,12 +304,12 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 <%
 	if(StringUtils.isNotBlank(userId)) {
 %>
-		<td class="result" style="font-size:15px; background-color: Azure;" onclick="checkPick();">픽등록</td>
+		<td class="result" style="height:30px;font-size:15px; background-color: Azure;" onclick="checkPick();">픽등록</td>
 		<td class="result" style="font-size:15px; background-color: Azure;"><input type="checkbox"  name="pubYnChk" id="pubYnChk"/> 비공개픽</td>
 <%		
 	} else {
 %>
-		<td colspan="2" style="font-size:15px; background-color: Azure;" class="result" onclick="checkPick();">픽등록</td>
+		<td class="result" style="height:30px;font-size:15px; background-color: Azure;" onclick="checkPick();" colspan="2">픽등록</td>
 <%
 	}
 %>					

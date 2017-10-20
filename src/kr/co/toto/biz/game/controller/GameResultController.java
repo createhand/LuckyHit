@@ -3,25 +3,16 @@
  */
 package kr.co.toto.biz.game.controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.jsoup.Connection;
-import org.jsoup.helper.HttpConnection;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,16 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.toto.base.controller.AbstractController;
 import kr.co.toto.base.persistence.domain.DomainConst;
-import kr.co.toto.base.persistence.domain.GameMt;
-import kr.co.toto.base.persistence.domain.MatchRecordMt;
-import kr.co.toto.base.persistence.domain.TeamMt;
-import kr.co.toto.base.service.CommonService;
-import kr.co.toto.biz.game.persistence.domain.GameDetailListDt;
 import kr.co.toto.biz.game.service.GameService;
 import kr.co.toto.biz.record.controller.RecordInputController;
 import kr.co.toto.biz.record.service.RecordService;
+import kr.co.toto.comn.model.TAData;
 import kr.co.toto.util.BeanFinder;
-import kr.co.toto.util.BizUtil;
 import kr.co.toto.util.DateUtil;
 import kr.co.toto.util.ParamMap;
 
@@ -51,7 +37,7 @@ import kr.co.toto.util.ParamMap;
 public class GameResultController extends AbstractController {
 	
     /**
-     * 게임정보수집
+     * 공개픽 목록
      * @param request
      * @param response
      * @param model
@@ -60,27 +46,106 @@ public class GameResultController extends AbstractController {
      * @throws Exception
      */
     @RequestMapping(value = "/gameResult", method = RequestMethod.GET)
-    public String input002(HttpServletRequest request, HttpServletResponse response,
+    public String gameResult(HttpServletRequest request, HttpServletResponse response,
+            Model model, @RequestParam Map<String, Object> params) throws Exception {
+    	
+    	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
+    	ParamMap map = new ParamMap(params);
+    	
+    	String gmCd = map.getString("gmCd");
+    	String gmPostNo = map.getString("gmPostNo");
+    	int pageNo = map.getString("pageNo") == null ? 0 : map.getInt("pageNo");
+    	
+    	int totalCount = 0;
+    	List<String> errMsg = new ArrayList<String>();    	
+    	List<TAData> pickList = new ArrayList<TAData>();
+    	TAData pagingInfo = new TAData();
+    	
+        try {
+        	
+        	//공개픽만 조회
+        	map.put("pubYn", "0");
+        	
+        	//전체 목록 수  
+        	totalCount = gameService.selectPickGameListCount(map);
+        	
+        	pagingInfo.set("pageNo", pageNo);
+        	pagingInfo.set("countPerPage", DomainConst.countPerPage);
+        	
+        	int totalPage = (int)Math.ceil((double)totalCount/10);
+        	pagingInfo.set("totalCount", totalCount);
+        	pagingInfo.set("totalPageCount", totalPage);
+        	
+        	//페이징처리
+        	map.put("paging", "Y");
+        	map.put("pageIndex", (pageNo -1) * DomainConst.countPerPage);
+        	map.put("countPerPage", DomainConst.countPerPage);
+        	
+        	//페이징 목록 수
+        	pickList = gameService.selectPickGameList(map);
+        	
+        } catch(Exception e) {
+        	System.out.println(e);
+        	errMsg.add(e.toString());
+        }
+    	
+        model.addAttribute("pagingInfo", pagingInfo);
+        model.addAttribute("totalCount", totalCount);
+    	model.addAttribute("pickList", pickList);
+        return getViewName(request);
+    }
+    
+    
+    /**
+     * 게임정보수집
+     * @param request
+     * @param response
+     * @param model
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/gameResultDetail", method = RequestMethod.GET)
+    public String gameResultDetail(HttpServletRequest request, HttpServletResponse response,
             Model model, @RequestParam Map<String, Object> params) throws Exception {
     	
     	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
     	RecordService recordService = (RecordService) BeanFinder.getBean(RecordService.class);
     	ParamMap map = new ParamMap(params);
     	
-    	//공개픽만 조회
-    	map.put("pubYn", "0");
-    	
     	String gmCd = map.getString("gmCd");
     	String gmPostNo = map.getString("gmPostNo");
+    	int pageNo = map.getString("pageNo") == null ? 0 : map.getInt("pageNo");
     	
+    	int totalCount = 0;
     	List<String> errMsg = new ArrayList<String>();    	
     	List<HashMap> selectedGame = new ArrayList<HashMap>();
-    	List<HashMap> gameList = new ArrayList<HashMap>();
+    	List<HashMap> pickList = new ArrayList<HashMap>();
     	HashMap selectGameInfo = new HashMap();
+    	TAData pagingInfo = new TAData();
     	
         try {
         	
-        	gameList = gameService.selectPickGameList(map);
+        	//공개픽만 조회
+        	map.put("pubYn", "0");
+        	
+        	//전체 목록 수  
+        	totalCount = gameService.selectPickGameListCount(map);
+        	
+        	pagingInfo.set("pageNo", pageNo);
+        	pagingInfo.set("countPerPage", DomainConst.countPerPage);
+        	
+        	int totalPage = (int)Math.ceil((double)totalCount/10);
+        	pagingInfo.set("totalCount", totalCount);
+        	pagingInfo.set("totalPageCount", totalPage);
+        	
+        	//페이징처리
+        	map.put("paging", "Y");
+        	map.put("pageIndex", (pageNo -1) * DomainConst.countPerPage);
+        	map.put("countPerPage", DomainConst.countPerPage);
+        	
+        	//페이징 목록 수
+//        	pickList = gameService.selectPickGameList(map);
         	
         	if(gmCd.equals("")) {
 	        	HashMap latest = gameService.selectLatestPick(map);
@@ -94,7 +159,7 @@ public class GameResultController extends AbstractController {
         		gmPostNo = String.valueOf((Integer)selectedGame.get(0).get("gmPostNo"));
         	}
         	
-        	for(HashMap pickInfo : gameList) {
+        	for(HashMap pickInfo : pickList) {
         		if(StringUtils.equals(gmPostNo, String.valueOf((Integer)pickInfo.get("gmPostNo"))) &&
         				StringUtils.equals(gmCd, String.valueOf((String)pickInfo.get("gmCd")))) {
         			selectGameInfo = pickInfo;
@@ -150,7 +215,9 @@ public class GameResultController extends AbstractController {
     	model.addAttribute("selectGameInfo", selectGameInfo);
         model.addAttribute("selectedGame", selectedGame);
         model.addAttribute("gmPostNo", gmPostNo);
-    	model.addAttribute("gameList", gameList);
+        model.addAttribute("pagingInfo", pagingInfo);
+        model.addAttribute("totalCount", totalCount);
+    	model.addAttribute("pickList", pickList);
     	model.addAttribute("gmCd", gmCd);
         return getViewName(request);
     }

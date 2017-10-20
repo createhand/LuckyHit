@@ -116,4 +116,8 @@ public class DomainConst {
     public static final String SAT = "6";
     public static final String SUN = "7";
     
+    
+    /* paging */
+    public static final int countPerPage = 10;
+    
 }

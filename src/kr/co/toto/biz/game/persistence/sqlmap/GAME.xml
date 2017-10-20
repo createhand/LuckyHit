@@ -102,17 +102,45 @@ ORDER BY GM_END_DATE DESC
 </select>
 
 <!-- 픽이 있는 게임 목록 -->
-<select id="selectPickGameList" parameterClass="map" resultClass="HashMap" >
+<select id="selectPickGameList" parameterClass="tadata" resultClass="HashMap" >
+SELECT
+*
+FROM (
+	SELECT 
+		@RNUM := @RNUM + 1 AS RNUM,
+		B.GM_CD AS gmCd,
+	    B.GM_NAME AS gmName,
+	    A.GM_POST_NO AS gmPostNo,
+	    A.GM_POST_TITLE AS gmPostTitle,
+		A.GM_POST_CONTENT AS gmPostContent,
+	    B.GM_TURN AS gmTurn,
+	    B.GM_END_DATE AS gmEndDate,
+	    B.GM_END AS gmEnd,
+	    B.GM_SEQ AS gmSeq,
+	    DATE_FORMAT(A.RG_DATE, '%Y-%m-%d %H:%i:%s') as regDt
+	FROM
+		T_INFO_GAME_PICK A,
+		T_INFO_GAME B,
+		(SELECT @RNUM := 1) C
+	WHERE A.GM_CD = B.GM_CD
+<isNotEmpty property="pubYn">
+			 AND PUB_YN = #pubYn#
+</isNotEmpty>
+<isNotEmpty property="userId">
+			 AND USER_ID = #userId#
+</isNotEmpty>
+	ORDER BY B.GM_CD DESC, GM_POST_NO DESC
+) A
+ORDER BY RNUM DESC
+<isNotEmpty property="paging">
+LIMIT #pageIndex#, #countPerPage#
+</isNotEmpty>
+</select>
+
+<!-- 픽이 있는 게임 목록 갯수 -->
+<select id="selectPickGameListCount" parameterClass="map" resultClass="int" >
 SELECT 
-	B.GM_CD AS gmCd,
-    B.GM_NAME AS gmName,
-    A.GM_POST_NO AS gmPostNo,
-	A.GM_POST_CONTENT AS gmPostContent,
-    B.GM_TURN AS gmTurn,
-    B.GM_END_DATE AS gmEndDate,
-    B.GM_END AS gmEnd,
-    B.GM_SEQ AS gmSeq,
-    DATE_FORMAT(A.RG_DATE, '%Y-%m-%d %H:%i:%s') as regDt
+	COUNT(B.GM_CD) AS cnt
 FROM
 	T_INFO_GAME_PICK A,
 	T_INFO_GAME B
@@ -123,8 +151,6 @@ WHERE A.GM_CD = B.GM_CD
 <isNotEmpty property="userId">
 			 AND USER_ID = #userId#
 </isNotEmpty>
-
-ORDER BY B.GM_CD DESC, GM_POST_NO DESC
 </select>
 
 

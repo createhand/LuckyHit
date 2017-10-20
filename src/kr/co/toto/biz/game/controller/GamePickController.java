@@ -59,6 +59,8 @@ public class GamePickController extends AbstractController {
     	
     	//게임CD
     	String gmCd = request.getParameter("gmCd");
+    	//픽제목
+    	String gmPostTitle = request.getParameter("gmPostTitle");
     	//픽내용
     	String gmPostContent = request.getParameter("gmPostContent");
     	gmPostContent = gmPostContent.replace("\r\n","<br/>");
@@ -92,6 +94,7 @@ public class GamePickController extends AbstractController {
     	HashMap<String, String> gamePick = new HashMap<String, String>();
     	gamePick.put("gmCd", gmCd);
     	gamePick.put("gmPostNo", String.valueOf(gmPostNo));
+    	gamePick.put("gmPostTitle", gmPostTitle);
     	gamePick.put("gmPostContent", gmPostContent);
     	gamePick.put("pubYn", pubYn);
     	gamePick.put("userId", userId);

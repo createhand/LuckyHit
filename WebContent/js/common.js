@@ -14,6 +14,14 @@ function isBlank(obj) {
 	} 
 }
 
+function returnBlank(obj) {
+	if(obj == null || obj == undefined || obj == "null" || obj == "undefined" || obj == "") {
+		return "";
+	} else {
+		return obj;
+	} 
+}
+
 function replaceStr(src, des, str) {
 	//src : original string
 	//des : target string

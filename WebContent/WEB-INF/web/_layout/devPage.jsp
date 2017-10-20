@@ -14,7 +14,7 @@
 <!-- script -->
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/util.js"></script>
-<script type="text/javascript" src="js/jquery/jquery-1.8.1.js"></script>
+<script type="text/javascript" src="js/jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%><tiles:getAsString name="script" />"></script>
 
 <!-- css -->
