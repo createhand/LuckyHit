@@ -102,7 +102,7 @@ ORDER BY GM_END_DATE DESC
 </select>
 
 <!-- 픽이 있는 게임 목록 -->
-<select id="selectPickGameList" parameterClass="tadata" resultClass="HashMap" >
+<select id="selectPickGameList" parameterClass="map" resultClass="tadata" >
 SELECT
 *
 FROM (
@@ -113,22 +113,33 @@ FROM (
 	    A.GM_POST_NO AS gmPostNo,
 	    A.GM_POST_TITLE AS gmPostTitle,
 		A.GM_POST_CONTENT AS gmPostContent,
+		A.USER_ID AS userId,
+		C.USER_NM AS userNm,
 	    B.GM_TURN AS gmTurn,
 	    B.GM_END_DATE AS gmEndDate,
 	    B.GM_END AS gmEnd,
 	    B.GM_SEQ AS gmSeq,
-	    DATE_FORMAT(A.RG_DATE, '%Y-%m-%d %H:%i:%s') as regDt
+	    DATE_FORMAT(A.RG_DATE, '%Y-%m-%d') as regDt,
+	    DATE_FORMAT(A.RG_DATE, '%H:%i') as regTm
 	FROM
-		T_INFO_GAME_PICK A,
-		T_INFO_GAME B,
-		(SELECT @RNUM := 1) C
-	WHERE A.GM_CD = B.GM_CD
-<isNotEmpty property="pubYn">
-			 AND PUB_YN = #pubYn#
-</isNotEmpty>
-<isNotEmpty property="userId">
-			 AND USER_ID = #userId#
-</isNotEmpty>
+		T_INFO_GAME_PICK A
+	LEFT OUTER JOIN T_INFO_GAME B ON A.GM_CD = B.GM_CD
+	LEFT OUTER JOIN T_INFO_USER C ON A.USER_ID = C.USER_ID,
+	(SELECT @RNUM := 0) D
+<dynamic prepend="WHERE">
+	<isNotEmpty property="pubYn" prepend="AND">
+		A.PUB_YN = #pubYn#
+	</isNotEmpty>
+	<isNotEmpty property="userId" prepend="AND">
+		A.USER_ID = #userId#
+	</isNotEmpty>
+	<isNotEmpty property="gmCd" prepend="AND">
+		A.GM_CD = #gmCd#
+	</isNotEmpty>
+	<isNotEmpty property="gmPostNo" prepend="AND">
+		A.GM_POST_NO = #gmPostNo#
+	</isNotEmpty>
+</dynamic>
 	ORDER BY B.GM_CD DESC, GM_POST_NO DESC
 ) A
 ORDER BY RNUM DESC

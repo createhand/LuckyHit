@@ -174,7 +174,7 @@ FROM (
   ) A
 </select>
 
-<select id="selectHitResult" parameterClass="map" resultClass="HashMap" >
+<select id="selectHitResult" parameterClass="map" resultClass="tadata" >
 SELECT
 	A.GM_CD AS gmCd,
     C.GM_LIST_NO AS gmListNo,

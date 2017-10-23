@@ -118,6 +118,9 @@ public class DomainConst {
     
     
     /* paging */
-    public static final int countPerPage = 10;
+    //페이지당 게시물수
+    public static final int countPerPage = 5;
+    //블럭당 페이지수
+    public static final int countPerBlock = 10;
     
 }

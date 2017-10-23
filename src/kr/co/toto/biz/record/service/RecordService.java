@@ -5,12 +5,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import kr.co.toto.base.exception.BizException;
 import kr.co.toto.base.persistence.IBatisDAO;
 import kr.co.toto.base.persistence.IBatisDAOImpl;
 import kr.co.toto.base.persistence.domain.DomainConst;
 import kr.co.toto.base.persistence.domain.MatchRecordMt;
 import kr.co.toto.base.persistence.domain.TeamMt;
 import kr.co.toto.base.service.CommonService;
+import kr.co.toto.comn.model.TAData;
 import kr.co.toto.util.BeanFinder;
 import kr.co.toto.util.BizUtil;
 import kr.co.toto.util.DateUtil;
@@ -18,12 +26,6 @@ import kr.co.toto.util.ParamMap;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -95,9 +97,9 @@ public class RecordService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<HashMap> selectHitResult(ParamMap params) throws Exception {
+    public List<TAData> selectHitResult(ParamMap params) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);    	
-    	return (List<HashMap>)dao.selectList("RECORD.selectHitResult", params);   	
+    	return (List<TAData>)dao.selectList("RECORD.selectHitResult", params);   	
     }
     
     

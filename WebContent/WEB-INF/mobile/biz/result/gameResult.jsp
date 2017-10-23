@@ -12,14 +12,17 @@
 	List<TAData> pickList = (List<TAData>)request.getAttribute("pickList");
 
 	//페이징 관련
-	int  totalCount = (Integer)request.getAttribute("totalCount");
 	TAData pagingInfo = (TAData)request.getAttribute("pagingInfo");
-	int totalPageCount = pagingInfo.getInt("totalPageCount");
-	int pageNo = pagingInfo.getInt("pageNo");
 	
-	String gmCd = (String)request.getAttribute("gmCd");
-	String gmPostNo = (String)request.getAttribute("gmPostNo");
-	String gmSeq = "";
+	int countPerPage = pagingInfo.getInt("countPerPage");
+	int countPerBlock = pagingInfo.getInt("countPerBlock");
+	
+	int totalPageCount = pagingInfo.getInt("totalPageCount");
+	int totalBlockCount = pagingInfo.getInt("totalBlockCount");
+	int  totalCount = (Integer)request.getAttribute("totalCount");
+	
+	int pageNo = pagingInfo.getInt("pageNo");
+	int blockNo = pagingInfo.getInt("blockNo");
 %>
 	<form name="frm" method="GET">
       <div class="content_title">
@@ -32,12 +35,10 @@
 		  <table class="common">
 		  	<thead>
 			<tr>
-				<th>번호</th>
-				<th>제목</th>
-				<th>작성자</th>
-				<th>예측</th>
-				<th>결과</th>
-				<th>적중</th>
+				<th width="10%">번호</th>
+				<th width="75%">제목</th>
+<!-- 				<th width="25%">작성자</th> -->
+				<th width="15%">작성일시</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -46,40 +47,72 @@
 	for(TAData pickInfo : pickList) {
 %>
 			<tr>
-				<td><%=pickInfo.getString("RNUM") %></td>
-				<td><%=pickInfo.getString("RNUM") %></td>
+				<td><%=pickInfo.getInt("RNUM") %></td>
+				<td style="text-align: left;padding-left:5px;">
+					<a href="<%=request.getContextPath() %>gameResultDetail.do?pageNo=<%=pageNo%>&gmCd=<%=pickInfo.getString("gmCd")%>&gmPostNo=<%=pickInfo.getString("gmPostNo")%>">
+					<%=pickInfo.getString("gmPostTitle") %></a><br/>
+					<div style="font-size: 10px;text-align: right;padding-right: 5px;color: black;">
+<%
+		if(StringUtils.isBlank(pickInfo.getString("userNm"))) {
+			out.print("익명");
+		} else {
+			out.print(pickInfo.getString("userNm")+"("+pickInfo.getString("userId")+")");
+		}
+%>
+					</div>
+				</td>
+<!-- 				<td> -->
+<%
+/*
+		if(StringUtils.isBlank(pickInfo.getString("userNm"))) {
+			out.print("익명");
+		} else {
+			out.print(pickInfo.getString("userNm")+"("+pickInfo.getString("userId")+")");
+		}
+*/
+%>
+<!-- 				</td> -->
+				<td>
+					<%
+					if(StringUtils.equals(DateUtil.getToday("yyyy-MM-dd"), pickInfo.getString("regDt"))) {
+						out.print(pickInfo.getString("regTm"));	
+					} else {
+						out.print(DateUtil.getToday("MM-dd"));	
+					}
+%>
+				</td>
 			</tr>
 <%		
-	}	
+	}
 %>
-			<tr>
-				<td colspan="6">
-					<div class="content_list" style="text-align: left;font-size:16px;"><p>제목 : <%=selectGameInfo.get("gmPostTitle") %></p></div>
-					<div class="content_list" style="text-align: left;font-size:14px;padding:0 10px 0 10px;line-height:1.3em"><%=selectGameInfo.get("gmPostContent") %></div>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="6"><span id="common">적중수 : <font color='red'><%=accCnt%>/14</font> / 적중률 : <font color='red'><%=Math.ceil((accCnt/14)*100) %>%</font></span></td>	
-			</tr>
-			<tr>
-				<td colspan="6"><a href="http://m.betman.co.kr/winningResultToto.so?method=detail&gameId=G011&gameRound=<%=gmSeq%>&page=3" target="_blank"><span id="common">당첨결과</span></a></td>
-			</tr>
-			<tr>
-				<td colspan="6">
-				<%
-					for(int i=0;i<totalPageCount;i++) {
-						int no = i+1;
-						if(no == pageNo) {
-							out.print("<a href=\"\"><b>" + no + "</b></a>");
-						} else {
-							out.print(no);	
-						}
-					}
-				%>
-				</td>
-			</tr>
 			</tbody>
 		  </table>
+			  <div>
+			  	<table class="common">
+			  	<tr>
+			  		<td class="normal">
+<%
+
+		int pageStNo = (blockNo*countPerBlock)+1;
+		int pageEnNo = (blockNo*countPerBlock)+1+countPerBlock;
+
+		if(blockNo != 0) {
+			out.print("<a href=\""+request.getContextPath()+"gameResult.do?pageNo="+(pageStNo-1)+"\"> [이전]</a> ");
+		}
+
+		for(int i=pageStNo;i<pageEnNo;i++) {
+			if(i>totalPageCount) continue;
+			out.print("<a href=\""+request.getContextPath()+"gameResult.do?pageNo="+i+"\"> ["+i+"]</a> ");
+		}
+		
+		if((blockNo+1) < totalBlockCount) {
+			out.print("<a href=\""+request.getContextPath()+"gameResult.do?pageNo="+(pageEnNo)+"\"> [다음]</a>");
+		}
+%>
+					</td>
+				</tr>			  
+				</table>
+			  </div>
 		  </div>
       </div>
       </form>

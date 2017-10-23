@@ -52,9 +52,7 @@ public class GameResultController extends AbstractController {
     	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
     	ParamMap map = new ParamMap(params);
     	
-    	String gmCd = map.getString("gmCd");
-    	String gmPostNo = map.getString("gmPostNo");
-    	int pageNo = map.getString("pageNo") == null ? 0 : map.getInt("pageNo");
+    	int pageNo = StringUtils.isBlank(map.getString("pageNo")) ? 1 : map.getInt("pageNo");
     	
     	int totalCount = 0;
     	List<String> errMsg = new ArrayList<String>();    	
@@ -63,23 +61,27 @@ public class GameResultController extends AbstractController {
     	
         try {
         	
-        	//공개픽만 조회
-        	map.put("pubYn", "0");
-        	
         	//전체 목록 수  
         	totalCount = gameService.selectPickGameListCount(map);
         	
+        	int totalPage = (int)Math.ceil((double)totalCount/DomainConst.countPerPage);
+        	int totalBlock = (int)Math.ceil((double)totalPage/DomainConst.countPerBlock);
+        	int blockNo = (int)Math.ceil((double)pageNo/DomainConst.countPerBlock) -1;
         	pagingInfo.set("pageNo", pageNo);
-        	pagingInfo.set("countPerPage", DomainConst.countPerPage);
+        	pagingInfo.set("blockNo", blockNo);
         	
-        	int totalPage = (int)Math.ceil((double)totalCount/10);
+        	pagingInfo.set("countPerPage", DomainConst.countPerPage);
+        	pagingInfo.set("countPerBlock", DomainConst.countPerBlock);
+        	
         	pagingInfo.set("totalCount", totalCount);
         	pagingInfo.set("totalPageCount", totalPage);
+        	pagingInfo.set("totalBlockCount", totalBlock);
+        
         	
         	//페이징처리
         	map.put("paging", "Y");
-        	map.put("pageIndex", (pageNo -1) * DomainConst.countPerPage);
-        	map.put("countPerPage", DomainConst.countPerPage);
+        	map.put("pageIndex", (pageNo -1) * pagingInfo.getInt("countPerPage"));
+        	map.put("countPerPage", pagingInfo.getInt("countPerPage"));
         	
         	//페이징 목록 수
         	pickList = gameService.selectPickGameList(map);
@@ -113,16 +115,9 @@ public class GameResultController extends AbstractController {
     	RecordService recordService = (RecordService) BeanFinder.getBean(RecordService.class);
     	ParamMap map = new ParamMap(params);
     	
-    	String gmCd = map.getString("gmCd");
-    	String gmPostNo = map.getString("gmPostNo");
-    	int pageNo = map.getString("pageNo") == null ? 0 : map.getInt("pageNo");
-    	
-    	int totalCount = 0;
-    	List<String> errMsg = new ArrayList<String>();    	
-    	List<HashMap> selectedGame = new ArrayList<HashMap>();
-    	List<HashMap> pickList = new ArrayList<HashMap>();
-    	HashMap selectGameInfo = new HashMap();
-    	TAData pagingInfo = new TAData();
+    	List<String> errMsg = new ArrayList<String>();
+    	List<TAData> selectedGame = new ArrayList<TAData>();
+    	TAData selectGameInfo = new TAData();
     	
         try {
         	
@@ -130,48 +125,15 @@ public class GameResultController extends AbstractController {
         	map.put("pubYn", "0");
         	
         	//전체 목록 수  
-        	totalCount = gameService.selectPickGameListCount(map);
-        	
-        	pagingInfo.set("pageNo", pageNo);
-        	pagingInfo.set("countPerPage", DomainConst.countPerPage);
-        	
-        	int totalPage = (int)Math.ceil((double)totalCount/10);
-        	pagingInfo.set("totalCount", totalCount);
-        	pagingInfo.set("totalPageCount", totalPage);
-        	
-        	//페이징처리
-        	map.put("paging", "Y");
-        	map.put("pageIndex", (pageNo -1) * DomainConst.countPerPage);
-        	map.put("countPerPage", DomainConst.countPerPage);
-        	
-        	//페이징 목록 수
-//        	pickList = gameService.selectPickGameList(map);
-        	
-        	if(gmCd.equals("")) {
-	        	HashMap latest = gameService.selectLatestPick(map);
-	        	gmCd = latest.get("gmCd").toString();
-	        	map.put("gmCd", gmCd);
-        	}
-        	
         	selectedGame = recordService.selectHitResult(map);
         	
-        	if(StringUtils.isBlank(gmPostNo)) {
-        		gmPostNo = String.valueOf((Integer)selectedGame.get(0).get("gmPostNo"));
-        	}
-        	
-        	for(HashMap pickInfo : pickList) {
-        		if(StringUtils.equals(gmPostNo, String.valueOf((Integer)pickInfo.get("gmPostNo"))) &&
-        				StringUtils.equals(gmCd, String.valueOf((String)pickInfo.get("gmCd")))) {
-        			selectGameInfo = pickInfo;
-        			break;
-        		}
-        	}
+        	selectGameInfo = gameService.selectPickGameInfo(map);
         	
         	//종료된 경기 체크
         	int endCnt = 0;
         	
         	//종료경기 수집처리(현시각 기준으로 종료된 경기 카운팅 후 수집)
-        	for(HashMap matchInfo : selectedGame) {
+        	for(TAData matchInfo : selectedGame) {
         		//경기 종료여부 체크
         		if(StringUtils.equals(DomainConst.NO, matchInfo.get("matchEnd").toString())) {
         			
@@ -214,11 +176,6 @@ public class GameResultController extends AbstractController {
     	
     	model.addAttribute("selectGameInfo", selectGameInfo);
         model.addAttribute("selectedGame", selectedGame);
-        model.addAttribute("gmPostNo", gmPostNo);
-        model.addAttribute("pagingInfo", pagingInfo);
-        model.addAttribute("totalCount", totalCount);
-    	model.addAttribute("pickList", pickList);
-    	model.addAttribute("gmCd", gmCd);
         return getViewName(request);
     }
 

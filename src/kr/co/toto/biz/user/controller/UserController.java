@@ -29,6 +29,8 @@ import kr.co.toto.comn.model.TAData;
 import kr.co.toto.util.BeanFinder;
 import kr.co.toto.util.DateUtil;
 import kr.co.toto.util.ParamMap;
+import kr.co.toto.util.crypto.EncryptSHA1;
+import signgate.core.provider.md.MD5;
 
 /**
  * @author seochan
@@ -72,11 +74,12 @@ public class UserController extends AbstractController {
     	String errMsg = null;
     	TAData map = new TAData(params);
     	TAData userInfo = userService.selectUserInfo(map.getString("userId").toLowerCase());
+    	String userPwd = EncryptSHA1.getEncryptSHA1(map.getString("userPwd"));
     	
     	if(userInfo == null) {
     		errMsg = "아이디가 존재하지 않습니다.";
     		isLogin = false;
-    	} else if(!StringUtils.equals(userInfo.getString("USER_PWD"), map.getString("userPwd"))) {
+    	} else if(!StringUtils.equals(userInfo.getString("USER_PWD"), userPwd)) {
     		errMsg = "비밀번호가 일치하지 않습니다.";
     		isLogin = false;
     	}
@@ -120,6 +123,7 @@ public class UserController extends AbstractController {
     	
     	String errMsg = null;
     	TAData map = new TAData(params);
+    	map.set("userPwd", EncryptSHA1.getEncryptSHA1(map.getString("userPwd")));
     	
     	TAData userInfo = userService.selectUserInfo(map.getString("userId").toLowerCase());
     	
@@ -171,8 +175,8 @@ public class UserController extends AbstractController {
     	String gmPostNo = map.getString("gmPostNo");
     	
     	List<String> errMsg = new ArrayList<String>();    	
-    	List<HashMap> selectedGame = new ArrayList<HashMap>();
-    	List<HashMap> gameList = new ArrayList<HashMap>();
+    	List<TAData> selectedGame = new ArrayList<TAData>();
+    	List<TAData> gameList = new ArrayList<TAData>();
     	HashMap selectGameInfo = new HashMap();
     	
         try {

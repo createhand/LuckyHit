@@ -168,6 +168,19 @@ public class GameService {
     }
     
     /**
+     * 픽이 있는 게임 목록 조회한다
+     * 
+     * @param 
+     * @return
+     * @throws BizException
+     * @throws Exception
+     */ 
+    public TAData selectPickGameInfo(ParamMap map) throws Exception {
+    	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
+    	return (TAData)dao.selectList("GAME.selectPickGameList", map);
+    }
+    
+    /**
      * 픽이 있는 게임 목록 카운트
      * 
      * @param 
