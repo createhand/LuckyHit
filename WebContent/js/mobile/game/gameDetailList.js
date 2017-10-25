@@ -11,9 +11,36 @@ function getSubGameList(obj, no, select) {
     
    	//ratio
    	var nowRatio;
-   	
    	var expResultList = document.getElementsByName("expResult");
    	
+   	//현재 선택한 픽 적용
+	var nowBet = expResultList[no-1].value;
+	var chgBet = expResultList[no-1].value;
+	var totalPickCnt = 1;
+	
+	if(chgBet.indexOf(select) < 0) {
+		chgBet += select;
+	} else {
+		chgBet = replaceStr(chgBet, select, "");
+	}
+	expResultList[no-1].value = chgBet;
+   	
+	//현재 픽 갯수
+   	for(var i=0;i<expResultList.length;i++) {
+   		if(expResultList[i].value.length == 0) {
+   			continue;
+   		}
+   		totalPickCnt  = expResultList[i].value.length * totalPickCnt;
+	}
+	
+	//96개픽 제한
+   	if(totalPickCnt > 96) {
+   	expResultList[no-1].value = nowBet;
+   	chgBet = nowBet;
+   		alert("96가지 조합을 초과하여 픽을 선택할 수 없습니다.");
+		return;
+   	}
+	   	
    	if(elem.attr("class") == "clickOff") {
    		//class on
    		elem.attr("class", "clickOn");
@@ -27,30 +54,9 @@ function getSubGameList(obj, no, select) {
    	$('#myRatio').text(nowRatio);
    	$('#subRatio').text(nowRatio);
 
-   	//하단 픽목록 요약 영역에 표시
-	var nowBet = expResultList[no-1].value;
-	
-	if(nowBet.indexOf(select) < 0) {
-		nowBet += select;
-	} else {
-		nowBet = replaceStr(nowBet, select, "");
-	}
-	
-	expResultList[no-1].value = nowBet;
-	$('#subGame_'+no).html("<div style='display:inline; color:red;font-size:15px;'>"+nowBet+"</div>");
+	$('#subGame_'+no).html("<div style='display:inline; color:red;font-size:13px;'>"+chgBet+"</div>");
+	$('#totalPickCnt').html("<div style='display:inline; color:red;font-size:15px;'>"+totalPickCnt+"</div>");
 }
-
-/*
-function getPickRatio(obj) {
-	obj[0].value
-}
-
-function getPickCnt(str) {
-	var cnt = 0;
-	if(str.str.indexOf("D") > -1) cnt++;
-	
-}
-*/
 
 function getResult(obj) {
 	searchFrm.action = 'gameDetailList.do';
@@ -106,34 +112,5 @@ function viewDetail(no) {
 
 //복수 픽 선택
 $(function() {
-/*	
-	$('#mcTbl td').click(function() {
-		var elem = $(this);
-		var parent = elem.parent();
-		var selectedRatio = elem.find("div").text();
-		var totalBetCnt = $('#totalBetCnt').text();
-		var myRatio = $('#myRatio').text();
-
-	   	if(elem.find("div").attr("id") != "ratio") return;
-	    
-	   	//ratio
-	   	var nowRatio;
-	   	
-	   	var expResultList = document.getElementsByName("expResult");
-	   	
-	   	if(elem.attr("class") == "clickOff") {
-	   		//class on
-	   		elem.attr("class", "clickOn");
-	   		nowRatio = $('#myRatio').text() * (selectedRatio/100);
-	   	} else if(elem.attr("class") == "clickOn") {
-	   		//class off
-	    	elem.attr("class", "clickOff");
-	    	nowRatio = $('#myRatio').text() / (selectedRatio/100);
-	   	}
-	   	
-	   	$('#myRatio').text(nowRatio);
-	   	$('#subRatio').text(nowRatio);
-	   	
-	 });
-*/
+	location.href = "#match1";
 });

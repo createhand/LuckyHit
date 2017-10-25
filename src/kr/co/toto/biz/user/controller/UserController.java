@@ -161,15 +161,11 @@ public class UserController extends AbstractController {
     	
     	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
     	RecordService recordService = (RecordService) BeanFinder.getBean(RecordService.class);
-    	ParamMap map = new ParamMap(params);
+    	TAData map = new TAData(params);
     	
     	//내 픽만 조회
     	String userId = (String)request.getSession().getAttribute("userId");
     	map.put("userId", userId);
-    	
-    	if(StringUtils.isBlank(userId)) {
-    		map.put("pubYn", "0");
-    	}
     	
     	String gmCd = map.getString("gmCd");
     	String gmPostNo = map.getString("gmPostNo");
@@ -177,11 +173,13 @@ public class UserController extends AbstractController {
     	List<String> errMsg = new ArrayList<String>();    	
     	List<TAData> selectedGame = new ArrayList<TAData>();
     	List<TAData> gameList = new ArrayList<TAData>();
-    	HashMap selectGameInfo = new HashMap();
+    	TAData selectGameInfo = new TAData();
     	
         try {
         	
-        	gameList = gameService.selectPickGameList(map);
+        	TAData pickParams = new TAData();
+        	pickParams.set("userId", userId);
+        	gameList = gameService.selectPickGameList(pickParams);
         	
         	//페이지 최초 진입시 gmCd, gmPostNo 없는 경우
         	if(gmCd.equals("")) {
@@ -198,9 +196,9 @@ public class UserController extends AbstractController {
         	
         	
         	if(StringUtils.isBlank((String)selectGameInfo.get("gmCd"))) {
-	        	for(HashMap pickInfo : gameList) {
-	        		if(StringUtils.equals(gmPostNo, String.valueOf((Integer)pickInfo.get("gmPostNo"))) &&
-	        				StringUtils.equals(gmCd, String.valueOf((String)pickInfo.get("gmCd")))) {
+	        	for(TAData pickInfo : gameList) {
+	        		if(StringUtils.equals(gmPostNo, pickInfo.getString("gmPostNo")) &&
+	        				StringUtils.equals(gmCd, pickInfo.getString("gmCd"))) {
 	        			selectGameInfo = pickInfo;
 	        			break;
 	        		}
@@ -211,7 +209,7 @@ public class UserController extends AbstractController {
         	int endCnt = 0;
         	
         	//종료경기 수집처리(현시각 기준으로 종료된 경기 카운팅 후 수집)
-        	for(HashMap matchInfo : selectedGame) {
+        	for(TAData matchInfo : selectedGame) {
         		//경기 종료여부 체크
         		if(StringUtils.equals(DomainConst.NO, matchInfo.get("matchEnd").toString())) {
         			

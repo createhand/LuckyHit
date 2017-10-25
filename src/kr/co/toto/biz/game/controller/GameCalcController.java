@@ -49,10 +49,10 @@ public class GameCalcController extends AbstractController {
     	
     	CommonService commService = (CommonService) BeanFinder.getBean(CommonService.class);
     	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
-    	ParamMap paramMap = new ParamMap(params);
+    	TAData paramMap = new TAData(params);
     	List<String> errMsg = new ArrayList<String>();
-    	List<GameDetailListDt> selectedGame = null;
-    	List<HashMap> gameList = null;
+    	List<TAData> selectedGame = null;
+    	List<TAData> gameList = null;
     	TAData returnMap = null;
     	
     	GameMt gameInfo = new GameMt();
@@ -64,7 +64,7 @@ public class GameCalcController extends AbstractController {
         	String gmCd = paramMap.getString("gmCd");
         	if(gmCd.equals("")) {
     	    	//최근 게임회차
-        		HashMap latest = (HashMap)gameService.selectLatestGame();	    	
+        		TAData latest = (TAData)gameService.selectLatestGame();	    	
     	    	gmCd = (String)latest.get("gmCd");
         	}
         	
@@ -77,7 +77,7 @@ public class GameCalcController extends AbstractController {
         	gameList = gameService.selectGameList(new TAData());
         	
         	returnMap = gameService.selectGameBetList(selectedGame, url);
-        	selectedGame = (List<GameDetailListDt>)returnMap.get("gameDetailList");
+        	selectedGame = (List<TAData>)returnMap.get("gameDetailList");
         	totalBetCnt = returnMap.getDouble("totalBetCnt");
         	
         } catch(Exception e) {

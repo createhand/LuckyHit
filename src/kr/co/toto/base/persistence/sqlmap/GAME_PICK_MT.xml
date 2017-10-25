@@ -119,18 +119,6 @@ INSERT INTO
 	,GM_POST_NO
 	,MC_CD
 	,EXP_RESULT
-	,H_LT_RECORD
-	,H_LT_AG_RECORD
-	,H_LT_GT_POINT
-	,H_LT_LS_POINT
-	,H_LT_GT_AG_POINT
-	,H_LT_LS_AG_POINT
-	,A_LT_RECORD
-	,A_LT_AG_RECORD
-	,A_LT_GT_POINT
-	,A_LT_LS_POINT
-	,A_LT_GT_AG_POINT
-	,A_LT_LS_AG_POINT
 	,MD_DATE
 	,RG_DATE )
 VALUES
@@ -139,18 +127,6 @@ VALUES
 	, #gmPostNo#
 	, #mcCd#
 	, #expResult#
-	, #hLtRecord#
-	, #hLtAgRecord#
-	, #hLtGtPoint#
-	, #hLtLsPoint#
-	, #hLtGtAgPoint#
-	, #hLtLsAgPoint#
-	, #aLtRecord#
-	, #aLtAgRecord#
-	, #aLtGtPoint#
-	, #aLtLsPoint#
-	, #aLtGtAgPoint#
-	, #aLtLsAgPoint#
 	, now()
 	, now() )
 </insert>

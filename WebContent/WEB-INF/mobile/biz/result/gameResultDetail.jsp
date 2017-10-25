@@ -17,7 +17,7 @@
 %>
 	<form name="frm" method="GET">
       <div class="content_title">
-  		<h2 class="header">공개픽
+  		<h2 class="header">공개픽 - <%=selectGameInfo.getString("gmName") %> <%=selectGameInfo.getString("gmTurn") %>회
 		<input type="hidden" id="gmCd" name="gmCd" value="<%=gmCd %>" />
 		<input type="hidden" id="gmPostNo" name="gmPostNo" value="<%=gmPostNo %>" />
   		</h2>
@@ -27,7 +27,30 @@
 		  <table class="common">
 		  	<thead>
 		  	<tr>
-		  		<th colspan="6" style="color: TOMATO;">등록시간 : <%=selectGameInfo.get("regDt") %></th>
+				<td colspan="3" style="border-right: 0;">
+				<div style="text-align: left;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:black;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
+				</td>
+				<td colspan="3">
+				<div style="text-align: right;"><a href="javascript:history.back();" style="font-size:15px;color:black;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="6">
+					<div class="content_list"><p style="text-align: left;font-size:18px;line-height:1.6em;color:black;"><%=selectGameInfo.get("gmPostTitle") %></p></div>
+					<div style="font-size:13px;line-height:1.8em;text-align: right;color:black;padding-right: 10px;">
+					<%
+					if(StringUtils.isBlank(selectGameInfo.getString("userId")) || selectGameInfo.getString("userId").equals("null")) {
+						out.print("익명");
+					} else {
+						out.print(selectGameInfo.getString("userNm")+"("+selectGameInfo.getString("userId")+")");
+					}
+					%>
+					</div>
+					<div class="content_list"><p style="text-align: left;font-size:14px;line-height:1.3em"><%=selectGameInfo.get("gmPostContent") %></p><br/></div>
+				</td>
+			</tr>		  	
+		  	<tr>
+		  		<th colspan="6" style="color: TOMATO;">등록시간 : <%=selectGameInfo.get("regDt") %> <%=selectGameInfo.get("regTm") %></th>
 		  	</tr>
 			<tr>
 				<th>번호</th>
@@ -80,16 +103,18 @@
 	}	
 %>
 			<tr>
-				<td colspan="6">
-					<div class="content_list" style="text-align: left;font-size:16px;"><p>제목 : <%=selectGameInfo.get("gmPostTitle") %></p></div>
-					<div class="content_list" style="text-align: left;font-size:14px;padding:0 10px 0 10px;line-height:1.3em"><%=selectGameInfo.get("gmPostContent") %></div>
-				</td>
-			</tr>
-			<tr>
 				<td colspan="6"><span id="common">적중수 : <font color='red'><%=accCnt%>/14</font> / 적중률 : <font color='red'><%=Math.ceil((accCnt/14)*100) %>%</font></span></td>	
 			</tr>
 			<tr>
 				<td colspan="6"><a href="http://m.betman.co.kr/winningResultToto.so?method=detail&gameId=G011&gameRound=<%=selectGameInfo.getString("gmSeq")%>&page=3" target="_blank"><span id="common">당첨결과</span></a></td>
+			</tr>
+			<tr>
+				<td colspan="3" style="border-right: 0;">
+				<div style="text-align: left;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:black;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
+				</td>
+				<td colspan="3">
+				<div style="text-align: right;"><a href="javascript:history.back();" style="font-size:15px;color:black;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
+				</td>
 			</tr>
 			</tbody>
 		  </table>

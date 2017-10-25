@@ -5,12 +5,13 @@
 <%@ page import="java.util.*" %>
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ page import="kr.co.toto.util.*" %>
+<%@ page import="kr.co.toto.comn.model.TAData" %>
 <%@ page import="org.springframework.web.servlet.support.RequestContext"%>
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
 <%
 	List<HashMap> gameList = (List<HashMap>)request.getAttribute("gameList");
 	List<HashMap> selectedGame = (List<HashMap>)request.getAttribute("selectedGame");
-	HashMap selectGameInfo = (HashMap)request.getAttribute("selectGameInfo");
+	TAData selectGameInfo = (TAData)request.getAttribute("selectGameInfo");
 	String gmCd = (String)request.getAttribute("gmCd");
 	String gmPostNo = (String)request.getAttribute("gmPostNo");
 	String gmSeq = "";
@@ -29,7 +30,7 @@
 				
 %>  		
 				<option value="<%=getGmCd%>@<%=obj.get("gmPostNo")%>" <%=gmCd.equals(getGmCd) && gmPostNo.equals(getGmPostNo) ? "selected" : ""%>>
-				<%=obj.get("gmEndDate").toString().substring(0, 4) %> <%=obj.get("gmName") %> <%=obj.get("gmTurn") %>회-<%=obj.get("gmPostNo") %> <%=obj.get("gmPostContent") %>
+				<%=obj.get("gmEndDate").toString().substring(0, 4) %> <%=obj.get("gmName") %> <%=obj.get("gmTurn") %>회-<%=obj.get("gmPostTitle") %>
 				</option>
 <%
 			}
@@ -43,8 +44,20 @@
 		  <div class="content_info">
 		  <table class="common">
 		  	<thead>
+			<tr>
+				<td colspan="6">
+<%
+			if(StringUtils.equals(userId, "createhand")
+					|| StringUtils.equals(userId, "usuyoung")) {
+				out.print("<p><a href=\"/gameInput.do\">게임등록</a></p>");
+			}
+%>
+					<div class="content_list"><p style="text-align: left;font-size:18px;line-height:1.6em;color:black;"><%=selectGameInfo.get("gmPostTitle") %></p></div>
+					<div class="content_list"><p style="text-align: left;font-size:14px;line-height:1.3em"><%=selectGameInfo.get("gmPostContent") %></p><br/></div>
+				</td>
+			</tr>		  	
 		  	<tr>
-		  		<th colspan="6" style="color: TOMATO;">등록시간 : <%=selectGameInfo.get("regDt") %></th>
+		  		<th colspan="6" style="color: TOMATO;">등록시간 : <%=selectGameInfo.get("regDt") %> <%=selectGameInfo.get("regTm") %></th>
 		  	</tr>
 			<tr>
 				<th>번호</th>

@@ -50,7 +50,7 @@ public class GameResultController extends AbstractController {
             Model model, @RequestParam Map<String, Object> params) throws Exception {
     	
     	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
-    	ParamMap map = new ParamMap(params);
+    	TAData map = new TAData(params);
     	
     	int pageNo = StringUtils.isBlank(map.getString("pageNo")) ? 1 : map.getInt("pageNo");
     	
@@ -60,6 +60,9 @@ public class GameResultController extends AbstractController {
     	TAData pagingInfo = new TAData();
     	
         try {
+        	
+        	//공개픽만 조회
+        	map.put("pubYn", "0");
         	
         	//전체 목록 수  
         	totalCount = gameService.selectPickGameListCount(map);
@@ -99,7 +102,7 @@ public class GameResultController extends AbstractController {
     
     
     /**
-     * 게임정보수집
+     * 공개픽 상세화면
      * @param request
      * @param response
      * @param model
@@ -113,7 +116,7 @@ public class GameResultController extends AbstractController {
     	
     	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
     	RecordService recordService = (RecordService) BeanFinder.getBean(RecordService.class);
-    	ParamMap map = new ParamMap(params);
+    	TAData map = new TAData(params);
     	
     	List<String> errMsg = new ArrayList<String>();
     	List<TAData> selectedGame = new ArrayList<TAData>();

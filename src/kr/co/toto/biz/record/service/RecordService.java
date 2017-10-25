@@ -97,7 +97,7 @@ public class RecordService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<TAData> selectHitResult(ParamMap params) throws Exception {
+    public List<TAData> selectHitResult(TAData params) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);    	
     	return (List<TAData>)dao.selectList("RECORD.selectHitResult", params);   	
     }
@@ -111,9 +111,9 @@ public class RecordService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<HashMap> selectLatestRecordList(ParamMap params) throws Exception {
+    public List<TAData> selectLatestRecordList(TAData params) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);    	
-    	return (List<HashMap>)dao.selectList("RECORD.latestRecordList", params);   	
+    	return (List<TAData>)dao.selectList("RECORD.latestRecordList", params);   	
     }
     
 	
@@ -125,7 +125,7 @@ public class RecordService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<String> selectLatestRecord(ParamMap params) throws Exception {
+    public List<String> selectLatestRecord(TAData params) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);    	
     	return (List<String>)dao.selectList("RECORD.latestRecord", params);    	
     }
@@ -168,7 +168,7 @@ public class RecordService {
      * @throws BizException
      * @throws Exception
      */ 
-    public HashMap<String, BigDecimal> selectLatestScore(ParamMap params) throws Exception {
+    public HashMap<String, BigDecimal> selectLatestScore(TAData params) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
     	return (HashMap<String, BigDecimal>)dao.select("RECORD.latestScore", params);
     }

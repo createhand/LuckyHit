@@ -65,7 +65,7 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public TAData selectGameBetList(List<GameDetailListDt> gameDetailList, String url) throws Exception {
+    public TAData selectGameBetList(List<TAData> gameDetailList, String url) throws Exception {
     	
     	TAData returnMap = new TAData();
     	String result = BizUtil.getUrlSource(url, "EUC-KR");
@@ -125,12 +125,12 @@ public class GameService {
         		}
     		}
     		
-    		if(gameListNo != null) {
+    		if(StringUtils.isNotBlank(gameListNo)) {
     			int i = new BizUtil().convertInt(gameListNo)-1;
-    			GameDetailListDt dt = gameDetailList.get(i);
-    			dt.setWinBetCnt(new BizUtil().convertInt(winBet));
-    			dt.setDrawBetCnt(new BizUtil().convertInt(drawBet));
-    			dt.setLoseBetCnt(new BizUtil().convertInt(loseBet));        			
+    			TAData dt = gameDetailList.get(i);
+    			dt.set("winBetCnt", new BizUtil().convertInt(winBet));
+    			dt.set("drawBetCnt", new BizUtil().convertInt(drawBet));
+    			dt.set("loseBetCnt", new BizUtil().convertInt(loseBet));        			
     			gameDetailList.set(i, dt);
     		}
     	}
@@ -149,9 +149,9 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<HashMap> selectGameList(TAData map) throws Exception {
+    public List<TAData> selectGameList(TAData map) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (List<HashMap>)dao.selectList("GAME.selectGameList", map);
+    	return (List<TAData>)dao.selectList("GAME.selectGameList", map);
     }
     
     /**
@@ -162,7 +162,7 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<TAData> selectPickGameList(ParamMap map) throws Exception {
+    public List<TAData> selectPickGameList(TAData map) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
     	return (List<TAData>)dao.selectList("GAME.selectPickGameList", map);
     }
@@ -175,9 +175,9 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public TAData selectPickGameInfo(ParamMap map) throws Exception {
+    public TAData selectPickGameInfo(TAData map) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (TAData)dao.selectList("GAME.selectPickGameList", map);
+    	return (TAData)dao.select("GAME.selectPickGameList", map);
     }
     
     /**
@@ -188,7 +188,7 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public int selectPickGameListCount(ParamMap map) throws Exception {
+    public int selectPickGameListCount(TAData map) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
     	return (Integer)dao.select("GAME.selectPickGameListCount", map);
     }
@@ -201,9 +201,9 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<GameDetailListDt> selectGameDetailList(ParamMap params) throws Exception {
+    public List<TAData> selectGameDetailList(TAData params) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (List<GameDetailListDt>)dao.selectList("GAME.select", params);
+    	return (List<TAData>)dao.selectList("GAME.select", params);
     }
     
     
@@ -215,9 +215,9 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public HashMap selectLatestGame() throws Exception {
+    public TAData selectLatestGame() throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (HashMap)dao.select("GAME.latestGame");
+    	return (TAData)dao.select("GAME.latestGame");
     }
     
     /**
@@ -228,9 +228,9 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public HashMap selectLatestPick(ParamMap params) throws Exception {
+    public TAData selectLatestPick(TAData params) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (HashMap)dao.select("GAME.latestPick", params);
+    	return (TAData)dao.select("GAME.latestPick", params);
     }
     
     /**
@@ -241,30 +241,26 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public double getTeamPoint(TeamPointDt objTeamPoint) throws Exception {
-    	
+    public double getTeamPoint(TAData objTeamPoint) throws Exception {
     	
     	double latestPoint = 0, latestPointAtHome = 0, againstPoint = 0, againstPointAtHome = 0, teamPoint = 0;
-
     	
     	/****************** 최근전적 ******************/
     	//최근전적점수 적용
-    	List<String> latestRecord = objTeamPoint.getLatestRecord();
-    	if(latestRecord == null) latestRecord = new ArrayList<String>();
+    	String[] latestRecord = objTeamPoint.getString("latestResult").split("");
     	
-    	for(int i=0;i<latestRecord.size();i++) {
-    		if(latestRecord.get(i).equals(DomainConst.RECORD_WIN)) latestPoint += DomainConst.LATEST_WIN_POINT;
-    		else if(latestRecord.get(i).equals(DomainConst.RECORD_LOSE)) latestPoint += DomainConst.LATEST_LOSE_POINT;
+    	for(int i=0;i<latestRecord.length;i++) {
+    		if(latestRecord[i].equals(DomainConst.RECORD_WIN)) latestPoint += DomainConst.LATEST_WIN_POINT;
+    		else if(latestRecord[i].equals(DomainConst.RECORD_LOSE)) latestPoint += DomainConst.LATEST_LOSE_POINT;
     		else latestPoint += DomainConst.LATEST_DRAW_POINT;    		
     	}
     	
 
     	//홈에서 최근전적점수 적용
-    	List<String> latestRecordAtHome = objTeamPoint.getLatestRecordAtHome();
-    	if(latestRecordAtHome == null) latestRecordAtHome = new ArrayList<String>();    	
-    	for(int i=0;i<latestRecordAtHome.size();i++) {
-    		if(latestRecordAtHome.get(i).equals(DomainConst.RECORD_WIN)) latestPointAtHome += DomainConst.LATEST_WIN_POINT;
-    		else if(latestRecordAtHome.get(i).equals(DomainConst.RECORD_LOSE)) latestPointAtHome += DomainConst.LATEST_LOSE_POINT;
+    	String[] latestRecordAtHome = objTeamPoint.getString("homeLatestResult").split("");
+    	for(int i=0;i<latestRecordAtHome.length;i++) {
+    		if(latestRecordAtHome[i].equals(DomainConst.RECORD_WIN)) latestPointAtHome += DomainConst.LATEST_WIN_POINT;
+    		else if(latestRecordAtHome[i].equals(DomainConst.RECORD_LOSE)) latestPointAtHome += DomainConst.LATEST_LOSE_POINT;
     		else latestPointAtHome += DomainConst.LATEST_DRAW_POINT;    		
     	}
 
@@ -275,19 +271,18 @@ public class GameService {
     	
     	/****************** 상대전적 ******************/
     	//최근상대전적점수 적용
-    	List<String> againstRecord = objTeamPoint.getAgainstRecord();
-    	if(againstRecord == null) againstRecord = new ArrayList<String>();
-    	for(int i=0;i<againstRecord.size();i++) {
-    		if(againstRecord.get(i).equals(DomainConst.RECORD_WIN)) againstPoint += DomainConst.AGAINST_WIN_POINT;
-    		else if(againstRecord.get(i).equals(DomainConst.RECORD_LOSE)) againstPoint += DomainConst.AGAINST_LOSE_POINT;
+    	String[] againstRecord = objTeamPoint.getString("againstLatestResult").split("");
+    	for(int i=0;i<againstRecord.length;i++) {
+    		if(againstRecord[i].equals(DomainConst.RECORD_WIN)) againstPoint += DomainConst.AGAINST_WIN_POINT;
+    		else if(againstRecord[i].equals(DomainConst.RECORD_LOSE)) againstPoint += DomainConst.AGAINST_LOSE_POINT;
     		else againstPoint += DomainConst.AGAINST_DRAW_POINT;    		
     	}
     	
     	//홈에서 최근상대전적점수 적용
-    	List<String> againstRecordAtHome = objTeamPoint.getAgainstRecordAtHome();
-    	for(int i=0;i<againstRecordAtHome.size();i++) {
-    		if(againstRecordAtHome.get(i).equals(DomainConst.RECORD_WIN)) againstPointAtHome += DomainConst.AGAINST_WIN_POINT;
-    		else if(againstRecordAtHome.get(i).equals(DomainConst.RECORD_LOSE)) againstPointAtHome += DomainConst.AGAINST_LOSE_POINT;
+    	String[] againstRecordAtHome = objTeamPoint.getString("homeAgainstLatestResult").split("");
+    	for(int i=0;i<againstRecordAtHome.length;i++) {
+    		if(againstRecordAtHome[i].equals(DomainConst.RECORD_WIN)) againstPointAtHome += DomainConst.AGAINST_WIN_POINT;
+    		else if(againstRecordAtHome[i].equals(DomainConst.RECORD_LOSE)) againstPointAtHome += DomainConst.AGAINST_LOSE_POINT;
     		else againstPointAtHome += DomainConst.AGAINST_DRAW_POINT;    		
     	}
     	
@@ -301,8 +296,69 @@ public class GameService {
     	
     	return teamPoint;
     }
-    
 
+    //경기목록에서 경기결과요약 리턴
+    /*returnType
+     *0 : 홈, 어웨이 모두 / 1 : 홈팀일때만 / 2: 어웨이 팀일때만
+     */
+    public TAData getResultStr(String tmCd, int returnType, List<TAData> matchList, int matchCnt) {
+    	
+    	//선택된 경기 목록
+    	List<TAData> selectMatchList = new ArrayList<TAData>();
+    	//득점
+    	int getScore = 0;
+    	//실점
+    	int lostScore = 0;
+    	//승무패 결과
+    	String resultStr = "";
+    	//경기 수
+    	int cnt = 1;
+    	
+    	TAData result = new TAData();
+    	
+    	for(TAData matchInfo : matchList) {
+    		
+    		if(matchCnt < cnt) break;
+    		
+    		if(StringUtils.equals(matchInfo.getString("tmCdH"), tmCd)) {
+    			if(returnType == 0 || returnType == 1) {
+	    			//홈팀일때 경기결과
+	    			resultStr += matchInfo.getString("mcResult");
+	    			getScore += matchInfo.getInt("scoreH");
+	    			lostScore += matchInfo.getInt("scoreA");
+	    			
+	    			selectMatchList.add(matchInfo);
+	    			cnt++;
+    			}
+    		} else if(StringUtils.equals(matchInfo.getString("tmCdA"), tmCd)) {
+    			if(returnType == 0 || returnType == 2) {
+	    			//원정팀일때 경기결과
+    				
+	    			if(StringUtils.equals(matchInfo.getString("mcResult"), DomainConst.RECORD_WIN)) {
+	    				resultStr += DomainConst.RECORD_LOSE;
+	    			} else if(StringUtils.equals(matchInfo.getString("mcResult"), DomainConst.RECORD_LOSE)) {
+	    				resultStr += DomainConst.RECORD_WIN;
+	    			} else {
+	    				resultStr += DomainConst.RECORD_DRAW;
+	    			}
+	    			
+	    			getScore += matchInfo.getInt("scoreA");
+	    			lostScore += matchInfo.getInt("scoreH");
+	    			cnt++;
+	    			
+	    			selectMatchList.add(matchInfo);
+    			}
+    		}
+    	}
+    	
+    	result.set("matchList", matchList);
+    	result.set("resultStr", resultStr);
+    	result.set("getScore", getScore);
+    	result.set("lostScore", lostScore);
+    	
+    	return result;
+    }
+    
     /**
      * 승,무,패 목록에서 점수산출
      * 
@@ -311,13 +367,12 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public double getPointByList(List<String> list) throws Exception {
+    public double getPointByResultList(String resultStr) throws Exception {
     	double listPoint = 0;
-    	
-    	if(list == null) list = new ArrayList<String>();
-    	for(int i=0;i<list.size();i++) {
-    		if(list.get(i).equals(DomainConst.RECORD_WIN)) listPoint += DomainConst.LATEST_WIN_POINT;
-    		else if(list.get(i).equals(DomainConst.RECORD_LOSE)) listPoint += DomainConst.LATEST_LOSE_POINT;
+    	String[] list = resultStr.split("");
+    	for(int i=0;i<list.length;i++) {
+    		if(list[i].equals(DomainConst.RECORD_WIN)) listPoint += DomainConst.LATEST_WIN_POINT;
+    		else if(list[i].equals(DomainConst.RECORD_LOSE)) listPoint += DomainConst.LATEST_LOSE_POINT;
     		else listPoint += DomainConst.LATEST_DRAW_POINT;    		
     	}
     	return listPoint;
@@ -431,7 +486,7 @@ public class GameService {
      * @throws BizException
      * @throws Exception
      */ 
-    public String selectMaxPostNo(ParamMap map) throws Exception {
+    public String selectMaxPostNo(TAData map) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
     	return (String)dao.select("GAME_PICK_MT.selectMaxPostNo", map);
     }
@@ -447,7 +502,7 @@ public class GameService {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public List<HashMap> selectGamePickList(ParamMap params) throws Exception {
+    public List<HashMap> selectGamePickList(TAData params) throws Exception {
         IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
         return (List<HashMap>)dao.selectList("GAME_PICK_MT.selectPickList", params);        
     }
@@ -462,7 +517,7 @@ public class GameService {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public HashMap selectGamePick(ParamMap params) throws Exception {
+    public HashMap selectGamePick(TAData params) throws Exception {
         IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
         return (HashMap)dao.select("GAME_PICK_MT.selectPick", params);        
     }

@@ -1,7 +1,5 @@
 package kr.co.toto.biz.game.persistence.domain;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 
 import kr.co.toto.base.persistence.domain.TeamMt;
@@ -26,30 +24,57 @@ public class GameDetailListDt {
 	private String matchResult;
 	private String stadiumCode;
 	private String stadiumName;
-	private List<String> homeTeamlatestRecord;
-	private List<String> awayTeamlatestRecord;
-	private List<String> homeTeamAgainstRecord;	
-	private List<String> awayTeamAgainstRecord;
-	private HashMap<String, BigDecimal> homeTeamlatestScore;	
-	private HashMap<String, BigDecimal> awayTeamlatestScore;
-	private HashMap<String, BigDecimal> homeTeamAgainstScore;
-	private HashMap<String, BigDecimal> awayTeamAgainstScore;
+	
+	//홈, 어웨이 최근 경기 전체
+	private List<TAData> homeTeamlatestRecordList;
+	private List<TAData> awayTeamlatestRecordList;
+	
+	//상대 경기
+	private List<TAData> againstRecordList;
+	
+	//홈 최근 경기 요약
+	private TAData homeTeamlatestInfo;
+	
+	//어웨이 최근 경기 요약
+	private TAData awayTeamlatestInfo;
+	
+	//예상결과
 	private String expectMatchResult;
 	private String expectMatchResultCode;
+	
 	private int scoreHome;
 	private int scoreAway;
+	
+	//베팅현황
 	private double winBetCnt;
 	private double drawBetCnt;
 	private double loseBetCnt;
 	
+	//팀정보
 	private TeamMt homeTeamInfo;
 	private TeamMt awayTeamInfo;
 	
+	//시즌성적 
 	private TAData homeTeamSeaonInfo;
 	private TAData awayTeamSeaonInfo;
 	
+	//이변 경기
 	private List<TAData> homeTeamAmzaingList;
 	private List<TAData> awayTeamAmzaingList;
+	
+	
+	public TAData getHomeTeamlatestInfo() {
+		return homeTeamlatestInfo;
+	}
+	public void setHomeTeamlatestInfo(TAData homeTeamlatestInfo) {
+		this.homeTeamlatestInfo = homeTeamlatestInfo;
+	}
+	public TAData getAwayTeamlatestInfo() {
+		return awayTeamlatestInfo;
+	}
+	public void setAwayTeamlatestInfo(TAData awayTeamlatestInfo) {
+		this.awayTeamlatestInfo = awayTeamlatestInfo;
+	}
 	public String getGameCode() {
 		return gameCode;
 	}
@@ -152,57 +177,23 @@ public class GameDetailListDt {
 	public void setStadiumName(String stadiumName) {
 		this.stadiumName = stadiumName;
 	}
-	public List<String> getHomeTeamlatestRecord() {
-		return homeTeamlatestRecord;
+	public List<TAData> getHomeTeamlatestRecordList() {
+		return homeTeamlatestRecordList;
 	}
-	public void setHomeTeamlatestRecord(List<String> homeTeamlatestRecord) {
-		this.homeTeamlatestRecord = homeTeamlatestRecord;
+	public void setHomeTeamlatestRecordList(List<TAData> homeTeamlatestRecordList) {
+		this.homeTeamlatestRecordList = homeTeamlatestRecordList;
 	}
-	public List<String> getAwayTeamlatestRecord() {
-		return awayTeamlatestRecord;
+	public List<TAData> getAwayTeamlatestRecordList() {
+		return awayTeamlatestRecordList;
 	}
-	public void setAwayTeamlatestRecord(List<String> awayTeamlatestRecord) {
-		this.awayTeamlatestRecord = awayTeamlatestRecord;
+	public void setAwayTeamlatestRecordList(List<TAData> awayTeamlatestRecordList) {
+		this.awayTeamlatestRecordList = awayTeamlatestRecordList;
 	}
-	public List<String> getHomeTeamAgainstRecord() {
-		return homeTeamAgainstRecord;
+	public List<TAData> getAgainstRecordList() {
+		return againstRecordList;
 	}
-	public void setHomeTeamAgainstRecord(List<String> homeTeamAgainstRecord) {
-		this.homeTeamAgainstRecord = homeTeamAgainstRecord;
-	}
-	public List<String> getAwayTeamAgainstRecord() {
-		return awayTeamAgainstRecord;
-	}
-	public void setAwayTeamAgainstRecord(List<String> awayTeamAgainstRecord) {
-		this.awayTeamAgainstRecord = awayTeamAgainstRecord;
-	}
-	public HashMap<String, BigDecimal> getHomeTeamlatestScore() {
-		return homeTeamlatestScore;
-	}
-	public void setHomeTeamlatestScore(
-			HashMap<String, BigDecimal> homeTeamlatestScore) {
-		this.homeTeamlatestScore = homeTeamlatestScore;
-	}
-	public HashMap<String, BigDecimal> getAwayTeamlatestScore() {
-		return awayTeamlatestScore;
-	}
-	public void setAwayTeamlatestScore(
-			HashMap<String, BigDecimal> awayTeamlatestScore) {
-		this.awayTeamlatestScore = awayTeamlatestScore;
-	}
-	public HashMap<String, BigDecimal> getHomeTeamAgainstScore() {
-		return homeTeamAgainstScore;
-	}
-	public void setHomeTeamAgainstScore(
-			HashMap<String, BigDecimal> homeTeamAgainstScore) {
-		this.homeTeamAgainstScore = homeTeamAgainstScore;
-	}
-	public HashMap<String, BigDecimal> getAwayTeamAgainstScore() {
-		return awayTeamAgainstScore;
-	}
-	public void setAwayTeamAgainstScore(
-			HashMap<String, BigDecimal> awayTeamAgainstScore) {
-		this.awayTeamAgainstScore = awayTeamAgainstScore;
+	public void setAgainstRecordList(List<TAData> againstRecordList) {
+		this.againstRecordList = againstRecordList;
 	}
 	public String getExpectMatchResult() {
 		return expectMatchResult;
@@ -282,6 +273,5 @@ public class GameDetailListDt {
 	public void setAwayTeamAmzaingList(List<TAData> awayTeamAmzaingList) {
 		this.awayTeamAmzaingList = awayTeamAmzaingList;
 	}
-	
-}
 
+}

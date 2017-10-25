@@ -6,7 +6,12 @@
 <%@ page import="kr.co.toto.util.*" %>
 <%@ page import="org.springframework.web.servlet.support.RequestContext"%>
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
-
+<%
+	if(!StringUtils.equals(userId, "createhand")
+			&& !StringUtils.equals(userId, "usuyoung")) {
+		return;
+	}
+%>
 <span class="button" style="font-size:15px;font-weight: bold;">경기일정 및 결과 수집</span><br/></br>
 <form name="frm" method="POST" action="<%=request.getContextPath() %>recordCollecting.do">
 <select name="league" id="league">
@@ -31,7 +36,6 @@
 <br/>
 <br/>
 <br/>
-<!-- 
 <span class="button" style="font-size:15px;font-weight: bold;">팀 등록</span><br/></br>
 <form name="frm" method="POST" action="<%=request.getContextPath() %>teamCollecting.do">
 <select name="league" id="league">
@@ -59,7 +63,6 @@
 </select>
 <input type="submit" id="submitBtn" name="submitBtn" value="수집"/>
 </form>
- -->
 
 <!-- 
 <form name="frm" method="POST" action="<%=request.getContextPath() %>recordCollectingJ.do">

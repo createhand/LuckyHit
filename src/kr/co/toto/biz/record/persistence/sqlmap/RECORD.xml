@@ -3,13 +3,14 @@
 <sqlMap namespace="RECORD" >
 	
 <typeAlias alias="HashMap" type="java.util.HashMap" />
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
 <typeAlias alias="MatchRecordMt" type="kr.co.toto.base.persistence.domain.MatchRecordMt" />
 
 <!-- 
 1. 최근전적 경기목록
 2. 상대전적 경기목록
 -->
-<select id="latestRecordList" parameterClass="map" resultClass="HashMap" >
+<select id="latestRecordList" parameterClass="map" resultClass="tadata" >
 SELECT
 	A.MC_CD AS mcCd,
     A.LG_CD AS lgCd,

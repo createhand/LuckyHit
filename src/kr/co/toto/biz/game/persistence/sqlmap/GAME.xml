@@ -6,7 +6,7 @@
 <typeAlias alias="HashMap" type="java.util.HashMap" />
 <typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
 
-<select id="select" parameterClass="map" resultClass="GameDetailListDt" >
+<select id="select" parameterClass="map" resultClass="tadata" >
 SELECT
 	A.GM_CD AS gameCode,
 	A.GM_NAME AS gameName,
@@ -16,7 +16,11 @@ SELECT
 	C.TM_CD_H AS homeTeamCode,
 	C.TM_CD_A AS awayTeamCode,
 	D.TM_NAME AS homeTeamName,
+	D.TM_NAME_BET AS homeTeamNameBet,
 	E.TM_NAME AS awayTeamName,
+	E.TM_NAME_BET AS awayTeamNameBet,
+	D.TM_IMG_URL AS homeTeamImg,
+	E.TM_IMG_URL AS awayTeamImg,
 	C.MC_DATE AS matchDate,
 	C.MC_TIME AS matchTime,
 	C.MC_DAY AS matchDay,
@@ -42,7 +46,7 @@ ORDER BY B.GM_LIST_NO
 </select>
 
 <!-- 가장 최근에 수집된 게임(픽을 안올린 게임) -->
-<select id="latestGame" resultClass="HashMap" >
+<select id="latestGame" resultClass="tadata" >
 SELECT 
 	MAX(A.GM_CD) AS gmCd,
 	MAX(A.GM_END_DATE) AS gmEndDate, 
@@ -119,6 +123,7 @@ FROM (
 	    B.GM_END_DATE AS gmEndDate,
 	    B.GM_END AS gmEnd,
 	    B.GM_SEQ AS gmSeq,
+	    A.RG_DATE,
 	    DATE_FORMAT(A.RG_DATE, '%Y-%m-%d') as regDt,
 	    DATE_FORMAT(A.RG_DATE, '%H:%i') as regTm
 	FROM
@@ -140,9 +145,8 @@ FROM (
 		A.GM_POST_NO = #gmPostNo#
 	</isNotEmpty>
 </dynamic>
-	ORDER BY B.GM_CD DESC, GM_POST_NO DESC
 ) A
-ORDER BY RNUM DESC
+ORDER BY RG_DATE DESC
 <isNotEmpty property="paging">
 LIMIT #pageIndex#, #countPerPage#
 </isNotEmpty>

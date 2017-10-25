@@ -9,18 +9,16 @@
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ page import="kr.co.toto.comn.model.TAData" %>
 <%@ page import="kr.co.toto.util.*" %>
-<%@ page import="kr.co.toto.biz.game.persistence.domain.GameDetailListDt" %>
 <%@ page import="kr.co.toto.base.persistence.domain.GameMt" %>
 <%@ page import="org.springframework.web.servlet.support.RequestContext"%>
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
 <%
 List<HashMap> gameList = (List<HashMap>)request.getAttribute("gameList");
-List<GameDetailListDt> list = (List<GameDetailListDt>)request.getAttribute("gameDetailList");
+List<TAData> list = (List<TAData>)request.getAttribute("gameDetailList");
 GameMt gameMt = (GameMt)request.getAttribute("gameMt");
 String gmCd = (String)request.getAttribute("gmCd");
 double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 %>
-
 		<div id="content">
 			<form name="searchFrm" method="get">
 			<table class="common">
@@ -68,171 +66,163 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 
 	for(int i=0;i<list.size();i++) {
 		
-		String hLtRecord = "", hLtAgRecord = "", aLtRecord = "", aLtAgRecord = "";		
-		int hLtGtPoint = 0, hLtLsPoint = 0, hLtGtAgPoint = 0, hLtLsAgPoint = 0; 
-		int aLtGtPoint = 0, aLtLsPoint = 0, aLtGtAgPoint = 0, aLtLsAgPoint = 0;
-		GameDetailListDt mr = (GameDetailListDt)list.get(i);
-		List<String> homeTeamRecordList = mr.getHomeTeamlatestRecord();
-		List<String> awayTeamRecordList = mr.getAwayTeamlatestRecord();
-		List<String> homeTeamAgainstRecordList = mr.getHomeTeamAgainstRecord();
-		List<String> awayTeamAgainstRecordList = mr.getAwayTeamAgainstRecord();
+		TAData mr = (TAData)list.get(i);
 		
-		HashMap<String, BigDecimal> homeScore = mr.getHomeTeamlatestScore();
-		HashMap<String, BigDecimal> awayScore = mr.getAwayTeamlatestScore();
-		HashMap<String, BigDecimal> homeTeamAgainstScore = mr.getHomeTeamAgainstScore();
-		HashMap<String, BigDecimal> awayTeamAgainstScore = mr.getAwayTeamAgainstScore();
 		
-		for(int j=0;j<homeTeamRecordList.size();j++) hLtRecord += homeTeamRecordList.get(j);
-		for(int j=0;j<homeTeamAgainstRecordList.size();j++) hLtAgRecord += homeTeamAgainstRecordList.get(j);
-		for(int j=0;j<awayTeamRecordList.size();j++) aLtRecord += awayTeamRecordList.get(j);
-		for(int j=0;j<awayTeamAgainstRecordList.size();j++) aLtAgRecord += awayTeamAgainstRecordList.get(j);
+		//*********** 홈팀 최근 경기 요약 ***********//
+		TAData homeTeamlatestInfo = (TAData)mr.get("homeTeamlatestInfo");
 		
-		hLtGtPoint = homeScore.get("totalGetScore").intValue(); 
-		hLtLsPoint = homeScore.get("totalLostScore").intValue();
-		hLtGtAgPoint = homeTeamAgainstScore.get("totalGetScore").intValue();
-		hLtLsAgPoint = homeTeamAgainstScore.get("totalLostScore").intValue();		
+		//최근 경기(6경기)
+		TAData homeTeamResult = (TAData)homeTeamlatestInfo.get("homeTeamResult");
+		//최근 홈경기(6경기)
+		TAData homeTeamResultAtHome = (TAData)homeTeamlatestInfo.get("homeTeamResultAtHome");
+		//최근 상대경기(6경기)
+		TAData homeAgainstResult = (TAData)homeTeamlatestInfo.get("homeAgainstResult");		
+		//최근 홈에서 상대경기(6경기)
+		TAData homeAgainstResultAtHome = (TAData)homeTeamlatestInfo.get("homeAgainstResultAtHome");		
 		
-		aLtGtPoint = awayScore.get("totalGetScore").intValue(); 
-		aLtLsPoint = awayScore.get("totalLostScore").intValue();
-		aLtGtAgPoint = awayTeamAgainstScore.get("totalGetScore").intValue();
-		aLtLsAgPoint = awayTeamAgainstScore.get("totalLostScore").intValue();
 		
-		TeamMt homeTeamInfo = mr.getHomeTeamInfo();
-		TeamMt awayTeamInfo = mr.getAwayTeamInfo();
-		TAData homeTeamSeasonInfo = mr.getHomeTeamSeaonInfo();
-		TAData awayTeamSeasonInfo = mr.getAwayTeamSeaonInfo();
+		//*********** 어웨이팀 최근 경기 요약 ***********//
+		TAData awayTeamlatestInfo = (TAData)mr.get("awayTeamlatestInfo");
 		
-		List<TAData> homeTeamAmzaingList = mr.getHomeTeamAmzaingList(); 
-		List<TAData> awayTeamAmzaingList = mr.getAwayTeamAmzaingList();
+		//최근 경기(6경기)
+		TAData awayTeamResult = (TAData)awayTeamlatestInfo.get("awayTeamResult");
+		//최근 홈경기(6경기)
+		TAData awayTeamResultAtHome = (TAData)awayTeamlatestInfo.get("awayTeamResultAtHome");
+		//최근 상대경기(6경기)
+		TAData awayAgainstResult = (TAData)awayTeamlatestInfo.get("awayAgainstResult");		
+		//최근 홈에서 상대경기(6경기)
+		TAData awayAgainstResultAtHome = (TAData)awayTeamlatestInfo.get("awayAgainstResultAtHome");		
 		
-		double winBet = (mr.getWinBetCnt()/totalBetCnt)*100;
-		double drawBet = (mr.getDrawBetCnt()/totalBetCnt)*100;
-		double loseBet = (mr.getLoseBetCnt()/totalBetCnt)*100;
+		
+		//*********** 시즌성적 ***********//
+		TAData homeTeamSeasonInfo = (TAData)mr.get("homeTeamSeasonInfo");
+		TAData awayTeamSeasonInfo = (TAData)mr.get("awayTeamSeasonInfo");
+		
+		//*********** 이변경기 ***********//
+		List<TAData> homeTeamAmzaingList = (List<TAData>)mr.get("homeTeamAmzaingList"); 
+		List<TAData> awayTeamAmzaingList = (List<TAData>)mr.get("awayTeamAmzaingList");
+		
+		double winBet = (mr.getInt("winBetCnt")/totalBetCnt)*100;
+		double drawBet = (mr.getInt("drawBetCnt")/totalBetCnt)*100;
+		double loseBet = (mr.getInt("loseBetCnt")/totalBetCnt)*100;
 		
 %>
-				<tr id="mcDate<%=mr.getGameListNo() %>">
-					<td colspan="3" width="100%">
-						<%=mr.getGameListNo()%>.
-						<%=DateUtil.getDate2String(DateUtil.getDate(mr.getMatchDate(), "yyyyMMdd"), "yyyy-MM-dd")%>
-						(<%=new BizUtil().getDayStr(Integer.parseInt(mr.getMatchDay()))%>)
+				<tr id="mcDate<%=mr.getInt("gameListNo") %>">
+					<td colspan="3" width="100%" style="font-size: 14px;">
+						<a style="font-size: 14px;" id="match<%=mr.getInt("gameListNo")%>"><%=mr.getInt("gameListNo")%>.</a>
+						<%=DateUtil.getDate2String(DateUtil.getDate(mr.getString("matchDate"), "yyyyMMdd"), "yyyy-MM-dd")%>
+						(<%=new BizUtil().getDayStr(mr.getInt("matchDay"))%>)
 						<%
-						if(mr.getMatchTime().length() == 4) {
-							out.print(DateUtil.getDate2String(DateUtil.getDate(mr.getMatchTime(), "HHmm"), "HH:mm"));
+						if(mr.getString("matchTime").length() == 4) {
+							out.print(DateUtil.getDate2String(DateUtil.getDate(mr.getString("matchTime"), "HHmm"), "HH:mm"));
 						}
 						%>
 						/ 예상 : 
-						<%=mr.getExpectMatchResultCode().toString().equals("W") ? "승" : ""%>
-						<%=mr.getExpectMatchResultCode().toString().equals("D") ? "무" : ""%>
-						<%=mr.getExpectMatchResultCode().toString().equals("L") ? "패" : ""%>
+						<%=mr.getString("expectMatchResultCode").toString().equals("W") ? "승" : ""%>
+						<%=mr.getString("expectMatchResultCode").toString().equals("D") ? "무" : ""%>
+						<%=mr.getString("expectMatchResultCode").toString().equals("L") ? "패" : ""%>
 						<input type="hidden" id="expResult" name="expResult">
 					</td>
 				</tr>
-				<tr id="gm<%=mr.getGameListNo() %>" class="off">
-					<td width="40%" class="clickOff" onclick="getSubGameList(this, '<%=mr.getGameListNo() %>', 'W')">
-						<img src="<%=homeTeamInfo.getTmImgUrl() %>" width="70" height="70" alt="<%=mr.getHomeTeamName() %>"/><br/>
-						<%=mr.getHomeTeamName() %><br/><br/>
-						(<%=homeTeamSeasonInfo.getInt("RANK") %>위)<br/><br/>
+				<tr id="gm<%=mr.getInt("gameListNo") %>" class="off" style="line-height: 1.7em;">
+					<td width="40%" class="clickOff" onclick="getSubGameList(this, '<%=mr.getInt("gameListNo") %>', 'W')">
+						<img src="<%=mr.getString("homeTeamImg") %>" width="70" height="70" alt="<%=mr.getString("homeTeamName") %>"/><br/>
+						<%=mr.getString("homeTeamName") %>(<%=homeTeamSeasonInfo.getInt("RANK") %>위)<br/>
 						<div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div>
 					</td>
-					<td class="clickOff" onclick="getSubGameList(this, '<%=mr.getGameListNo() %>', 'D')">VS<br/>
+					<td class="clickOff" onclick="getSubGameList(this, '<%=mr.getInt("gameListNo") %>', 'D')">VS<br/>
 					<div id="ratio"><fmt:formatNumber value="<%=drawBet %>" pattern="###.##" /></div>
 					</td>
-					<td width="40%" class="clickOff" onclick="getSubGameList(this, '<%=mr.getGameListNo() %>', 'L')">
-						<img src="<%=awayTeamInfo.getTmImgUrl() %>" width="70" height="70" alt="<%=mr.getAwayTeamName() %>"/><br/>
-						<%=mr.getAwayTeamName() %><br/><br/>
-						(<%=awayTeamSeasonInfo.getInt("RANK") %>위)<br/><br/>
+					<td width="40%" class="clickOff" onclick="getSubGameList(this, '<%=mr.getInt("gameListNo") %>', 'L')">
+						<img src="<%=mr.getString("awayTeamImg") %>" width="70" height="70" alt="<%=mr.getString("awayTeamName") %>"/><br/>
+						<%=mr.getString("awayTeamName") %>(<%=awayTeamSeasonInfo.getInt("RANK") %>위)<br/>
 						<div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div>
 					</td>
 				</tr>
-				<tr id="mcLatest<%=mr.getGameListNo() %>" >
+				<tr id="mcLatestHomeAway<%=mr.getInt("gameListNo") %>" >
 					<td>
-						<%=hLtRecord%><br/><br/>
-						득:<%=homeScore.get("totalGetScore") %>/실:<%=homeScore.get("totalLostScore") %>
+						<a href="javascript:layer_popup('#layerPopup', 'mcLatestHomeAway<%=mr.getInt("gameListNo") %>')">
+						<%=homeTeamResult.getString("resultStr")%><br/>
+						득:<%=homeTeamResult.getInt("getScore")%>/실:<%=homeTeamResult.getInt("lostScore")%>
+						</a>
 					</td>
-					<td>최근</td>
+					<td>최근<br/>홈,원정</td>
 					<td>
-						<%=aLtRecord%><br/><br/>
-						득:<%=awayScore.get("totalGetScore") %>/실:<%=awayScore.get("totalLostScore") %>
-					</td>
-				</tr>
-				<tr id="mcVersus<%=mr.getGameListNo() %>" >
-					<td>
-						<%=hLtAgRecord%><br/><br/>
-						득:<%=homeTeamAgainstScore.get("totalGetScore") %>/실:<%=homeTeamAgainstScore.get("totalLostScore") %>
-					</td>
-					<td>상대</td>
-					<td>
-						<%=aLtAgRecord%><br/><br/>
-						득:<%=awayTeamAgainstScore.get("totalGetScore") %>/실:<%=awayTeamAgainstScore.get("totalLostScore") %>
+						<%=awayTeamResult.getString("resultStr")%><br/>
+						득:<%=awayTeamResult.getInt("getScore")%>/실:<%=awayTeamResult.getInt("lostScore")%>
 					</td>
 				</tr>
-				<tr id="mcAmaz<%=mr.getGameListNo() %>" >
+				<tr id="mcLatestHome<%=mr.getInt("gameListNo") %>" >
 					<td>
-					<%
-						for(TAData amazingInfo : homeTeamAmzaingList) {
-							out.print(DateUtil.getDate2String(DateUtil.getDate(amazingInfo.getString("MC_DATE"), "yyyyMMdd"), "yyyy-MM-dd")+"<br/>"+amazingInfo.getInt("PRDT_WIN")+":"+amazingInfo.getInt("PRDT_DRAW")+":"+amazingInfo.getInt("PRDT_LOSS")+"<br/>");
-							out.print(amazingInfo.getString("TM_NAME_H")+"("+amazingInfo.getString("SCORE_H")+")"+":");
-							out.print("("+amazingInfo.getString("SCORE_A")+")"+amazingInfo.getString("TM_NAME_A")+"<br/><br/><br/>");
-						}
-					%>
+						<%=homeTeamResultAtHome.getString("resultStr")%><br/>
+						득:<%=homeTeamResultAtHome.getInt("getScore")%>/실:<%=homeTeamResultAtHome.getInt("lostScore")%>
 					</td>
-					<td>이변</td>
+					<td>최근<br/>홈경기</td>
 					<td>
-					<%
-						for(TAData amazingInfo : awayTeamAmzaingList) {
-							out.print(DateUtil.getDate2String(DateUtil.getDate(amazingInfo.getString("MC_DATE"), "yyyyMMdd"), "yyyy-MM-dd")+"<br/>"+amazingInfo.getInt("PRDT_WIN")+":"+amazingInfo.getInt("PRDT_DRAW")+":"+amazingInfo.getInt("PRDT_LOSS")+"<br/>");
-							out.print(amazingInfo.getString("TM_NAME_H")+"("+amazingInfo.getString("SCORE_H")+")"+":");
-							out.print("("+amazingInfo.getString("SCORE_A")+")"+amazingInfo.getString("TM_NAME_A")+"<br/><br/><br/>");
-						}
-					%>					
-						<input type="hidden" id="hLtRecord" name="hLtRecord" value="<%=hLtRecord%>" />
-						<input type="hidden" id="hLtAgRecord" name="hLtAgRecord" value="<%=hLtAgRecord%>" />
-						<input type="hidden" id="aLtRecord" name="aLtRecord" value="<%=aLtRecord%>" />
-						<input type="hidden" id="aLtAgRecord" name="aLtAgRecord" value="<%=aLtAgRecord%>" />
-						
-						<input type="hidden" id="hLtGtPoint" name="hLtGtPoint" value="<%=hLtGtPoint%>" />
-						<input type="hidden" id="hLtLsPoint" name="hLtLsPoint" value="<%=hLtLsPoint%>" />
-						<input type="hidden" id="hLtGtAgPoint" name="hLtGtAgPoint" value="<%=hLtGtAgPoint%>" />
-						<input type="hidden" id="hLtLsAgPoint" name="hLtLsAgPoint" value="<%=hLtLsAgPoint%>" />
-						
-						<input type="hidden" id="aLtGtPoint" name="aLtGtPoint" value="<%=aLtGtPoint%>" />
-						<input type="hidden" id="aLtLsPoint" name="aLtLsPoint" value="<%=aLtLsPoint%>" />
-						<input type="hidden" id="aLtGtAgPoint" name="aLtGtAgPoint" value="<%=aLtGtAgPoint%>" />
-						<input type="hidden" id="aLtLsAgPoint" name="aLtLsAgPoint" value="<%=aLtLsAgPoint%>" />
-						
-						<input type="hidden" id="gmListNo" name="gmListNo" value="<%=mr.getGameListNo()%>" />
-						<input type="hidden" id="mcCd" name="mcCd" value="<%=mr.getMatchCode()%>" />
+						<%=awayTeamResultAtHome.getString("resultStr")%><br/>
+						득:<%=awayTeamResultAtHome.getInt("getScore")%>/실:<%=awayTeamResultAtHome.getInt("lostScore")%>
 					</td>
 				</tr>
-				<tr id="mcNews<%=mr.getGameListNo() %>" >
+				<tr id="mcAgainstHomeAway<%=mr.getInt("gameListNo") %>" >
+					<td>
+						<%=homeAgainstResult.getString("resultStr")%><br/>
+						득:<%=homeAgainstResult.getInt("getScore")%>/실:<%=homeAgainstResult.getInt("lostScore")%>
+					</td>
+					<td>상대<br/>홈,원정</td>
+					<td>
+						<%=awayAgainstResult.getString("resultStr")%><br/>
+						득:<%=awayAgainstResult.getInt("getScore")%>/실:<%=awayAgainstResult.getInt("lostScore")%>
+					</td>
+				</tr>
+				<tr id="mcAgainstHome<%=mr.getInt("gameListNo") %>" >
+					<td>
+						<%=homeAgainstResultAtHome.getString("resultStr")%><br/>
+						득:<%=homeAgainstResultAtHome.getInt("getScore")%>/실:<%=homeAgainstResultAtHome.getInt("lostScore")%>
+					</td>
+					<td>상대<br/>홈경기</td>
+					<td>
+						<%=awayAgainstResultAtHome.getString("resultStr")%><br/>
+						득:<%=awayAgainstResultAtHome.getInt("getScore")%>/실:<%=awayAgainstResultAtHome.getInt("lostScore")%>
+					</td>
+				</tr>
+				<tr id="mcNews<%=mr.getInt("gameListNo") %>" >
 					<td colspan="3">
-						<%=homeTeamInfo.getTmName() %> :
-						<a href="https://search.naver.com/search.naver?query=<%=homeTeamInfo.getTmName() %>" target=_blank>네이버 뉴스 검색</a>
+						<%=mr.getString("homeTeamName") %> :
+						<a href="https://search.naver.com/search.naver?query=<%=mr.getString("homeTeamName") %>" target=_blank>하이라이트</a>
 						/
-						<a href="https://search.daum.net/search?q=<%=homeTeamInfo.getTmName() %>" target=_blank>다음 뉴스 검색</a>
+						<a href="https://search.naver.com/search.naver?query=<%=mr.getString("homeTeamName") %>" target=_blank>네이버 뉴스 검색</a>
 						/
-						<a href="https://www.google.co.kr/search?q=<%=homeTeamInfo.getTmName() %>&ie=UTF-8" target=_blank>구글 검색</a>
+						<a href="https://search.daum.net/search?q=<%=mr.getString("homeTeamName") %>" target=_blank>다음 뉴스 검색</a>
+						/
+						<a href="https://www.google.co.kr/search?q=<%=mr.getString("homeTeamName") %>&ie=UTF-8" target=_blank>구글 검색</a>
 						<br/><br/>
-						<%=awayTeamInfo.getTmName() %> :
-						<a href="https://search.naver.com/search.naver?query=<%=awayTeamInfo.getTmName() %>&x=0&y=0" target=_blank>네이버 뉴스 검색</a>
+						<%=mr.getString("awayTeamName") %> :
+						<a href="https://search.naver.com/search.naver?query=<%=mr.getString("awayTeamName") %>" target=_blank>하이라이트</a>
 						/
-						<a href="https://search.daum.net/search?q=<%=awayTeamInfo.getTmName() %>" target=_blank>다음 뉴스 검색</a>
+						<a href="https://search.naver.com/search.naver?query=<%=mr.getString("awayTeamName") %>&x=0&y=0" target=_blank>네이버 뉴스 검색</a>
 						/
-						<a href="https://www.google.co.kr/search?q=<%=awayTeamInfo.getTmName() %>&ie=UTF-8" target=_blank>구글 검색</a>
+						<a href="https://search.daum.net/search?q=<%=mr.getString("awayTeamName") %>" target=_blank>다음 뉴스 검색</a>
+						/
+						<a href="https://www.google.co.kr/search?q=<%=mr.getString("awayTeamName") %>&ie=UTF-8" target=_blank>구글 검색</a>
+						
+						<!-- hidden -->
+						<input type="hidden" id="gmListNo" name="gmListNo" value="<%=mr.getInt("gameListNo")%>" />
+						<input type="hidden" id="mcCd" name="mcCd" value="<%=mr.getString("matchCode")%>" />
 					</td>
 				</tr>
-				<tr id="mcResult<%=mr.getGameListNo() %>" >
+				<tr id="mcResult<%=mr.getInt("gameListNo") %>" >
 					<td colspan="3" style="background-color: AliceBlue">
 					<%
-						if(mr.getMatchEnd().equals("Y")) {
-							if(mr.getMatchResult().equals("W")) {
-								out.print(mr.getHomeTeamName());								
-							} else if(mr.getMatchResult().equals("L")) {
-								out.print(mr.getAwayTeamName());
+						if(mr.getString("matchEnd").equals("Y")) {
+							if(mr.getString("matchResult").equals("W")) {
+								out.print(mr.getString("homeTeamName"));								
+							} else if(mr.getString("matchResult").equals("L")) {
+								out.print(mr.getString("awayTeamName"));
 							} else {
 								out.print("무");
 							}
-							out.print("<br/>"+mr.getScoreHome()+":"+mr.getScoreAway());
+							out.print("<br/>"+mr.getString("scoreHome")+":"+mr.getString("scoreAway"));
 						} else {
 							out.print("경기예정");
 						}
@@ -256,7 +246,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 			</tr>
 			<tr>
 				<td colspan="3">
-					<input type="text" name="gmPostTitle" id="gmPostTitle" placeholder="픽을 구분할 수 있는 간단한 제목을 입력해주세요(필수)" style="width:100%;" />
+					<input type="text" name="gmPostTitle" id="gmPostTitle" placeholder="픽을 구분할 수 있는 간단한 제목을 입력해주세요(필수)" maxlength="200" style="width:100%;" />
 				</td>
 			</tr>
 			<tr>
@@ -276,40 +266,117 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		</div>
 		<br/><br/><br/><br/><br/><br/><br/>
 
-  <nav class="floating-menu">
-  <table class="subTable" style="width:100%;">
+
+<script>
 <%
-  	for(int i=0;i<list.size();i++) {
-		GameDetailListDt mr = (GameDetailListDt)list.get(i);
-		TeamMt homeTeamInfo = mr.getHomeTeamInfo();
-		TeamMt awayTeamInfo = mr.getAwayTeamInfo();
-		if(i % 2 == 0) {
-			out.print("<tr>");
-		}
-		out.print("<td style=\"font-size:15px;\">"+mr.getGameListNo()+". "+homeTeamInfo.getTmNameBet()+" VS "+awayTeamInfo.getTmNameBet());
-		out.print("(<gm id='subGame_"+mr.getGameListNo()+"' class='subGame' style='font-color:red;'></gm>)</td>");
-		if(i % 2 == 1) {
-			out.print("</tr>");
-		}
+//for(int i=0;i<list.size();i++) {
+//	TAData mr = (TAData)list.get(i);
+%>
+
+<%
+//}
+%>
+
+function layer_popup(el, dataId) {
+	
+	layerPopupMatchList.innerHTML = "<b>"+dataId+"</b>";
+
+    var $el = $(el);        //레이어의 id를 $el 변수에 저장
+    var isDim = $el.prev().hasClass('dimBg');   //dimmed 레이어를 감지하기 위한 boolean 변수
+
+    isDim ? $('.dim-layer').fadeIn() : $el.fadeIn();
+
+    var $elWidth = ~~($el.outerWidth()),
+        $elHeight = ~~($el.outerHeight()),
+        docWidth = $(document).width(),
+        docHeight = $(document).height();
+
+    // 화면의 중앙에 레이어를 띄운다.
+    if ($elHeight < docHeight || $elWidth < docWidth) {
+        $el.css({
+            marginTop: -$elHeight /2,
+            marginLeft: -$elWidth/2
+        })
+    } else {
+        $el.css({top: 0, left: 0});
+    }
+
+    $el.find('a.btn-layerClose').click(function(){
+        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 닫기 버튼을 클릭하면 레이어가 닫힌다.
+        return false;
+    });
+
+    $('.layer .dimBg').click(function(){
+        $('.dim-layer').fadeOut();
+        return false;
+    });
+
+}
+</script>
+
+<!-- 경기 요약 정보 레이어 영역 -->
+<div class="dim-layer">
+    <div class="dimBg"></div>
+    <div id="layerPopup" class="pop-layer">
+        <div class="pop-container">
+            <div id="layerPopupMatchList" class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20">Thank you.<br>
+                    Your registration was submitted successfully.<br>
+                    Selected invitees will be notified by e-mail on JANUARY 24th.<br><br>
+                    Hope to see you soon!
+                </p>
+                <div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
+                </div>
+                <!--// content-->
+            </div>
+        </div>
+    </div>
+</div>
+		
+<!-- 하단 픽 영역 -->
+  <nav class="floating-menu">
+  <table class="subTable" style="border:0px 0px 0px 0px;width:100%;">
+  <tr>
+  	<td>
+  		<ul>
+<%
+  	for(int i=0;i<7;i++) {
+		TAData mr = (TAData)list.get(i);
+		out.print("<li><a  style=\"font-size:13px;padding-left:5px;line-height:1.3em;text-align:left;\" href='#match"+mr.getInt("gameListNo")+"'>"+mr.getInt("gameListNo")+". "+mr.getString("homeTeamNameBet")+" VS "+mr.getString("awayTeamNameBet"));
+		out.print("(<gm id='subGame_"+mr.getInt("gameListNo")+"' class='subGame' style='font-color:red;'></gm>)</a></li>");
   	}
 %>
+		</ul>
+  	</td>
+  	<td>
+  		<ul>
+<%
+  	for(int i=7;i<list.size();i++) {
+		TAData mr = (TAData)list.get(i);
+		out.print("<li><a  style=\"font-size:13px;padding-left:5px;line-height:1.3em;text-align:left;\" href='#match"+mr.getInt("gameListNo")+"'>"+mr.getInt("gameListNo")+". "+mr.getString("homeTeamNameBet")+" VS "+mr.getString("awayTeamNameBet"));
+		out.print("(<gm id='subGame_"+mr.getInt("gameListNo")+"' class='subGame' style='font-color:red;'></gm>)</li>");
+  	}
+%>
+		</ul>  	
+  	</td>
+  </tr>
 	<tr>
 		<td colspan="2" class="result">
 			픽비율 : <gm id="subRatio" class="subGame"><fmt:formatNumber value="<%=totalBetCnt %>" pattern="#" /></gm>
-<!-- 			/ -->
-<!-- 			구입금액 : 10,000원 -->
 		</td>
 	</tr>
 	<tr>
 <%
 	if(StringUtils.isNotBlank(userId)) {
 %>
-		<td class="result" style="height:30px;font-size:15px; background-color: Azure;" onclick="checkPick();">픽등록</td>
-		<td class="result" style="font-size:15px; background-color: Azure;"><input type="checkbox"  name="pubYnChk" id="pubYnChk"/> 비공개픽</td>
+		<td class="result" style="height:40px;font-size:15px; background-color:white; color: black;" onclick="checkPick();"><gm id="totalPickCnt">0</gm>조합 픽올리기</td>
+		<td class="result" style="font-size:15px; background-color:white; color: black;"><input type="checkbox"  name="pubYnChk" id="pubYnChk"/> 비공개픽</td>
 <%		
 	} else {
 %>
-		<td class="result" style="height:30px;font-size:15px; background-color: Azure;" onclick="checkPick();" colspan="2">픽등록</td>
+		<td class="result" style="height:40px;font-size:15px; background-color:white; color: black;" onclick="checkPick();" colspan="2"><gm id="totalPickCnt">0</gm>조합 픽올리기</td>
 <%
 	}
 %>					

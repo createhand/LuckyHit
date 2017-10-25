@@ -11,6 +11,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +30,6 @@ import kr.co.toto.biz.game.service.GameService;
 import kr.co.toto.biz.record.service.RecordService;
 import kr.co.toto.comn.model.TAData;
 import kr.co.toto.util.BeanFinder;
-import kr.co.toto.util.ParamMap;
 
 /**
  * @author seochan
@@ -36,6 +38,7 @@ import kr.co.toto.util.ParamMap;
 @Controller
 public class GameListController extends AbstractController {
 	
+	protected final Log logger = LogFactory.getLog(getClass());
     /**
      * 게임상세내역
      * @param request
@@ -52,15 +55,14 @@ public class GameListController extends AbstractController {
     	RecordService recordService = (RecordService) BeanFinder.getBean(RecordService.class);    	
     	GameService service = (GameService) BeanFinder.getBean(GameService.class);
     	CommonService commService = (CommonService) BeanFinder.getBean(CommonService.class);
-    	ParamMap paramMap = new ParamMap(params);
+    	TAData paramMap = new TAData(params);
     	
-//    	List<GameDetailListDt> returnList = new ArrayList<GameDetailListDt>();
-    	List<GameDetailListDt> gameDetailList = new ArrayList<GameDetailListDt>();
+    	List<TAData> gameDetailList = new ArrayList<TAData>();
     	GameMt gameMt = new GameMt();
     	String gmCd = paramMap.getString("gmCd");
     	
     	//전체 게임목록 조회
-    	List<HashMap> gameList = service.selectGameList(new TAData());
+    	List<TAData> gameList = service.selectGameList(new TAData());
     	
     	if(gmCd.equals("")) {
 	    	//최근 게임회차
@@ -76,150 +78,142 @@ public class GameListController extends AbstractController {
     	
     	
     	for(int i=0;i<gameDetailList.size();i++) {
-    		GameDetailListDt tmp = gameDetailList.get(i);
-	    	ParamMap tmCd = new ParamMap(new HashMap());
+    		TAData gameDetailInfo = gameDetailList.get(i);
 	    	
-	    	/* 팀정보 */
-	    	tmp.setHomeTeamInfo(commService.selectTeam(tmp.getHomeTeamCode()));
-	    	tmp.setAwayTeamInfo(commService.selectTeam(tmp.getAwayTeamCode()));
-	    	
-	    	/* 팀 시즌정보 */
-	    	String snCd = commService.selectLatestSeasonInfo(tmp.getLgCd());
+    		/*####################### 팀 시즌정보 #######################*/
+	    	String snCd = commService.selectLatestSeasonInfo(gameDetailInfo.getString("lgCd"));
 	    	HashMap<String, String> seasonParams = new HashMap<String, String>();
-	    	seasonParams.put("lgCd", tmp.getLgCd());
+	    	seasonParams.put("lgCd", gameDetailInfo.getString("lgCd"));
 	    	seasonParams.put("snCd", snCd);
-	    	seasonParams.put("tmCd", tmp.getHomeTeamCode());
 	    	
 	    	//홈팀시즌정보
-	    	List<TAData> seasonInfo = commService.selectTeamSeasonInfo(seasonParams);
-	    	if(seasonInfo.size() == 1) {
-	    		tmp.setHomeTeamSeaonInfo(seasonInfo.get(0));
+	    	List<TAData> seasonInfoList = commService.selectTeamSeasonInfo(seasonParams);
+	    	
+	    	for(TAData teamSeasonInfo : seasonInfoList) {
+	    		//홈팀 시즌정보
+	    		if(StringUtils.equals(teamSeasonInfo.getString("TM_CD"), gameDetailInfo.getString("homeTeamCode"))) {
+	    			gameDetailInfo.set("homeTeamSeasonInfo", teamSeasonInfo);
+	    		}
+	    		//어웨이팀 시즌정보
+	    		if(StringUtils.equals(teamSeasonInfo.getString("TM_CD"), gameDetailInfo.getString("awayTeamCode"))) {
+	    			gameDetailInfo.set("awayTeamSeasonInfo", teamSeasonInfo);
+	    		}
 	    	}
-	    	//원정팀시즌정보
-	    	seasonParams.put("tmCd", tmp.getAwayTeamCode());
-	    	seasonInfo = commService.selectTeamSeasonInfo(seasonParams);
-	    	if(seasonInfo.size() == 1) {
-	    		tmp.setAwayTeamSeaonInfo(seasonInfo.get(0));
-	    	}
+	    	
+	    	/*####################### 이변 경기 목록 #######################*/
+//	    	gameDetailInfo.set("homeTeamAmzaingList", service.selectAmazingList(gameDetailInfo.getString("homeTeamCode")));
+//	    	gameDetailInfo.set("awayTeamAmzaingList", service.selectAmazingList(gameDetailInfo.getString("awayTeamCode")));
 	    	
 	    	
+	    	/*####################### 최근 경기 조회 #######################*/
+	    	TAData recordParam = new TAData();
+	    	//최근 경기 수(12경기)
+	    	recordParam.put("queryCnt", DomainConst.RECORD_LATEST_CNT);
+	    	recordParam.put("mcDate", gameDetailInfo.getString("matchDate"));
 	    	
-	    	//최근 경기 수
-	    	tmCd.put("queryCnt", DomainConst.RECORD_LATEST_CNT);
-	    	tmCd.put("mcDate", tmp.getMatchDate());
+	    	/***************** 홈팀 *****************/
+	    	recordParam.set("tmCd", gameDetailInfo.getString("homeTeamCode"));
+	    	List<TAData> homeLatestRecordList = recordService.selectLatestRecordList(recordParam);
 	    	
-	    	/* 전적 */
-	    	//홈팀 최근 경기 전적조회
-	    	tmCd.put("tmCd", tmp.getHomeTeamCode());
-	    	tmCd.put("mcDate", tmp.getMatchDate());
-	    	tmp.setHomeTeamlatestRecord(recordService.selectLatestRecord(tmCd));
+	    	/***************** 어웨이팀 *****************/
+	    	recordParam.set("tmCd", gameDetailInfo.getString("awayTeamCode"));
+	    	List<TAData> awayLatestRecordList = recordService.selectLatestRecordList(recordParam);
 	    	
-	    	//어웨이팀 최근 경기 전적조회
-	    	tmCd.put("tmCd", tmp.getAwayTeamCode());
-	    	tmp.setAwayTeamlatestRecord(recordService.selectLatestRecord(tmCd));
+	    	/*####################### 최근 상대 경기조회 #######################*/
+	    	/***************** 홈, 어웨이 *****************/
+	    	recordParam.set("tmCd", gameDetailInfo.getString("homeTeamCode"));
+	    	recordParam.set("tmCdA", gameDetailInfo.getString("awayTeamCode"));
+	    	List<TAData> againstLatestRecordList = recordService.selectLatestRecordList(recordParam);
 	    	
-	    	//홈팀 상대전적 조회
-	    	tmCd.put("tmCd", tmp.getHomeTeamCode());
-	    	tmCd.put("tmCdA", tmp.getAwayTeamCode());
-	    	tmp.setHomeTeamAgainstRecord(recordService.selectLatestRecord(tmCd));
-	    	
-	    	//어웨이팀 상대전적 조회
-	    	tmCd.put("tmCd", tmp.getAwayTeamCode());
-	    	tmCd.put("tmCdA", tmp.getHomeTeamCode());
-	    	tmp.setAwayTeamAgainstRecord(recordService.selectLatestRecord(tmCd));
+	    	//match list set
+	    	gameDetailInfo.set("homeTeamlatestRecordList", homeLatestRecordList);
+	    	gameDetailInfo.set("awayTeamlatestRecordList", awayLatestRecordList);
+	    	gameDetailInfo.set("againstRecordList", againstLatestRecordList);
 
 	    	
-	    	/* 골득실 */
-	    	//홈팀 최근경기 골득실
-	    	tmCd.put("tmCd", tmp.getHomeTeamCode());
-	    	tmCd.remove("tmCdA");
-	    	tmp.setHomeTeamlatestScore(recordService.selectLatestScore(tmCd));
 	    	
-	    	//어웨이팀 최근경기 골득실
-	    	tmCd.put("tmCd", tmp.getAwayTeamCode());
-	    	tmp.setAwayTeamlatestScore(recordService.selectLatestScore(tmCd));
-	    	
-	    	//홈팀 상대전적 골득실
-	    	tmCd.put("tmCd", tmp.getHomeTeamCode());
-	    	tmCd.put("tmCdA", tmp.getAwayTeamCode());
-	    	tmp.setHomeTeamAgainstScore(recordService.selectLatestScore(tmCd));
-	    	
-	    	//어웨이팀 상대전적 골득실
-	    	tmCd.put("tmCd", tmp.getAwayTeamCode());
-	    	tmCd.put("tmCdA", tmp.getHomeTeamCode());
-	    	tmp.setAwayTeamAgainstScore(recordService.selectLatestScore(tmCd));
-	    	
-	    	
+	    	/*####################### 계산식 적용 #######################*/
 	    	/*
 	    	 ************* 홈팀 점수산출(계산식 대입) *************
 	    	 */
-	    	//홈팀 : 최근 5경기 점수
-	    	double homeTeamLatestPoint = service.getPointByList(tmp.getHomeTeamlatestRecord());
+	    	//최근 경기(6경기)
+	    	TAData homeTeamResult = service.getResultStr(gameDetailInfo.getString("homeTeamCode"), 0, homeLatestRecordList, 6);
+	    	//최근 홈경기(6경기)
+	    	TAData homeTeamResultAtHome = service.getResultStr(gameDetailInfo.getString("homeTeamCode"), 1, homeLatestRecordList, 6);
+	    	//최근 상대경기(6경기)
+	    	TAData homeAgainstResult = service.getResultStr(gameDetailInfo.getString("homeTeamCode"), 0, againstLatestRecordList, 6);
+	    	//최근 홈에서 상대경기(6경기)
+	    	TAData homeAgainstResultAtHome = service.getResultStr(gameDetailInfo.getString("homeTeamCode"), 1, againstLatestRecordList, 6);
 	    	
-	    	//홈팀 : 최근 상대팀과 5경기 점수
-	    	double homeTeamAgainstPoint = service.getPointByList(tmp.getHomeTeamAgainstRecord());
+	    	//홈팀 최근 경기 요약
+	    	TAData teamSummary = new TAData();
+	    	teamSummary.set("homeTeamResult", homeTeamResult);
+	    	teamSummary.set("homeTeamResultAtHome", homeTeamResultAtHome);
+	    	teamSummary.set("homeAgainstResult", homeAgainstResult);
+	    	teamSummary.set("homeAgainstResultAtHome", homeAgainstResultAtHome);
+	    	gameDetailInfo.set("homeTeamlatestInfo", teamSummary);
+	    	
+	    	//최근 6경기 점수산출
+	    	double homeTeamLatestPoint = service.getPointByResultList(homeTeamResult.getString("resultStr"));
+	    	
+	    	//최근 상대팀과 6경기 점수산출
+	    	double homeTeamAgainstPoint = service.getPointByResultList(homeAgainstResult.getString("resultStr"));
 	    	
 	    	
+	    	//최근5경기, 상대5경기 가중치적용
+	    	TAData teamPoint = new TAData();
+	    	//최근 경기
+	    	teamPoint.set("latestResult", homeTeamResult.getString("resultStr"));
+	    	//최근 홈경기
+	    	teamPoint.set("homeLatestResult", homeTeamResultAtHome.getString("resultStr"));
+	    	//최근 상대경기
+	    	teamPoint.set("againstLatestResult", homeAgainstResult.getString("resultStr"));
+	    	//최근 홈에서 상대경기
+	    	teamPoint.set("homeAgainstLatestResult", homeAgainstResultAtHome.getString("resultStr"));
 	    	
-	    	//홈팀 : 최근5경기, 상대5경기 가중치적용
-	    	TeamPointDt teamPoint = new TeamPointDt();
-	    	teamPoint.setAgainstRecord(tmp.getHomeTeamAgainstRecord());
-	    	teamPoint.setLatestRecord(tmp.getHomeTeamlatestRecord());
+	    	double homeTeamPoint = service.getTeamPoint(teamPoint);
 	    	
-	    	paramMap = new ParamMap(new HashMap());	    	
-	    	//최근 경기 수
-	    	paramMap.put("queryCnt", DomainConst.RECORD_LATEST_CNT);
-	    	paramMap.put("mcDate", tmp.getMatchDate());
-	    	paramMap.put("homeYn", "Y");
-   	
-	    	//홈팀 : 홈에서 최근 5경기 
-	    	paramMap.put("tmCd", tmp.getHomeTeamCode());
-	    	teamPoint.setLatestRecordAtHome(recordService.selectLatestRecord(paramMap));
-	    	
-	    	//홈팀 : 홈에서 상대팀과 최근 5경기
-	    	paramMap.put("tmCdA", tmp.getAwayTeamCode());
-	    	teamPoint.setAgainstRecordAtHome(recordService.selectLatestRecord(paramMap));
-	    	
-	    	double homeTeamPoint = service.getTeamPoint(teamPoint); 
-	    	
-    	
 	    	
 	    	/*
 	    	 ************* 원정팀 점수산출(계산식 대입) *************
 	    	 */
-	    		    	
-	    	//원정팀 : 최근 5경기
-	    	teamPoint.setLatestRecord(tmp.getAwayTeamlatestRecord());
-	    	double awayTeamLatestPoint = service.getPointByList(tmp.getAwayTeamlatestRecord());
+	    	//최근 경기(6경기)
+	    	TAData awayTeamResult = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 0, awayLatestRecordList, 6);
+	    	//최근 홈경기(6경기)
+	    	TAData awayTeamResultAtHome = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 1, awayLatestRecordList, 6);
+	    	//최근 상대경기(6경기)
+	    	TAData awayAgainstResult = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 0, againstLatestRecordList, 6);
+	    	//최근 홈에서 상대경기(6경기)
+	    	TAData awayAgainstResultAtHome = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 1, againstLatestRecordList, 6);
 	    	
-	    	//원정팀 : 최근 상대팀과 5경기
-	    	teamPoint.setAgainstRecord(tmp.getAwayTeamAgainstRecord());
-	    	double awayTeamAgainstPoint = service.getPointByList(tmp.getAwayTeamAgainstRecord());
+	    	//어웨이팀 최근 경기 요약
+	    	teamSummary = new TAData();
+	    	teamSummary.set("awayTeamResult", awayTeamResult);
+	    	teamSummary.set("awayTeamResultAtHome", awayTeamResultAtHome);
+	    	teamSummary.set("awayAgainstResult", awayAgainstResult);
+	    	teamSummary.set("awayAgainstResultAtHome", awayAgainstResultAtHome);
+	    	gameDetailInfo.set("awayTeamlatestInfo", teamSummary);
+	    	
+	    	//최근 6경기 점수산출
+	    	double awayTeamLatestPoint = service.getPointByResultList(awayTeamResult.getString("resultStr"));
+	    	
+	    	//최근 상대팀과 6경기 점수산출
+	    	double awayTeamAgainstPoint = service.getPointByResultList(awayAgainstResult.getString("resultStr"));
 	    	
 	    	
-	    	
-	    	//원정팀 : 최근5경기, 상대5경기 가중치적용
-	    	teamPoint = new TeamPointDt();
-	    	teamPoint.setAgainstRecord(tmp.getAwayTeamAgainstRecord());
-	    	teamPoint.setLatestRecord(tmp.getAwayTeamlatestRecord());
-	    	
-	    	paramMap = new ParamMap(new HashMap());
-	    	//최근 경기 수
-	    	paramMap.put("queryCnt", DomainConst.RECORD_LATEST_CNT);
-	    	paramMap.put("mcDate", tmp.getMatchDate());
-	    	paramMap.put("homeYn", "Y");
-	    	
-	    	//원정팀 : 홈에서 최근 5경기
-	    	paramMap.put("tmCd", tmp.getAwayTeamCode());
-	    	teamPoint.setLatestRecordAtHome(recordService.selectLatestRecord(paramMap));
-	    	
-	    	//원정팀 : 홈에서 상대팀과 최근 5경기
-	    	paramMap.put("tmCdA", tmp.getHomeTeamCode());
-	    	teamPoint.setAgainstRecordAtHome(recordService.selectLatestRecord(paramMap));	    	
+	    	//최근5경기, 상대5경기 가중치적용
+	    	teamPoint = new TAData();
+	    	//최근 경기
+	    	teamPoint.set("latestResult", awayTeamResult.getString("resultStr"));
+	    	//최근 홈경기
+	    	teamPoint.set("homeLatestResult", awayTeamResultAtHome.getString("resultStr"));
+	    	//최근 상대경기
+	    	teamPoint.set("againstLatestResult", awayAgainstResult.getString("resultStr"));
+	    	//최근 홈에서 상대경기
+	    	teamPoint.set("homeAgainstLatestResult", awayAgainstResultAtHome.getString("resultStr"));
 	    	
 	    	double awayTeamPoint = service.getTeamPoint(teamPoint); 
-
-
+	    	
 	    	
 	    	double latestPoint = homeTeamLatestPoint - awayTeamLatestPoint;
 	    	double aginstPoint = homeTeamAgainstPoint - awayTeamAgainstPoint;
@@ -234,40 +228,36 @@ public class GameListController extends AbstractController {
 	    	
 	    	//예상픽 결정
 	    	if(teamSum > DomainConst.EXPECTED_DRAW_RANGE_FROM) {
-	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_WIN);
-	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getHomeTeamCode()).getTmName());
+	    		gameDetailInfo.set("expectMatchResultCode", DomainConst.RECORD_WIN);
+	    		gameDetailInfo.set("expectMatchResult", commService.selectTeam(gameDetailInfo.getString("homeTeamCode")).getTmName());
 	    	} else if(teamSum < DomainConst.EXPECTED_DRAW_RANGE_TO) {
-	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_LOSE);
-	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getAwayTeamCode()).getTmName());
+	    		gameDetailInfo.set("expectMatchResultCode", DomainConst.RECORD_LOSE);
+	    		gameDetailInfo.set("expectMatchResult", commService.selectTeam(gameDetailInfo.getString("awayTeamCode")).getTmName());
 	    	} else { 
-	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_DRAW);
-	    		tmp.setExpectMatchResult("무승부");
+	    		gameDetailInfo.set("expectMatchResultCode", DomainConst.RECORD_DRAW);
+	    		gameDetailInfo.set("expectMatchResult", "무승부");
 	    	}
 	    	
 	    	if(latestPoint >= DomainConst.SIMPLE_ABS_RANGE_FROM) {
-	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_WIN);
-	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getHomeTeamCode()).getTmName());
+	    		gameDetailInfo.set("expectMatchResultCode", DomainConst.RECORD_WIN);
+	    		gameDetailInfo.set("expectMatchResult", commService.selectTeam(gameDetailInfo.getString("homeTeamCode")).getTmName());
 	    	} else if(latestPoint <= DomainConst.SIMPLE_ABS_RANGE_TO) {
-	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_LOSE);
-	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getAwayTeamCode()).getTmName());
+	    		gameDetailInfo.set("expectMatchResultCode", DomainConst.RECORD_LOSE);
+	    		gameDetailInfo.set("expectMatchResult", commService.selectTeam(gameDetailInfo.getString("awayTeamCode")).getTmName());
 	    	} else if(aginstPoint >= DomainConst.SIMPLE_ABS_RANGE_FROM) {
-	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_WIN);
-	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getHomeTeamCode()).getTmName());
+	    		gameDetailInfo.set("expectMatchResultCode", DomainConst.RECORD_WIN);
+	    		gameDetailInfo.set("expectMatchResult", commService.selectTeam(gameDetailInfo.getString("homeTeamCode")).getTmName());
 	    	} else if(aginstPoint <= DomainConst.SIMPLE_ABS_RANGE_TO) {
-	    		tmp.setExpectMatchResultCode(DomainConst.RECORD_LOSE);
-	    		tmp.setExpectMatchResult(commService.selectTeam(tmp.getAwayTeamCode()).getTmName());
+	    		gameDetailInfo.set("expectMatchResultCode", DomainConst.RECORD_LOSE);
+	    		gameDetailInfo.set("expectMatchResult", commService.selectTeam(gameDetailInfo.getString("awayTeamCode")).getTmName());
 	    	}
 	    	
-	    	tmp.setHomeTeamAmzaingList(service.selectAmazingList(tmp.getHomeTeamCode()));
-	    	tmp.setAwayTeamAmzaingList(service.selectAmazingList(tmp.getAwayTeamCode()));
-	    	
-//	    	returnList.add(tmp);
     	}
     	
     	//게임 URL
     	String url = DomainConst.GAME_BASE_URL+gameMt.getGmSeq();
     	TAData returnMap = service.selectGameBetList(gameDetailList, url);
-    	gameDetailList = (List<GameDetailListDt>)returnMap.get("gameDetailList");
+    	gameDetailList = (List<TAData>)returnMap.get("gameDetailList");
     	double totalBetCnt = returnMap.getDouble("totalBetCnt");
     	
     	model.addAttribute("gameDetailList", gameDetailList);

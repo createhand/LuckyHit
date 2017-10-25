@@ -4,14 +4,12 @@
 package kr.co.toto.biz.game.controller;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -22,14 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.toto.base.controller.AbstractController;
 import kr.co.toto.base.persistence.domain.DomainConst;
-import kr.co.toto.base.persistence.domain.GameMt;
-import kr.co.toto.base.service.CommonService;
-import kr.co.toto.biz.game.persistence.domain.GameDetailListDt;
 import kr.co.toto.biz.game.service.GameService;
 import kr.co.toto.biz.record.service.RecordService;
+import kr.co.toto.comn.model.TAData;
 import kr.co.toto.util.BeanFinder;
-import kr.co.toto.util.Paging;
-import kr.co.toto.util.PagingList;
 import kr.co.toto.util.ParamMap;
 
 /**
@@ -65,7 +59,7 @@ public class GamePickController extends AbstractController {
     	String gmPostContent = request.getParameter("gmPostContent");
     	gmPostContent = gmPostContent.replace("\r\n","<br/>");
     	//픽번호
-    	int gmPostNo = Integer.parseInt(gameService.selectMaxPostNo(new ParamMap(params)))+1;
+    	int gmPostNo = Integer.parseInt(gameService.selectMaxPostNo(new TAData()))+1;
     	//공개여부
     	String pubYn = request.getParameter("pubYn");
     	if(StringUtils.isBlank(pubYn)) pubYn = "0";
@@ -76,46 +70,20 @@ public class GamePickController extends AbstractController {
     	String gmListNo[] = request.getParameterValues("gmListNo");
     	String mcCd[] = request.getParameterValues("mcCd");
     	    	
-    	String hLtRecord[] = request.getParameterValues("hLtRecord");    	
-    	String hLtAgRecord[] = request.getParameterValues("hLtAgRecord");
-    	String aLtRecord[] = request.getParameterValues("aLtRecord");
-    	String aLtAgRecord[] = request.getParameterValues("aLtAgRecord");
-    	
-    	String hLtGtPoint[] = request.getParameterValues("hLtGtPoint");
-    	String hLtLsPoint[] = request.getParameterValues("hLtLsPoint");
-    	String hLtGtAgPoint[] = request.getParameterValues("hLtGtAgPoint");
-    	String hLtLsAgPoint[] = request.getParameterValues("hLtLsAgPoint");
-    	
-    	String aLtGtPoint[] = request.getParameterValues("aLtGtPoint");
-    	String aLtLsPoint[] = request.getParameterValues("aLtLsPoint");
-    	String aLtGtAgPoint[] = request.getParameterValues("aLtGtAgPoint");
-    	String aLtLsAgPoint[] = request.getParameterValues("aLtLsAgPoint");    	
- 
     	HashMap<String, String> gamePick = new HashMap<String, String>();
     	gamePick.put("gmCd", gmCd);
     	gamePick.put("gmPostNo", String.valueOf(gmPostNo));
     	gamePick.put("gmPostTitle", gmPostTitle);
     	gamePick.put("gmPostContent", gmPostContent);
     	gamePick.put("pubYn", pubYn);
-    	gamePick.put("userId", userId);
+    	if(StringUtils.isNotBlank(userId)) {
+    		gamePick.put("userId", userId);
+    	}
     	
     	List<HashMap<String, String>> gamePickList = new ArrayList<HashMap<String, String>>();
     	
     	for(int i=0;i<mcCd.length;i++) {
     		HashMap<String, String> tmp = new HashMap<String, String>();
-    		tmp.put("hLtRecord", hLtRecord[i]);
-    		tmp.put("hLtAgRecord", hLtAgRecord[i]);
-    		tmp.put("aLtRecord", aLtRecord[i]);
-    		tmp.put("aLtAgRecord", aLtAgRecord[i]);
-    		tmp.put("hLtGtPoint", hLtGtPoint[i]);
-    		tmp.put("hLtLsPoint", hLtLsPoint[i]);
-    		tmp.put("hLtGtAgPoint", hLtGtAgPoint[i]);
-    		tmp.put("hLtLsAgPoint", hLtLsAgPoint[i]);
-    		tmp.put("aLtGtPoint", aLtGtPoint[i]);
-    		tmp.put("aLtLsPoint", aLtLsPoint[i]);
-    		tmp.put("aLtGtAgPoint", aLtGtAgPoint[i]);
-    		tmp.put("aLtLsAgPoint", aLtLsAgPoint[i]);
-    		
     		tmp.put("gmCd", gmCd);
     		tmp.put("mcCd", mcCd[i]);
     		tmp.put("gmListNo", gmListNo[i]);
@@ -149,9 +117,9 @@ public class GamePickController extends AbstractController {
             Model model, @RequestParam Map<String, Object> params) throws Exception {
     	
     	GameService service = (GameService) BeanFinder.getBean(GameService.class);
-    	ParamMap formData = new ParamMap(params);
+    	TAData formData = new TAData(params);
     	
-    	HashMap<String, String> searchParam = service.selectLatestPick(formData);    	
+    	TAData searchParam = service.selectLatestPick(formData);    	
     	formData.put("gmCd", searchParam.get("gmCd"));
     	formData.put("gmPostNo", service.selectMaxPostNo(formData));
     	List<HashMap> pickList = service.selectGamePickList(formData);
@@ -178,21 +146,21 @@ public class GamePickController extends AbstractController {
             Model model, @RequestParam Map<String, Object> params) throws Exception {
     	
     	RecordService service = (RecordService) BeanFinder.getBean(RecordService.class);
-    	ParamMap formData = new ParamMap(params);
+    	TAData formData = new TAData(params);
     	String tmCdA = formData.getString("tmCdA");
     	int queryCnt = DomainConst.RECORD_LATEST_CNT;
     	formData.put("queryCnt", queryCnt);
     	
     	//상대전적
-    	List<HashMap> againstList = service.selectLatestRecordList(formData);
+    	List<TAData> againstList = service.selectLatestRecordList(formData);
     	
     	//홈팀 최근전적
     	formData.remove("tmCdA");
-    	List<HashMap> homeList = service.selectLatestRecordList(formData);
+    	List<TAData> homeList = service.selectLatestRecordList(formData);
     	
     	//어웨이팀 최근전적   	
     	formData.put("tmCd", tmCdA);
-    	List<HashMap> awayList = service.selectLatestRecordList(formData);
+    	List<TAData> awayList = service.selectLatestRecordList(formData);
     	
         
         model.addAttribute("agList", againstList);

@@ -54,7 +54,7 @@ public class DomainConst {
     public static final String RECORD_LOSE = "L";
     
     /* 조회조건 */
-    public static final int RECORD_LATEST_CNT = 5;	// 최근경기 조회수
+    public static final int RECORD_LATEST_CNT = 30;	// 최근경기 조회수
     
     
     /*
@@ -119,8 +119,8 @@ public class DomainConst {
     
     /* paging */
     //페이지당 게시물수
-    public static final int countPerPage = 5;
+    public static final int countPerPage = 10;
     //블럭당 페이지수
-    public static final int countPerBlock = 10;
+    public static final int countPerBlock = 5;
     
 }

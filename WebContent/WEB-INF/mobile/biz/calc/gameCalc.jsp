@@ -7,6 +7,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ page import="kr.co.toto.util.*" %>
+<%@ page import="kr.co.toto.comn.model.TAData" %>
 <%@page import="kr.co.toto.base.persistence.domain.DomainConst"%>
 <%@ page import="kr.co.toto.biz.game.persistence.domain.GameDetailListDt" %>
 <%@ page import="kr.co.toto.base.persistence.domain.GameMt" %>
@@ -14,7 +15,7 @@
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
 <%
 	List<HashMap> gameList = (List<HashMap>)request.getAttribute("gameList");
-	List<GameDetailListDt> list = (List<GameDetailListDt>)request.getAttribute("selectedGame");
+	List<TAData> list = (List<TAData>)request.getAttribute("selectedGame");
 	GameMt gameMt = (GameMt)request.getAttribute("gmInfo");
 	double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 %>
@@ -61,22 +62,22 @@
 
 	for(int i=0;i<list.size();i++) {
 		
-		GameDetailListDt dt = (GameDetailListDt)list.get(i);
-		double winBet = (dt.getWinBetCnt()/totalBetCnt)*100;
-		double drawBet = (dt.getDrawBetCnt()/totalBetCnt)*100;
-		double loseBet = (dt.getLoseBetCnt()/totalBetCnt)*100;
-		if(gameMt.getGmEnd().equals("N")) dt.setMatchResult("");
+		TAData dt = (TAData)list.get(i);
+		double winBet = (dt.getInt("winBetCnt")/totalBetCnt)*100;
+		double drawBet = (dt.getInt("drawBetCnt")/totalBetCnt)*100;
+		double loseBet = (dt.getInt("loseBetCnt")/totalBetCnt)*100;
+		if(gameMt.getGmEnd().equals("N")) dt.set("matchResult", "");
 		String winClass = "normal", drawClass = "normal", loseClass = "normal";
-		if(dt.getMatchResult().equals(DomainConst.RECORD_WIN)) winClass="win";
-		if(dt.getMatchResult().equals(DomainConst.RECORD_LOSE)) loseClass="win";
-		if(dt.getMatchResult().equals(DomainConst.RECORD_DRAW)) drawClass="win";
+		if(dt.getString("matchResult").equals(DomainConst.RECORD_WIN)) winClass="win";
+		if(dt.getString("matchResult").equals(DomainConst.RECORD_LOSE)) loseClass="win";
+		if(dt.getString("matchResult").equals(DomainConst.RECORD_DRAW)) drawClass="win";
 %>
-			<tr id="gm<%=dt.getGameListNo() %>" class="off">
-				<td><%=dt.getGameListNo() %></td>
-				<td class="clickOff"><span class="<%=winClass%>"><%=dt.getHomeTeamName() %><br/><div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div></span></td>
+			<tr id="gm<%=dt.getInt("gameListNo") %>" class="off">
+				<td><%=dt.getInt("gameListNo") %></td>
+				<td class="clickOff"><span class="<%=winClass%>"><%=dt.getString("homeTeamName") %><br/><div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div></span></td>
 				<td class="clickOff"><span class="<%=drawClass%>">VS<br/><div id="ratio"><fmt:formatNumber value="<%=drawBet %>" pattern="###.##" /></div></span></td>
-				<td class="clickOff"><span class="<%=loseClass%>"><%=dt.getAwayTeamName() %><br/><div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div></span></td>
-				<td class="result"><%=new BizUtil().getWinstrResult(dt.getMatchResult()) %></td>
+				<td class="clickOff"><span class="<%=loseClass%>"><%=dt.getString("awayTeamName") %><br/><div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div></span></td>
+				<td class="result"><%=new BizUtil().getWinstrResult(dt.getString("matchResult")) %></td>
 			</tr>
 <%
 	}
