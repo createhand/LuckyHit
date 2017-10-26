@@ -165,9 +165,9 @@ public class CommonService {
      * @throws BizException
      * @throws Exception
      */ 
-    public HashMap<String, String> selectGameListNo(HashMap<String, String> map) throws Exception {    	
+    public TAData selectGameListNo(HashMap<String, String> map) throws Exception {    	
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (HashMap<String, String>)dao.select("GAME_MT.selectListNo", map);
+    	return (TAData)dao.select("GAME_MT.selectListNo", map);
     }
     
     /**
@@ -178,9 +178,9 @@ public class CommonService {
      * @throws BizException
      * @throws Exception
      */ 
-    public List<HashMap<String, String>> selectGameAllListNo(HashMap<String, String> map) throws Exception {    	
+    public List<TAData> selectGameAllListNo(HashMap<String, String> map) throws Exception {    	
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (List<HashMap<String, String>>)dao.select("GAME_MT.selectListNo", map);
+    	return (List<TAData>)dao.selectList("GAME_MT.selectListNo", map);
     }
     
     /**

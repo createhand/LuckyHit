@@ -1,5 +1,7 @@
 package kr.co.toto.biz.user.service;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -53,6 +55,32 @@ public class UserService {
     public int insertUser(TAData userInfo) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
     	return dao.update("USER.insertUser", userInfo);
+    }
+    
+	/**
+     * 댓글 조회
+     * 
+     * @param 
+     * @return
+     * @throws BizException
+     * @throws Exception
+     */ 
+    public List<TAData> selectReply(TAData params) throws Exception {
+    	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
+    	return (List<TAData>)dao.select("REPLY.select", params);
+    }
+    
+    /**
+     * 댓글 등록
+     * 
+     * @param 
+     * @return
+     * @throws BizException
+     * @throws Exception
+     */ 
+    public int insertReply(TAData params) throws Exception {
+    	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
+    	return dao.update("REPLY.insertReply", params);
     }
     
 }

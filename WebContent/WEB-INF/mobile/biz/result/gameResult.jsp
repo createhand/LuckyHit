@@ -55,7 +55,7 @@
 				<td><%=totalCount - ((pageNo-1)*countPerPage)-rowCnt %></td>
 				<td style="text-align: left;padding-left:5px;">
 <%-- 				[<%=pickInfo.getString("gmTurn") %>]회 --%>
-					<a style="font-size: 15px;line-height: 1.3em;color:black;" href="<%=request.getContextPath() %>gameResultDetail.do?pageNo=<%=pageNo%>&gmCd=<%=pickInfo.getString("gmCd")%>&gmPostNo=<%=pickInfo.getString("gmPostNo")%>">
+					<a style="font-size: 15px;line-height: 1.3em;color:#595959;" href="<%=request.getContextPath() %>gameResultDetail.do?pageNo=<%=pageNo%>&gmCd=<%=pickInfo.getString("gmCd")%>&gmPostNo=<%=pickInfo.getString("gmPostNo")%>">
 					<%=gmPostTitle %></a><br/>
 					<div style="font-size: 10px;text-align: right;padding-right: 5px;color: #678197;">
 <%
@@ -105,7 +105,7 @@
 
 		for(int i=pageStNo;i<pageEnNo;i++) {
 			if(i>totalPageCount) continue;
-			out.print("<a style=\"padding-left:4px;padding-right:4px;color:black;\" href=\""+request.getContextPath()+"gameResult.do?pageNo="+i+"\">["+i+"]</a> ");
+			out.print("<a style=\"padding-left:4px;padding-right:4px;color:#595959;\" href=\""+request.getContextPath()+"gameResult.do?pageNo="+i+"\">["+i+"]</a> ");
 		}
 		
 		if((blockNo+1) < totalBlockCount) {

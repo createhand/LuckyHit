@@ -32,6 +32,7 @@ import kr.co.toto.base.persistence.domain.GameMt;
 import kr.co.toto.base.persistence.domain.TeamMt;
 import kr.co.toto.base.service.CommonService;
 import kr.co.toto.biz.game.service.GameService;
+import kr.co.toto.comn.model.TAData;
 import kr.co.toto.util.BeanFinder;
 import kr.co.toto.util.BizUtil;
 import kr.co.toto.util.ParamMap;
@@ -71,7 +72,7 @@ public class GameInputController extends AbstractController {
      * @throws Exception
      */
     @RequestMapping(value = "/gameCollecting", method = RequestMethod.POST)
-    public String input002(HttpServletRequest request, HttpServletResponse response,
+    public String gameCollecting(HttpServletRequest request, HttpServletResponse response,
             Model model, @RequestParam Map<String, Object> params) throws Exception {
     	
     	CommonService commService = (CommonService) BeanFinder.getBean(CommonService.class);
@@ -276,7 +277,7 @@ public class GameInputController extends AbstractController {
 		        		HashMap<String, String> tmpMap = new HashMap<String, String>();
 	        			tmpMap.put("gmCd", gmCd);
 	        			tmpMap.put("gmListNo", gameListNo);
-	        			HashMap<String, String> gameListNoObj = commService.selectGameListNo(tmpMap);
+	        			TAData gameListNoObj = commService.selectGameListNo(tmpMap);
 	        			
 	        			if(gameListNoObj != null) {
 	        				updateRecordList.add(tmp);

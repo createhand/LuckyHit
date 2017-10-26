@@ -257,4 +257,40 @@ public class UserController extends AbstractController {
     	model.addAttribute("gmCd", gmCd);
         return getViewName(request);
     }
+    
+    
+    /**
+     * 댓글등록 처리
+     * @param request
+     * @param response
+     * @param model
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/replyRegistProc", method = RequestMethod.POST)
+    public String replyRegistProc(HttpServletRequest request, HttpServletResponse response,
+            Model model, @RequestParam Map<String, Object> params) throws Exception {
+    	
+    	UserService userService = (UserService) BeanFinder.getBean(UserService.class);
+    	TAData map = new TAData(params);
+    	//내 픽만 조회
+    	String userId = (String)request.getSession().getAttribute("userId");
+    	if(StringUtils.isNotBlank(userId)) {
+    		map.set("userId", userId);
+    	}
+    	
+    	String errMsg = null;
+    	int result = 0;
+    	try {
+    			result = userService.insertReply(map);
+    	} catch(Exception e) {
+    		errMsg = e.getMessage();
+    	}
+    	
+    	model.addAttribute("result", result);
+    	model.addAttribute("params", map);
+    	model.addAttribute("errMsg", errMsg);
+        return getViewName(request);
+    }
 }

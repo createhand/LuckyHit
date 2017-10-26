@@ -9,17 +9,15 @@
 <%@ page import="org.springframework.web.servlet.support.RequestContext"%>
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
 <%
+	List<TAData> replyList = (List<TAData>)request.getAttribute("replyList");
 	List<TAData> selectedGame = (List<TAData>)request.getAttribute("selectedGame");
 	TAData selectGameInfo = (TAData)request.getAttribute("selectGameInfo");
-
-	String gmCd = (String)request.getAttribute("gmCd");
-	String gmPostNo = (String)request.getAttribute("gmPostNo");
 %>
-	<form name="frm" method="GET">
+	<form name="frm" method="POST">
       <div class="content_title">
   		<h2 class="header">공개픽 - <%=selectGameInfo.getString("gmName") %> <%=selectGameInfo.getString("gmTurn") %>회
-		<input type="hidden" id="gmCd" name="gmCd" value="<%=gmCd %>" />
-		<input type="hidden" id="gmPostNo" name="gmPostNo" value="<%=gmPostNo %>" />
+		<input type="hidden" id="gmCd" name="gmCd" value="<%=selectGameInfo.getString("gmCd") %>" />
+		<input type="hidden" id="gmPostNo" name="gmPostNo" value="<%=selectGameInfo.getString("gmPostNo") %>" />
   		</h2>
       </div>
       <div class="content">
@@ -28,16 +26,16 @@
 		  	<thead>
 		  	<tr>
 				<td colspan="3" style="border-right: 0;">
-				<div style="text-align: left;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:black;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
+				<div style="text-align: left;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:#595959;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
 				</td>
 				<td colspan="3">
-				<div style="text-align: right;"><a href="javascript:history.back();" style="font-size:15px;color:black;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
+				<div style="text-align: right;"><a href="javascript:history.back();" style="font-size:15px;color:#595959;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="6">
-					<div class="content_list"><p style="text-align: left;font-size:18px;line-height:1.6em;color:black;"><%=selectGameInfo.get("gmPostTitle") %></p></div>
-					<div style="font-size:13px;line-height:1.8em;text-align: right;color:black;padding-right: 10px;">
+					<div class="content_list"><p style="text-align: left;font-size:18px;line-height:1.6em;color:#595959;"><%=selectGameInfo.get("gmPostTitle") %></p></div>
+					<div style="font-size:13px;line-height:1.8em;text-align: right;color:#595959;padding-right: 10px;">
 					<%
 					if(StringUtils.isBlank(selectGameInfo.getString("userId")) || selectGameInfo.getString("userId").equals("null")) {
 						out.print("익명");
@@ -108,12 +106,19 @@
 			<tr>
 				<td colspan="6"><a href="http://m.betman.co.kr/winningResultToto.so?method=detail&gameId=G011&gameRound=<%=selectGameInfo.getString("gmSeq")%>&page=3" target="_blank"><span id="common">당첨결과</span></a></td>
 			</tr>
+
+			<tr>
+				<td colspan="6">
+					<textarea id="replyContent" name="replyContent" rows="7" style="width: 100%;font-size: 15px;" placeholder="댓글을 입력하세요."></textarea>
+					<input type="button" id="btnWrite" name="btnWrite" value="댓글쓰기" style="width:100%;height: 35px;font-size: 15px;" onclick="writeReply();" />
+				</td>
+			</tr>
 			<tr>
 				<td colspan="3" style="border-right: 0;">
-				<div style="text-align: left;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:black;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
+				<div style="text-align: left;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:#595959;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
 				</td>
 				<td colspan="3">
-				<div style="text-align: right;"><a href="javascript:history.back();" style="font-size:15px;color:black;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
+				<div style="text-align: right;"><a href="javascript:history.back();" style="font-size:15px;color:#595959;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
 				</td>
 			</tr>
 			</tbody>

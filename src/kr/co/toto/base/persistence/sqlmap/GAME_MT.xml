@@ -19,13 +19,14 @@ select A.GM_CD as gmCd,
 WHERE A.GM_CD = #gmCd#
 </select>
 
-<select id="selectListNo" parameterClass="HashMap" resultClass="HashMap" >
+<select id="selectListNo" parameterClass="HashMap" resultClass="tadata" >
 SELECT A.GM_CD as gmCd,
        A.GM_LIST_NO as gmListNo,
        A.MC_CD as mcCd,
        A.GM_RT_WIN as gmRtWin,
        A.GM_RT_DRAW gmRtDraw,
-       A.GM_RT_LOSE as gmRtLose
+       A.GM_RT_LOSE as gmRtLose,
+       DATE_FORMAT(A.MD_DATE, '%Y%m%d%H%i') as latestUpdate
   FROM T_INFO_GAME_LIST A
 WHERE A.GM_CD = #gmCd#
 	<isNotEmpty property="gmListNo" prepend="AND">
@@ -108,9 +109,19 @@ SET
 	GM_RT_WIN = #gmRtWin# 
 	, GM_RT_DRAW = #gmRtDraw# 
 	, GM_RT_LOSE = #gmRtLose# 
-	, MD_DATE = now() 
-WHERE
-	MC_CD = #mcCd#
+	, MD_DATE = now()
+<dynamic prepend="WHERE">
+	<isNotEmpty property="mcCd" prepend="AND">
+		MC_CD = #mcCd#
+	</isNotEmpty>
+	<isNotEmpty property="gmCd" prepend="AND">
+		GM_CD = #gmCd#
+	</isNotEmpty>
+	<isNotEmpty property="gmListNo" prepend="AND">
+		GM_LIST_NO = #gmListNo#
+	</isNotEmpty>
+</dynamic>
+	 
 </update>
 
 </sqlMap>

@@ -53,14 +53,15 @@ table.subTable td {color:white;font-size: 11px;text-align:center;border-right: 1
 table.subTable td.result {color:red;font-size: 11px;text-align:center;border-right: 1px solid #cccccc;border-bottom: 1px solid #cccccc;padding: 3px 0;}
 
 /* Calc */
+.win {color:blue;font-weight: bold;font-size:13px;}
+.font13 {font-weight: bold;font-size:13px;}
 #mcTbl td {height:45px;font-size:13px;background-color: #fff;}
 #mcTbl .clickOff {background-color:white;cursor:hand;}
-#mcTbl .win {color:blue;font-weight: bold;font-size:13px;}
 #mcTbl .normal {font-size:13px;}
 #mcTbl #ratio {font-color:red;font-size:13px;}
 #mcTbl .clickOn {background-color:skyblue;cursor:hand;background-color: TOMATO; color: white;}
 #mcTbl .result, #myRatio {color:red;font-size:15px;}
-#common, #common font{font-size:15px;}
+.font15, #common, #common font{font-size:15px;}
 
 /* CONTENT */
 .content { padding: 20px 10px; }

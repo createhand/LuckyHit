@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="REPLY" >
+	
+<typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
+	
+<select id="select" parameterClass="tadata" resultClass="tadata" >
+SELECT
+		*
+FROM 
+	T_INFO_REPLY A
+LEFT OUTER JOIN T_INFO_USER B ON A.USER_ID = B.USER_ID
+WHERE 
+	A.GM_CD = #gmCd#
+	AND A.GM_POST_NO = #gmPostNo#
+</select>
+
+<insert id="insertReply" parameterClass="tadata">
+INSERT INTO 
+	T_INFO_REPLY
+	( GM_CD
+	,GM_POST_NO
+	,REPLY_CONTENT
+	,USER_ID
+	,MD_DATE
+	,RG_DATE )
+VALUES
+	(#gmCd#
+	, #gmPostNo#
+	, #replyContent#
+	, #userId#
+	, now()
+	, now()
+	)
+</insert>
+
+</sqlMap>

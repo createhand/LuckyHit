@@ -18,11 +18,14 @@ import kr.co.toto.base.exception.BizException;
 import kr.co.toto.base.persistence.IBatisDAO;
 import kr.co.toto.base.persistence.IBatisDAOImpl;
 import kr.co.toto.base.persistence.domain.DomainConst;
+import kr.co.toto.base.service.CommonService;
+import kr.co.toto.biz.game.controller.GameInputController;
 import kr.co.toto.biz.game.persistence.domain.GameDetailListDt;
 import kr.co.toto.biz.game.persistence.domain.TeamPointDt;
 import kr.co.toto.comn.model.TAData;
 import kr.co.toto.util.BeanFinder;
 import kr.co.toto.util.BizUtil;
+import kr.co.toto.util.DateUtil;
 import kr.co.toto.util.ParamMap;
 
 
@@ -57,17 +60,19 @@ public class GameService {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
     	return (List<TAData>)dao.selectList("GAME.selectAmazingList", tmCd);
     }
-	/**
-     * 전체 게임목록을 조회한다
+
+    /**
+     * 게임 베팅률 수집
      * 
      * @param 
      * @return
      * @throws BizException
      * @throws Exception
      */ 
-    public TAData selectGameBetList(List<TAData> gameDetailList, String url) throws Exception {
+    public void updateGameBetList(TAData gmInfo, String url) throws Exception {
     	
-    	TAData returnMap = new TAData();
+    	List<HashMap<String, String>> matchList = new ArrayList<HashMap<String, String>>();
+    	
     	String result = BizUtil.getUrlSource(url, "EUC-KR");
     	
    		//string to DOM parsing
@@ -82,7 +87,6 @@ public class GameService {
     	//총 발매금액 및 총 베팅수
     	String rate = doc.getElementsByClass("rate").text();
     	rate = rate.replaceAll("[^\\d.]", "");
-    	double totalBetCnt = Long.parseLong(rate)/1000;
     	
     	for(Element tr : trList) {
     		
@@ -126,14 +130,71 @@ public class GameService {
     		}
     		
     		if(StringUtils.isNotBlank(gameListNo)) {
-    			int i = new BizUtil().convertInt(gameListNo)-1;
-    			TAData dt = gameDetailList.get(i);
-    			dt.set("winBetCnt", new BizUtil().convertInt(winBet));
-    			dt.set("drawBetCnt", new BizUtil().convertInt(drawBet));
-    			dt.set("loseBetCnt", new BizUtil().convertInt(loseBet));        			
-    			gameDetailList.set(i, dt);
+    			HashMap<String, String> tmp = new HashMap<String, String>();
+    			tmp.put("gmCd", gmInfo.getString("gameCode"));
+    			tmp.put("gmListNo", gameListNo);
+    			tmp.put("gmRtWin", winBet);
+    			tmp.put("gmRtDraw", drawBet);
+    			tmp.put("gmRtLose", loseBet);
+    			matchList.add(tmp);
     		}
     	}
+    	
+    	updateGameList(matchList);
+    	
+    }
+    /**
+     * 전체 게임목록을 조회한다
+     * 
+     * @param 
+     * @return
+     * @throws BizException
+     * @throws Exception
+     */ 
+    public TAData selectGameBetList(List<TAData> gameDetailList, String url) throws Exception {
+    	
+    	CommonService commService = (CommonService) BeanFinder.getBean(CommonService.class);
+    	
+    	TAData returnMap = new TAData();
+    	TAData gameInfo = gameDetailList.get(0);
+    	
+    	//DB에서 베팅률 조회
+    	HashMap<String, String> map = new HashMap<String, String>();
+    	map.put("gmCd", gameInfo.getString("gameCode"));
+    	List<TAData> list = commService.selectGameAllListNo(map);
+    	
+    	int minDiff = DateUtil.getDayDiff(list.get(0).getString("latestUpdate"), DateUtil.getToday("yyyyMMddHHmm"), "yyyyMMddHHmm");
+    	int dayDiff = DateUtil.getDayDiff(DateUtil.getCurrentDate(), gameInfo.getString("gameEndDate"), "yyyyMMdd");
+    	
+    	//베팅 수집은 10분에 한번
+    	if(dayDiff >= 0 && minDiff >= 10) {
+    		updateGameBetList(gameInfo, url);
+    		list = commService.selectGameAllListNo(map);
+    	}
+    	
+    	for(TAData info : list) {
+    		
+    		String gmCd = info.getString("gmCd");
+    		String gmListNo = info.getString("gmListNo");
+    		
+    		for(TAData game : gameDetailList){
+    			String detailGmCd = game.getString("gameCode");
+    			String detailGmListNo = game.getString("gameListNo");
+    			
+    			//베팅률 set
+    			if(StringUtils.equals(gmCd, detailGmCd)
+    					&& StringUtils.equals(gmListNo, detailGmListNo)) {
+    				game.set("winBetCnt", info.getInt("gmRtWin"));
+    				game.set("drawBetCnt", info.getInt("gmRtDraw"));
+    				game.set("loseBetCnt", info.getInt("gmRtLose"));
+    				
+    				break;
+    			}
+    		}
+    	}
+    	
+    	gameInfo = gameDetailList.get(0);
+    	double totalBetCnt = gameInfo.getInt("winBetCnt") + gameInfo.getInt("drawBetCnt") + gameInfo.getInt("loseBetCnt");
     	
     	returnMap.set("gameDetailList", gameDetailList);
     	returnMap.set("totalBetCnt", totalBetCnt);
@@ -351,7 +412,7 @@ public class GameService {
     		}
     	}
     	
-    	result.set("matchList", matchList);
+    	result.set("matchList", selectMatchList);
     	result.set("resultStr", resultStr);
     	result.set("getScore", getScore);
     	result.set("lostScore", lostScore);

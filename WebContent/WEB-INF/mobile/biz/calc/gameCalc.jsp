@@ -41,11 +41,11 @@
 		  <table id="mcTbl" class="common">
 		  	<thead>
 			<tr>
-				<th>번호</th>
-				<th>홈</th>
-				<th>vs</th>
-				<th>원정</th>
-				<th>결과</th>
+				<th width="10%">번호</th>
+				<th width="32%">홈</th>
+				<th width="16%">vs</th>
+				<th width="32%">원정</th>
+				<th width="10%">결과</th>
 			</tr>
 			</thead>
 			<tbody>

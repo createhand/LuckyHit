@@ -15,6 +15,16 @@
 	String gmCd = (String)request.getAttribute("gmCd");
 	String gmPostNo = (String)request.getAttribute("gmPostNo");
 	String gmSeq = "";
+
+	//로그인하지 않은 접근 차단
+	if(StringUtils.isBlank(userId)) {
+		return;
+	}
+	
+	//아이디가 다른 접근 차단
+	if(!StringUtils.equals(selectGameInfo.getString("userId"), userId)) {
+		return;
+	}
 %>
 	<form name="frm" method="GET">
       <div class="content_title">
@@ -52,7 +62,16 @@
 				out.print("<p><a href=\"/gameInput.do\">게임등록</a></p>");
 			}
 %>
-					<div class="content_list"><p style="text-align: left;font-size:18px;line-height:1.6em;color:black;"><%=selectGameInfo.get("gmPostTitle") %></p></div>
+					<div class="content_list">
+						<p style="text-align: left;font-size:18px;line-height:1.6em;color:#595959;"><%=selectGameInfo.get("gmPostTitle") %>
+						<%
+							if(selectGameInfo.getInt("pubYn") == 0) {
+								out.print("(공개)");
+							} else {
+								out.print("(비공개)");
+							}
+						%>
+					</p></div>
 					<div class="content_list"><p style="text-align: left;font-size:14px;line-height:1.3em"><%=selectGameInfo.get("gmPostContent") %></p><br/></div>
 				</td>
 			</tr>		  	

@@ -179,12 +179,12 @@ public class GameListController extends AbstractController {
 	    	 */
 	    	//최근 경기(6경기)
 	    	TAData awayTeamResult = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 0, awayLatestRecordList, 6);
-	    	//최근 홈경기(6경기)
-	    	TAData awayTeamResultAtHome = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 1, awayLatestRecordList, 6);
+	    	//최근 원정경기(6경기)
+	    	TAData awayTeamResultAtHome = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 2, awayLatestRecordList, 6);
 	    	//최근 상대경기(6경기)
 	    	TAData awayAgainstResult = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 0, againstLatestRecordList, 6);
-	    	//최근 홈에서 상대경기(6경기)
-	    	TAData awayAgainstResultAtHome = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 1, againstLatestRecordList, 6);
+	    	//최근 원정에서 상대경기(6경기)
+	    	TAData awayAgainstResultAtHome = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 2, againstLatestRecordList, 6);
 	    	
 	    	//어웨이팀 최근 경기 요약
 	    	teamSummary = new TAData();

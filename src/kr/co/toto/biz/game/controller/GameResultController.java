@@ -24,6 +24,7 @@ import kr.co.toto.base.persistence.domain.DomainConst;
 import kr.co.toto.biz.game.service.GameService;
 import kr.co.toto.biz.record.controller.RecordInputController;
 import kr.co.toto.biz.record.service.RecordService;
+import kr.co.toto.biz.user.service.UserService;
 import kr.co.toto.comn.model.TAData;
 import kr.co.toto.util.BeanFinder;
 import kr.co.toto.util.DateUtil;
@@ -116,10 +117,13 @@ public class GameResultController extends AbstractController {
     	
     	GameService gameService = (GameService) BeanFinder.getBean(GameService.class);
     	RecordService recordService = (RecordService) BeanFinder.getBean(RecordService.class);
+    	UserService userService = (UserService) BeanFinder.getBean(UserService.class);
+    	
     	TAData map = new TAData(params);
     	
     	List<String> errMsg = new ArrayList<String>();
     	List<TAData> selectedGame = new ArrayList<TAData>();
+    	List<TAData> replyList = new ArrayList<TAData>();
     	TAData selectGameInfo = new TAData();
     	
         try {
@@ -127,10 +131,12 @@ public class GameResultController extends AbstractController {
         	//공개픽만 조회
         	map.put("pubYn", "0");
         	
-        	//전체 목록 수  
+        	//픽 목록  
         	selectedGame = recordService.selectHitResult(map);
-        	
+        	//픽 제목, 내용 등
         	selectGameInfo = gameService.selectPickGameInfo(map);
+        	//댓글목록
+        	replyList = userService.selectReply(map);
         	
         	//종료된 경기 체크
         	int endCnt = 0;
@@ -177,6 +183,7 @@ public class GameResultController extends AbstractController {
         	errMsg.add(e.toString());
         }
     	
+        model.addAttribute("replyList", replyList);
     	model.addAttribute("selectGameInfo", selectGameInfo);
         model.addAttribute("selectedGame", selectedGame);
         return getViewName(request);

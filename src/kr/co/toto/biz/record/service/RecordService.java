@@ -593,4 +593,33 @@ public class RecordService {
 		}
 	return lgCd;
     }
+    
+    //코드변환
+    public String getDaumLgCd(String pLeague) {
+    	
+    	String lgCd = null;
+    	
+		if(StringUtils.equals(pLeague, "KLG01")) {
+			lgCd = "kl";
+		} else if(StringUtils.equals(pLeague, "KLC01")) {
+			lgCd = "kl2";
+		} else if(StringUtils.equals(pLeague, "EPL01")) {
+			lgCd = "epl";
+		} else if(StringUtils.equals(pLeague, "BDL01")) {
+			lgCd = "bundesliga";
+		}  else if(StringUtils.equals(pLeague, "PRL01")) {
+			lgCd = "primera";
+		}  else if(StringUtils.equals(pLeague, "SEA01")) {
+			lgCd = "seriea";
+		}  else if(StringUtils.equals(pLeague, "LG101")) {
+			lgCd = "ligue1";
+		}  else if(StringUtils.equals(pLeague, "ERD01")) {
+			lgCd = "eredivisie";
+		}  else if(StringUtils.equals(pLeague, "UFC01")) {
+			lgCd = "uefacl";
+		}  else if(StringUtils.equals(pLeague, "UFP01")) {
+			lgCd = "uefacup";
+		}
+	return lgCd;
+    }
 }

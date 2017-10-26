@@ -70,6 +70,7 @@ function checkPick() {
 	for(var i=0;i<expResultList.length;i++) {
 		if(isBlank(expResultList[i].value)) {
 			alert((i+1)+"번째 픽이 선택되지 않았습니다.");
+			location.href="#match"+(i+1);
 			return;
 		}
 	}
@@ -84,7 +85,10 @@ function checkPick() {
 			&& document.getElementById("pubYnChk").checked) {
 		document.getElementById("pubYn").value = "1";
 	}
-	document.frm.submit();
+	
+	if(confirm("픽을 등록하시겠습니까?")) {
+		document.frm.submit();
+	}
 }
 
 function viewDetail(no) {
