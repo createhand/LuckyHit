@@ -9,6 +9,7 @@
 <%@ page import="org.springframework.web.servlet.support.RequestContext"%>
 <%@ include file="/WEB-INF/mobile/include/common.jsp" %>
 <%
+	TAData params = (TAData)request.getAttribute("params");
 	List<TAData> replyList = (List<TAData>)request.getAttribute("replyList");
 	List<TAData> selectedGame = (List<TAData>)request.getAttribute("selectedGame");
 	TAData selectGameInfo = (TAData)request.getAttribute("selectGameInfo");
@@ -29,7 +30,7 @@
 				<div style="text-align: left;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:#595959;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
 				</td>
 				<td colspan="3">
-				<div style="text-align: right;"><a href="javascript:history.back();" style="font-size:15px;color:#595959;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
+				<div style="text-align: right;"><a href="gameResult.do?pageNo=<%=params.getString("pageNo") %>" style="font-size:15px;color:#595959;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
 				</td>
 			</tr>
 			<tr>
@@ -104,8 +105,47 @@
 				<td colspan="6"><span id="common">적중수 : <font color='red'><%=accCnt%>/14</font> / 적중률 : <font color='red'><%=Math.ceil((accCnt/14)*100) %>%</font></span></td>	
 			</tr>
 			<tr>
-				<td colspan="6"><a href="http://m.betman.co.kr/winningResultToto.so?method=detail&gameId=G011&gameRound=<%=selectGameInfo.getString("gmSeq")%>&page=3" target="_blank"><span id="common">당첨결과</span></a></td>
+				<td colspan="6" style="background-color: #678197;color:white;">
+				댓글[<%=replyList.size() %>]
+				</td>
 			</tr>
+<%
+		for(TAData replyInfo : replyList) {
+%>
+			<tr>
+				<td colspan="4" style="border-right:0;border-bottom: 0;">
+					<div style="padding-left:10px;padding-top:5px;text-align: left;color:#595959;font-size: 13px;">
+<%
+		if(StringUtils.isBlank(replyInfo.getString("USER_NM"))) {
+			out.print("익명");
+		} else {
+			out.print(replyInfo.getString("USER_NM")+"("+replyInfo.getString("USER_ID")+")");
+		}
+%>
+					</div>
+				</td>
+				<td colspan="2" style="border-bottom: 0;">
+					<div style="padding-right:5px;text-align: right;color:#595959;font-size: 11px;">
+<%
+		if(StringUtils.equals(DateUtil.getToday("yy-MM-dd"), replyInfo.getString("REG_DT"))) {
+			out.print(replyInfo.getString("REG_TM"));
+		} else {
+			out.print(replyInfo.getString("REG_DT"));
+		}
+%>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="6">
+					<div style="text-align: left;padding-left: 10px;font-size: 13px;color:#595959;line-height: 1.5em;">
+					<%=replyInfo.getString("REPLY_CONTENT") %>
+					</div>
+				</td>
+			</tr>
+<%				
+		}
+%>			
 
 			<tr>
 				<td colspan="6">
@@ -118,7 +158,7 @@
 				<div style="text-align: left;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:#595959;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
 				</td>
 				<td colspan="3">
-				<div style="text-align: right;"><a href="javascript:history.back();" style="font-size:15px;color:#595959;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
+				<div style="text-align: right;"><a href="gameResult.do?pageNo=<%=params.getString("pageNo") %>" style="font-size:15px;color:#595959;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
 				</td>
 			</tr>
 			</tbody>

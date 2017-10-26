@@ -12,7 +12,7 @@
 	}
 </script>
   <div id="header" class="header">
-      <h1 style="color:white;font-size:16px;">LuckyHit</h1><br/>
+      <h1 style="color:white;font-size:20px;">LuckyHit</h1><br/>
       <h1 style="color:white;">운빨!</h1><br/>
 <%
 	if(nowLogin) {

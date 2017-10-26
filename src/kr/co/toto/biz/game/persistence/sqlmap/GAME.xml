@@ -121,6 +121,8 @@ FROM (
 	    A.GM_POST_NO AS gmPostNo,
 	    A.GM_POST_TITLE AS gmPostTitle,
 		A.GM_POST_CONTENT AS gmPostContent,
+		(SELECT COUNT(NO) FROM T_INFO_REPLY WHERE GM_CD = A.GM_CD AND GM_POST_NO = A.GM_POST_NO) AS replyCnt,
+		A.VIEW_CNT AS viewCnt,
 		A.USER_ID AS userId,
 		C.USER_NM AS userNm,
 		A.PUB_YN AS pubYn,

@@ -6,7 +6,14 @@
 	
 <select id="select" parameterClass="tadata" resultClass="tadata" >
 SELECT
-		*
+		A.NO,
+		A.GM_CD,
+		A.GM_POST_NO,
+		A.REPLY_CONTENT,
+		A.USER_ID,
+		B.USER_NM,
+		DATE_FORMAT(A.MD_DATE, '%y-%m-%d') AS REG_DT,
+		DATE_FORMAT(A.MD_DATE, '%H:%i') AS REG_TM
 FROM 
 	T_INFO_REPLY A
 LEFT OUTER JOIN T_INFO_USER B ON A.USER_ID = B.USER_ID

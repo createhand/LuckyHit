@@ -31,10 +31,10 @@
 			<table id="mcTbl" class="common">
 			  	<thead>
 					<tr>
-						<th>아이디</th><td><input type="text" name="userId" id="userId" style="width:100%;"></td>
+						<th>아이디</th><td><input type="text" name="userId" id="userId" style="width:95%;font-size: 14px;"></td>
 					</tr>
 					<tr>
-						<th>비밀번호</th><td><input type="password" name="userPwd" id="userPwd" style="width:100%;"></td>
+						<th>비밀번호</th><td><input type="password" name="userPwd" id="userPwd" style="width:95%;font-size: 14px;"></td>
 					</tr>
 				</thead>
 				<tbody>

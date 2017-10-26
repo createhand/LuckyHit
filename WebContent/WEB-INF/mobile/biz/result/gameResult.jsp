@@ -35,10 +35,15 @@
 		  <table class="common">
 		  	<thead>
 			<tr>
+				<td colspan="6" style="padding-right: 10px;">
+				<div style="text-align: right;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:#595959;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
+				</td>
+			</tr>		  	
+			<tr>
 				<th width="10%">번호</th>
-				<th width="75%">제목</th>
+				<th width="*">제목</th>
 <!-- 				<th width="25%">작성자</th> -->
-				<th width="15%">작성일시</th>
+				<th width="12%">조회</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -47,17 +52,25 @@
 	int rowCnt = 0;
 	for(TAData pickInfo : pickList) {
 		String gmPostTitle = pickInfo.getString("gmPostTitle");
-		if(gmPostTitle.length() > 20) {
-			gmPostTitle = gmPostTitle.substring(0, 20)+"..";
+		int replyCnt = pickInfo.getInt("replyCnt");
+		if(gmPostTitle.length() > 25) {
+			gmPostTitle = gmPostTitle.substring(0, 25)+"..";
 		}
 %>
 			<tr>
 				<td><%=totalCount - ((pageNo-1)*countPerPage)-rowCnt %></td>
-				<td style="text-align: left;padding-left:5px;">
+				<td style="text-align: left;padding-top:7px;padding-left:7px;line-height: 1.1em;">
 <%-- 				[<%=pickInfo.getString("gmTurn") %>]회 --%>
-					<a style="font-size: 15px;line-height: 1.3em;color:#595959;" href="<%=request.getContextPath() %>gameResultDetail.do?pageNo=<%=pageNo%>&gmCd=<%=pickInfo.getString("gmCd")%>&gmPostNo=<%=pickInfo.getString("gmPostNo")%>">
-					<%=gmPostTitle %></a><br/>
-					<div style="font-size: 10px;text-align: right;padding-right: 5px;color: #678197;">
+					<a style="font-size: 14px;line-height: 1.3em;color:#595959;" href="<%=request.getContextPath() %>gameResultDetail.do?pageNo=<%=pageNo%>&gmCd=<%=pickInfo.getString("gmCd")%>&gmPostNo=<%=pickInfo.getString("gmPostNo")%>">
+					<%=gmPostTitle %>
+<%
+				if(replyCnt > 0) {
+					out.print("["+replyCnt+"]");
+				}
+%>					
+					</a>
+					<br/><br/>
+					<div style="font-size: 12px;text-align: right;padding-right: 5px;color: #678197;">
 <%
 		if(StringUtils.isBlank(pickInfo.getString("userNm"))) {
 			out.print("익명");
@@ -66,25 +79,24 @@
 		}
 %>
 					</div>
-				</td>
-<!-- 				<td> -->
+					<div style="font-size: 12px;text-align: right;padding-right: 5px;color: #678197;">
 <%
-/*
-		if(StringUtils.isBlank(pickInfo.getString("userNm"))) {
-			out.print("익명");
-		} else {
-			out.print(pickInfo.getString("userNm")+"("+pickInfo.getString("userId")+")");
-		}
-*/
-%>
-<!-- 				</td> -->
-				<td>
-					<%
 					if(StringUtils.equals(DateUtil.getToday("yyyy-MM-dd"), pickInfo.getString("regDt"))) {
 						out.print(pickInfo.getString("regTm"));	
 					} else {
 						out.print(DateUtil.getToday("MM-dd"));	
 					}
+%>
+					</div>
+				</td>
+				<td style="line-height: 1.6em;font-size: 13px;">
+				<%=pickInfo.getInt("viewCnt") %><br/>				
+<%
+// 					if(StringUtils.equals(DateUtil.getToday("yyyy-MM-dd"), pickInfo.getString("regDt"))) {
+// 						out.print(pickInfo.getString("regTm"));	
+// 					} else {
+// 						out.print(DateUtil.getToday("MM-dd"));	
+// 					}
 %>
 				</td>
 			</tr>
@@ -114,6 +126,11 @@
 %>
 					</td>
 				</tr>
+				<tr>
+					<td colspan="6" style="padding-right: 10px;">
+					<div style="text-align: right;"><a href="<%=request.getContextPath() %>gameDetailList.do" style="font-size:15px;color:#595959;line-height: 1.8em;padding-left: 10px;">픽올리기</a></div>
+					</td>
+				</tr>				
 			</tbody>
 		  </table>
 		  </div>

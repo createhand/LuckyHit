@@ -283,7 +283,11 @@ public class UserController extends AbstractController {
     	String errMsg = null;
     	int result = 0;
     	try {
-    			result = userService.insertReply(map);
+			//픽내용
+	    	String replyContent = map.getString("replyContent");
+	    	replyContent = replyContent.replace("\r\n","<br/>");
+	    	map.set("replyContent", replyContent);
+    		result = userService.insertReply(map);
     	} catch(Exception e) {
     		errMsg = e.getMessage();
     	}

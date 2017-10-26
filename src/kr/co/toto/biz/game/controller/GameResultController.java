@@ -128,6 +128,9 @@ public class GameResultController extends AbstractController {
     	
         try {
         	
+        	//조회 수 증가
+        	gameService.updatePickViewCnt(map);
+        	
         	//공개픽만 조회
         	map.put("pubYn", "0");
         	
@@ -182,7 +185,8 @@ public class GameResultController extends AbstractController {
         	System.out.println(e);
         	errMsg.add(e.toString());
         }
-    	
+        
+        model.addAttribute("params", map);
         model.addAttribute("replyList", replyList);
     	model.addAttribute("selectGameInfo", selectGameInfo);
         model.addAttribute("selectedGame", selectedGame);

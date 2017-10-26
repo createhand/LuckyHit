@@ -505,6 +505,19 @@ public class GameService {
     }
     
     
+    /**
+     * 게임픽 입력
+     * 
+     * @param 
+     * @return
+     * @throws BizException
+     * @throws Exception
+     */ 
+    public int updatePickViewCnt(TAData params) throws Exception {
+    	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
+    	int result = dao.update("GAME_PICK_MT.updatePickViewCnt", params);
+    	return result;
+    }
     
     /**
      * 게임픽 입력

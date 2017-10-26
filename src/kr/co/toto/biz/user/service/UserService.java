@@ -67,7 +67,7 @@ public class UserService {
      */ 
     public List<TAData> selectReply(TAData params) throws Exception {
     	IBatisDAO dao = (IBatisDAO)BeanFinder.getBean(IBatisDAOImpl.class);
-    	return (List<TAData>)dao.select("REPLY.select", params);
+    	return (List<TAData>)dao.selectList("REPLY.select", params);
     }
     
     /**

@@ -89,6 +89,16 @@ ORDER BY GM_TURN DESC, GM_POST_NO DESC
 </select>
 
 
+<insert id="updatePickViewCnt" parameterClass="HashMap">
+	UPDATE
+		T_INFO_GAME_PICK
+	SET
+		VIEW_CNT = VIEW_CNT + 1
+	WHERE
+		GM_CD = #gmCd#
+		AND GM_POST_NO = #gmPostNo#
+</insert>
+
 <insert id="insertPick" parameterClass="HashMap">
 INSERT INTO 
 	T_INFO_GAME_PICK

@@ -87,6 +87,7 @@ function checkPick() {
 	}
 	
 	if(confirm("픽을 등록하시겠습니까?")) {
+		document.frm.action = "/gamePicking.do";
 		document.frm.submit();
 	}
 }

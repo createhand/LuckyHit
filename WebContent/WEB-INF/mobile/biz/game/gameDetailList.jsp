@@ -96,7 +96,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 			</table>
 			</form>
 			
-			<form name="frm" action="/gamePicking.do" method="post">
+			<form name="frm" method="post" onsubmit="checkPick();return false;">
 			<table id="mcTbl" class="common">
 			<tbody>
 <%
@@ -350,7 +350,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 							</table>							
 						</div>
 					</td>
-					<td>상대<br/>홈,원정</td>
+					<td>상대<br/>경기</td>
 					<td>
 						<a href="javascript:layer_popup('#layerPopup','matchListAgainst<%=mr.getInt("gameListNo") %>')" style="font-size: 13px;color:#678197;">
 						<%if(awayAgainstResult.getString("resultStr").length() >= 1) { %>
@@ -617,18 +617,22 @@ function layer_popup(el, dataId) {
 		</td>
 	</tr>
 	<tr>
-<%
-	if(StringUtils.isNotBlank(userId)) {
-%>
 		<td class="result" style="height:40px;font-size:15px; background-color:white; color: #595959;" onclick="checkPick();"><gm id="totalPickCnt">0</gm>조합 픽올리기</td>
-		<td class="result" style="font-size:15px; background-color:white; color: #595959;"><input type="checkbox"  name="pubYnChk" id="pubYnChk"/> 비공개픽</td>
-<%		
+		<td class="result" style="font-size:15px; background-color:white; color: #595959;">
+<%
+	String msg = "";
+	if(nowLogin) {
+%>
+		<input type="checkbox" name="pubYnChk" id="pubYnChk"/> 비공개픽
+<%	
 	} else {
 %>
-		<td class="result" style="height:40px;font-size:15px; background-color:white; color: #595959;" onclick="checkPick();" colspan="2"><gm id="totalPickCnt">0</gm>조합 픽올리기</td>
-<%
+		<a href="javascript:alert('로그인해야만 비공개픽을 등록하실 수 있습니다.')" style="font-size:15px;color:#595959;">비공개픽</a>
+		
+<%		
 	}
-%>					
+%>		
+		</td>
 	</tr>
   </table>
   </nav>
