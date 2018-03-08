@@ -50,6 +50,7 @@
 <option value="eredivisie">에레디비지에</option>
 </select>
 <select name="seasonKey" id="seasonKey">
+<option value="2018">2018</option>
 <option value="20172018">2017~2018</option>
 <option value="20162017">2016~2017</option>
 <option value="20152016">2015~2016</option>
