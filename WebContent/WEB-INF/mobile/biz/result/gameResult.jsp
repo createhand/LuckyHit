@@ -84,7 +84,7 @@
 					if(StringUtils.equals(DateUtil.getToday("yyyy-MM-dd"), pickInfo.getString("regDt"))) {
 						out.print(pickInfo.getString("regTm"));	
 					} else {
-						out.print(DateUtil.getToday("MM-dd"));	
+						out.print(pickInfo.getString("regDt"));	
 					}
 %>
 					</div>

@@ -141,8 +141,11 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		
 		//*********** 시즌성적 ***********//
 		TAData homeTeamSeasonInfo = (TAData)mr.get("homeTeamSeasonInfo");
+		if(homeTeamSeasonInfo == null) homeTeamSeasonInfo = new TAData();
+		homeTeamSeasonInfo.setNullToInitialize(true);
 		TAData awayTeamSeasonInfo = (TAData)mr.get("awayTeamSeasonInfo");
-		
+		if(awayTeamSeasonInfo == null) awayTeamSeasonInfo = new TAData(true);
+		awayTeamSeasonInfo.setNullToInitialize(true);
 		//*********** 이변경기 ***********//
 		List<TAData> homeTeamAmzaingList = (List<TAData>)mr.get("homeTeamAmzaingList"); 
 		List<TAData> awayTeamAmzaingList = (List<TAData>)mr.get("awayTeamAmzaingList");
@@ -302,6 +305,12 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						</a>
 					</td>
 				</tr>
+				
+				
+				
+				<%
+				if(homeAgainstResult != null || awayAgainstResult != null) {
+				%>
 				<tr id="mcAgainstHomeAway<%=mr.getInt("gameListNo") %>" >
 					<td>
 						<a href="javascript:layer_popup('#layerPopup','matchListAgainst<%=mr.getInt("gameListNo") %>')" style="font-size: 13px;color:#678197;">
@@ -313,8 +322,13 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						</a>
 						<div id="matchListAgainst<%=mr.getInt("gameListNo") %>" style="display: none;">
 							<%
-								homeResultPopupObj = getPopupHtml((List<TAData>)homeAgainstResult.get("matchList"), mr.getString("homeTeamCode"));
-								awayResultPopupObj = getPopupHtml((List<TAData>)awayAgainstResult.get("matchList"), mr.getString("awayTeamCode"));
+								if(homeAgainstResult != null) {
+									homeResultPopupObj = getPopupHtml((List<TAData>)homeAgainstResult.get("matchList"), mr.getString("homeTeamCode"));
+								}
+								
+								if(awayAgainstResult != null) {
+									awayResultPopupObj = getPopupHtml((List<TAData>)awayAgainstResult.get("matchList"), mr.getString("awayTeamCode"));
+								}
 							%>						
 							<!-- 최근 상대전적 6경기 상세정보 -->
 							<table class="common">
@@ -353,7 +367,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 					<td>상대<br/>경기</td>
 					<td>
 						<a href="javascript:layer_popup('#layerPopup','matchListAgainst<%=mr.getInt("gameListNo") %>')" style="font-size: 13px;color:#678197;">
-						<%if(awayAgainstResult.getString("resultStr").length() >= 1) { %>
+						<%if(awayAgainstResult != null && awayAgainstResult.getString("resultStr").length() >= 1) { %>
 						<span style="font-size: 13px;color:black;"><%=awayAgainstResult.getString("resultStr").substring(0, 1)%></span><%=awayAgainstResult.getString("resultStr").substring(1)%>
 						<%} %>
 						<br/>
@@ -421,6 +435,13 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 						</a>
 					</td>
 				</tr>
+				
+				<%
+				}
+				%>
+				
+				
+				
 				<tr id="mcNews<%=mr.getInt("gameListNo") %>" >
 				
 						<%
