@@ -33,6 +33,9 @@
 				<div style="text-align: right;"><a href="gameResult.do?pageNo=<%=params.getString("pageNo") %>" style="font-size:15px;color:#595959;line-height: 1.8em;padding-right: 10px;">목록보기</a></div>
 				</td>
 			</tr>
+		  	<tr>
+		  		<th colspan="6" style="color: TOMATO;">등록시간 : <%=selectGameInfo.get("regDt") %> <%=selectGameInfo.get("regTm") %></th>
+		  	</tr>			
 			<tr>
 				<td colspan="6">
 					<div class="content_list"><p style="text-align: left;font-size:18px;line-height:1.6em;color:#595959;"><%=selectGameInfo.get("gmPostTitle") %></p></div>
@@ -48,9 +51,9 @@
 					<div class="content_list"><p style="text-align: left;font-size:14px;line-height:1.3em"><%=selectGameInfo.get("gmPostContent") %></p><br/></div>
 				</td>
 			</tr>		  	
-		  	<tr>
-		  		<th colspan="6" style="color: TOMATO;">등록시간 : <%=selectGameInfo.get("regDt") %> <%=selectGameInfo.get("regTm") %></th>
-		  	</tr>
+<%
+	if(selectedGame.size() > 0) {
+%>		  	
 			<tr>
 				<th>번호</th>
 				<th>홈</th>
@@ -63,32 +66,32 @@
 			<tbody>
 				<tr>
 <%
-	double accCnt = 0;
-	for(int i=0;i<selectedGame.size();i++) {
-		
-		TAData obj = selectedGame.get(i);
-		
-		//예상 결과
-		String expResult = obj.getString("expResult");
-		//경기 결과
-		String mcResult = "";
-		//경기 종료여부
-		String matchEnd = obj.getString("matchEnd");
-		
-		String result = "예정";
-		String csStyle = "normal";
-		if(StringUtils.equals(matchEnd, DomainConst.YES)) {
+		double accCnt = 0;
+		for(int i=0;i<selectedGame.size();i++) {
 			
-			 mcResult = obj.getString("matchResult").toString();
-			 
-			if(expResult.indexOf(mcResult) > -1) {
-				accCnt++;
-				result = "적중";
-				csStyle = "result";
-			} else {
-				result = "미적중";
+			TAData obj = selectedGame.get(i);
+			
+			//예상 결과
+			String expResult = obj.getString("expResult");
+			//경기 결과
+			String mcResult = "";
+			//경기 종료여부
+			String matchEnd = obj.getString("matchEnd");
+			
+			String result = "예정";
+			String csStyle = "normal";
+			if(StringUtils.equals(matchEnd, DomainConst.YES)) {
+				
+				 mcResult = obj.getString("matchResult").toString();
+				 
+				if(expResult.indexOf(mcResult) > -1) {
+					accCnt++;
+					result = "적중";
+					csStyle = "result";
+				} else {
+					result = "미적중";
+				}
 			}
-		}		
 %>
 			<tr>
 				<td><%=obj.getString("gmListNo") %></td>
@@ -99,11 +102,16 @@
 				<td class="<%=csStyle%>"><%=result%></td>
 			</tr>
 <%		
-	}	
+		}	
 %>
 			<tr>
 				<td colspan="6"><span id="common">적중수 : <font color='red'><%=accCnt%>/14</font> / 적중률 : <font color='red'><%=Math.ceil((accCnt/14)*100) %>%</font></span></td>	
 			</tr>
+<%
+	}
+%>			
+			
+			
 			<tr>
 				<td colspan="6" style="background-color: #678197;color:white;">
 				댓글[<%=replyList.size() %>]
