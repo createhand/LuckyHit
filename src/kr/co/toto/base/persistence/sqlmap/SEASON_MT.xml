@@ -38,7 +38,7 @@ INSERT INTO T_INFO_TEAM_SEASON
 		SN_CD, 
 		LG_CD, 
 		TM_CD,
-		RANK, 
+		RANKING, 
 		GAME, 
 		WIN, 
 		DRAW, 
@@ -63,7 +63,7 @@ INSERT INTO T_INFO_TEAM_SEASON
 	)
 	ON DUPLICATE KEY
 	UPDATE 
-		RANK = #rank#,
+		RANKING = #rank#,
 		GAME = #game#,
 		WIN = #win#,
 		DRAW = #draw#,
@@ -102,7 +102,7 @@ SET
 	<isNotEmpty property="pts" prepend=",">
 	PTS =  $pts$
 	</isNotEmpty>
-	RANK = $rank$
+	RANKING = $rank$
 WHERE 
 	SN_CD = #snCd#
 	AND LG_CD =#lgCd#
