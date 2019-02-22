@@ -175,7 +175,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 				<tr id="gm<%=mr.getInt("gameListNo") %>" class="off" style="line-height: 1.7em;">
 					<td width="40%" class="clickOff" onclick="getSubGameList(this, '<%=mr.getInt("gameListNo") %>', 'W')" style="color:#595959;">
 						<img src="<%=mr.getString("homeTeamImg") %>" width="70" height="70" alt="<%=mr.getString("homeTeamName") %>"/><br/>
-						<%=mr.getString("homeTeamName") %>(<%=homeTeamSeasonInfo.getInt("RANK") %>위)<br/>
+						<%=mr.getString("homeTeamName") %>(<%=homeTeamSeasonInfo.getInt("RANKING") %>위)<br/>
 						<div id="ratio"><fmt:formatNumber value="<%=winBet %>" pattern="###.##" /></div>
 					</td>
 					<td class="clickOff" onclick="getSubGameList(this, '<%=mr.getInt("gameListNo") %>', 'D')" style="color:#595959;">VS<br/>
@@ -183,7 +183,7 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 					</td>
 					<td width="40%" class="clickOff" onclick="getSubGameList(this, '<%=mr.getInt("gameListNo") %>', 'L')" style="color:#595959;">
 						<img src="<%=mr.getString("awayTeamImg") %>" width="70" height="70" alt="<%=mr.getString("awayTeamName") %>"/><br/>
-						<%=mr.getString("awayTeamName") %>(<%=awayTeamSeasonInfo.getInt("RANK") %>위)<br/>
+						<%=mr.getString("awayTeamName") %>(<%=awayTeamSeasonInfo.getInt("RANKING") %>위)<br/>
 						<div id="ratio"><fmt:formatNumber value="<%=loseBet %>" pattern="###.##" /></div>
 					</td>
 				</tr>
