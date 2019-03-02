@@ -1,0 +1,3 @@
+      <Context docBase="LuckyHit" path="/" reloadable="true" source="org.eclipse.jst.jee.server:LuckyHit">
+      	<Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="3000" name="maydayPool" password="qwaszx1@" type="javax.sql.DataSource" url="jdbc:mysql://createhand.asuscomm.com:3306/luckyhit?characterEncoding=UTF-8" username="luckyhit"/>
+      </Context>

@@ -40,6 +40,52 @@ public TAData getPopupHtml(List<TAData> matchList, String tmCd) {
 			draw = "class=\"win\"";
 			drawCnt++;
 		}
+		html.append("<span class='font13'>"+DateUtil.formatDateTime(matchInfo.getString("mcDate"), "yyyy-MM-dd")+"("+new BizUtil().getDayStr(matchInfo.getInt("mcDay"))+")</span><br/>");
+		if(StringUtils.isNotBlank(matchInfo.getString("BET_RT_WIN"))) {
+			html.append("<span "+win+" >"+matchInfo.getString("tmNameBetH")+"["+matchInfo.getString("scoreH")+"]["+matchInfo.getString("BET_RT_WIN")+"%]</span><br/>");
+			html.append("<span "+draw+" > VS ["+matchInfo.getString("BET_RT_DRAW")+"%] </span><br/>");
+			html.append("<span "+lose+" style='padding-top:30px;'>"+matchInfo.getString("tmNameBetA")+"["+matchInfo.getString("scoreA")+"]["+matchInfo.getString("BET_RT_LOSE")+"%]</span><br/>");
+		} else {
+			html.append("<span "+win+" style='font-size:13px;'>"+matchInfo.getString("tmNameBetH")+"["+matchInfo.getString("scoreH")+"]</span>");
+			html.append("<span "+draw+" style='font-size:13px;'> VS </span>");
+			html.append("<span "+lose+" style='font-size:13px;'>"+matchInfo.getString("tmNameBetA")+"["+matchInfo.getString("scoreA")+"]</span><br/>");
+		}
+	}
+	
+	rtnObj.set("html", html);
+	rtnObj.set("winCnt", winCnt);
+	rtnObj.set("drawCnt", drawCnt);
+	rtnObj.set("loseCnt", loseCnt);
+	
+	return rtnObj;
+}
+
+public TAData getAmazingPopupHtml(List<TAData> matchList, String tmCd) {
+	
+	TAData rtnObj = new TAData();
+	int winCnt = 0, drawCnt = 0, loseCnt = 0;
+	StringBuffer html = new StringBuffer();
+	
+	for(TAData matchInfo : matchList) {
+		String win=null, draw=null, lose=null;
+		if(StringUtils.equals(matchInfo.getString("mcResult"), "W")) {
+			win = "class=\"win\"";
+			if(StringUtils.equals(matchInfo.getString("tmCdH"), tmCd)) {
+				winCnt++;
+			} else {
+				loseCnt++;
+			}
+		} else if(StringUtils.equals(matchInfo.getString("mcResult"), "L")) {
+			lose = "class=\"win\"";
+			if(StringUtils.equals(matchInfo.getString("tmCdH"), tmCd)) {
+				loseCnt++;
+			} else {
+				winCnt++;
+			}
+		} else {
+			draw = "class=\"win\"";
+			drawCnt++;
+		}
 		html.append("<span'>"+DateUtil.formatDateTime(matchInfo.getString("mcDate"), "yyyy-MM-dd")+"("+new BizUtil().getDayStr(matchInfo.getInt("mcDay"))+")</span><br/>");
 		html.append("<span "+win+" style='font-size:13px;'>"+matchInfo.getString("tmNameBetH")+"["+matchInfo.getString("scoreH")+"]</span>");
 		html.append("<span "+draw+" style='font-size:13px;'> VS </span>");
@@ -53,7 +99,6 @@ public TAData getPopupHtml(List<TAData> matchList, String tmCd) {
 	
 	return rtnObj;
 }
-
 %>
 <%
 RecordService recordService = new RecordService();
@@ -124,6 +169,8 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		TAData homeAgainstResult = (TAData)homeTeamlatestInfo.get("homeAgainstResult");		
 		//최근 홈에서 상대경기(6경기)
 		TAData homeAgainstResultAtHome = (TAData)homeTeamlatestInfo.get("homeAgainstResultAtHome");		
+		//최근 역배경기(6경기)
+		TAData homeAmazingResult = (TAData)homeTeamlatestInfo.get("homeAmazingResult");
 		
 		
 		//*********** 어웨이팀 최근 경기 요약 ***********//
@@ -137,7 +184,8 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		TAData awayAgainstResult = (TAData)awayTeamlatestInfo.get("awayAgainstResult");		
 		//최근 홈에서 상대경기(6경기)
 		TAData awayAgainstResultAtHome = (TAData)awayTeamlatestInfo.get("awayAgainstResultAtHome");		
-		
+		//최근 역배경기(6경기)
+		TAData awayAmazingResult = (TAData)awayTeamlatestInfo.get("awayAmazingResult");
 		
 		//*********** 시즌성적 ***********//
 		TAData homeTeamSeasonInfo = (TAData)mr.get("homeTeamSeasonInfo");
@@ -146,9 +194,6 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 		TAData awayTeamSeasonInfo = (TAData)mr.get("awayTeamSeasonInfo");
 		if(awayTeamSeasonInfo == null) awayTeamSeasonInfo = new TAData(true);
 		awayTeamSeasonInfo.setNullToInitialize(true);
-		//*********** 이변경기 ***********//
-		List<TAData> homeTeamAmzaingList = (List<TAData>)mr.get("homeTeamAmzaingList"); 
-		List<TAData> awayTeamAmzaingList = (List<TAData>)mr.get("awayTeamAmzaingList");
 		
 		double winBet = (mr.getInt("winBetCnt")/totalBetCnt)*100;
 		double drawBet = (mr.getInt("drawBetCnt")/totalBetCnt)*100;
@@ -436,6 +481,66 @@ double totalBetCnt = (Double)request.getAttribute("totalBetCnt");
 					</td>
 				</tr>
 				
+				<tr id="teamAmazing<%=mr.getInt("gameListNo") %>" >
+					<td>
+						<a href="javascript:layer_popup('#layerPopup','teamAmazingList<%=mr.getInt("gameListNo") %>')" style="font-size: 13px;color:#678197;">
+						<%if(homeAmazingResult.getString("resultStr").length() >= 1) { %>
+						<span style="font-size: 13px;color:black;"><%=homeAmazingResult.getString("resultStr").substring(0, 1)%></span><%=homeAmazingResult.getString("resultStr").substring(1)%>
+						<%} %>
+						<br/>
+						득:<%=homeAmazingResult.getInt("getScore")%>/실:<%=homeAmazingResult.getInt("lostScore")%>
+						</a>
+						
+						<div id="teamAmazingList<%=mr.getInt("gameListNo") %>" style="display: none;">
+							<%
+								homeResultPopupObj = getPopupHtml((List<TAData>)homeAmazingResult.get("matchList"), mr.getString("homeTeamCode"));
+								awayResultPopupObj = getPopupHtml((List<TAData>)awayAmazingResult.get("matchList"), mr.getString("awayTeamCode"));
+							%>						
+							<!-- 최근 이변 6경기 상세정보 -->
+							<table class="common">
+								<tbody>
+								<tr>
+									<td colspan="2" style="background-color: #678197;color: white;">최근 이변 6경기</td>
+								</tr>
+								<tr>
+									<td width="50%"><%=mr.getString("homeTeamName") %></td>
+									<td width="50%"><%=mr.getString("awayTeamName") %></td>
+								</tr>
+								<tr>
+									<td style="font-size: 13px;line-height: 1.4em;text-align: left;padding-left: 10px;">
+									<%=homeResultPopupObj.get("html").toString() %>									
+									</td>
+									<td style="font-size: 13px;line-height: 1.4em;text-align: left;padding-left: 10px;">
+									<%=awayResultPopupObj.get("html").toString() %>
+									</td>
+								</tr>
+								<tr>
+									<td style="color:red;">
+										<%=homeResultPopupObj.getInt("winCnt") %>승 
+										<%=homeResultPopupObj.getInt("drawCnt") %>무 
+										<%=homeResultPopupObj.getInt("loseCnt") %>패
+									</td>
+									<td style="color:red;">
+										<%=awayResultPopupObj.getInt("winCnt") %>승 
+										<%=awayResultPopupObj.getInt("drawCnt") %>무 
+										<%=awayResultPopupObj.getInt("loseCnt") %>패
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>						
+					</td>
+					<td>이변<br/>경기</td>
+					<td>
+						<a href="javascript:layer_popup('#layerPopup','teamAmazingList<%=mr.getInt("gameListNo") %>')" style="font-size: 13px;color:#678197;">
+						<%if(awayAmazingResult.getString("resultStr").length() >= 1) { %>
+						<span style="font-size: 13px;color:black;"><%=awayAmazingResult.getString("resultStr").substring(0, 1)%></span><%=awayAmazingResult.getString("resultStr").substring(1)%>
+						<%} %>
+						<br/>
+						득:<%=awayAmazingResult.getInt("getScore")%>/실:<%=awayAmazingResult.getInt("lostScore")%>
+						</a>
+					</td>
+				</tr>				
 				<%
 				}
 				%>

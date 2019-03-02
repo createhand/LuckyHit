@@ -101,8 +101,8 @@ public class GameListController extends AbstractController {
 	    	}
 	    	
 	    	/*####################### 이변 경기 목록 #######################*/
-//	    	gameDetailInfo.set("homeTeamAmzaingList", service.selectAmazingList(gameDetailInfo.getString("homeTeamCode")));
-//	    	gameDetailInfo.set("awayTeamAmzaingList", service.selectAmazingList(gameDetailInfo.getString("awayTeamCode")));
+	    	List<TAData> homeTeamAmazingList = service.selectAmazingList(gameDetailInfo.getString("homeTeamCode"));
+	    	List<TAData> awayTeamAmazingList = service.selectAmazingList(gameDetailInfo.getString("awayTeamCode"));
 	    	
 	    	
 	    	/*####################### 최근 경기 조회 #######################*/
@@ -144,6 +144,8 @@ public class GameListController extends AbstractController {
 	    	TAData homeAgainstResult = service.getResultStr(gameDetailInfo.getString("homeTeamCode"), 0, againstLatestRecordList, 6);
 	    	//최근 홈에서 상대경기(6경기)
 	    	TAData homeAgainstResultAtHome = service.getResultStr(gameDetailInfo.getString("homeTeamCode"), 1, againstLatestRecordList, 6);
+	    	//최근 역배경기(6경기)
+	    	TAData homeAmazingResult = service.getResultStr(gameDetailInfo.getString("homeTeamCode"), 0, homeTeamAmazingList, 6);
 	    	
 	    	//홈팀 최근 경기 요약
 	    	TAData teamSummary = new TAData();
@@ -151,6 +153,7 @@ public class GameListController extends AbstractController {
 	    	teamSummary.set("homeTeamResultAtHome", homeTeamResultAtHome);
 	    	teamSummary.set("homeAgainstResult", homeAgainstResult);
 	    	teamSummary.set("homeAgainstResultAtHome", homeAgainstResultAtHome);
+	    	teamSummary.set("homeAmazingResult", homeAmazingResult);
 	    	gameDetailInfo.set("homeTeamlatestInfo", teamSummary);
 	    	
 	    	//최근 6경기 점수산출
@@ -185,6 +188,8 @@ public class GameListController extends AbstractController {
 	    	TAData awayAgainstResult = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 0, againstLatestRecordList, 6);
 	    	//최근 원정에서 상대경기(6경기)
 	    	TAData awayAgainstResultAtHome = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 2, againstLatestRecordList, 6);
+	    	//최근 역배경기(6경기)
+	    	TAData awayAmazingResult = service.getResultStr(gameDetailInfo.getString("awayTeamCode"), 0, awayTeamAmazingList, 6);
 	    	
 	    	//어웨이팀 최근 경기 요약
 	    	teamSummary = new TAData();
@@ -192,6 +197,7 @@ public class GameListController extends AbstractController {
 	    	teamSummary.set("awayTeamResultAtHome", awayTeamResultAtHome);
 	    	teamSummary.set("awayAgainstResult", awayAgainstResult);
 	    	teamSummary.set("awayAgainstResultAtHome", awayAgainstResultAtHome);
+	    	teamSummary.set("awayAmazingResult", awayAmazingResult);
 	    	gameDetailInfo.set("awayTeamlatestInfo", teamSummary);
 	    	
 	    	//최근 6경기 점수산출

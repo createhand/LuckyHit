@@ -4,7 +4,7 @@
 	
 <typeAlias alias="GameMt" type="kr.co.toto.base.persistence.domain.GameMt" />
 <typeAlias alias="tadata" type="kr.co.toto.comn.model.TAData" />
-	
+
 <select id="select" parameterClass="String" resultClass="GameMt" >
 select A.GM_CD as gmCd,
        A.GM_TYPE as gmType,

@@ -178,6 +178,69 @@ WHERE A.GM_CD = B.GM_CD
 
 <!-- 이변 경기 목록 -->
 <select id="selectAmazingList" parameterClass="String" resultClass="tadata" >
+SELECT 
+	T1.GM_CD,
+	T2.GM_END_DATE,
+	T2.GM_TURN,
+	MC_CD,
+	MC_DATE AS mcDate,
+	MC_DAY AS mcDay,
+	SCORE_H AS scoreH,
+	SCORE_A AS scoreA,
+	TM_CD_H as tmCdH,
+	TM_CD_A as tmCdA,	
+	(SELECT TM_NAME_BET FROM T_INFO_TEAM WHERE TM_CD = T1.TM_CD_H) AS tmNameBetH,
+	(SELECT TM_NAME_BET FROM T_INFO_TEAM WHERE TM_CD = T1.TM_CD_A) AS tmNameBetA,
+	MC_RESULT as mcResult,	
+	BET_RT_WIN,
+	BET_RT_DRAW,
+	BET_RT_LOSE
+FROM (
+	SELECT
+		A.GM_CD,
+		A.MC_CD,
+		B.MC_DATE,
+		B.MC_DAY,
+		B.MC_RESULT,
+		B.SCORE_H,
+		B.SCORE_A,
+		B.TM_CD_H,
+		B.TM_CD_A,
+		A.GM_RT_WIN,
+		A.GM_RT_DRAW,
+		A.GM_RT_LOSE,
+		(A.GM_RT_WIN + A.GM_RT_DRAW + A.GM_RT_LOSE) AS TOTAL_BET,
+		ROUND((A.GM_RT_WIN / (A.GM_RT_WIN + A.GM_RT_DRAW + A.GM_RT_LOSE)) * 100) AS BET_RT_WIN,
+		ROUND((A.GM_RT_DRAW / (A.GM_RT_WIN + A.GM_RT_DRAW + A.GM_RT_LOSE)) * 100) AS BET_RT_DRAW,
+		ROUND((A.GM_RT_LOSE / (A.GM_RT_WIN + A.GM_RT_DRAW + A.GM_RT_LOSE)) * 100) AS BET_RT_LOSE
+	FROM 
+		T_INFO_GAME_LIST A
+	LEFT OUTER JOIN 
+		T_INFO_MATCH_RECORD B ON A.MC_CD = B.MC_CD
+) T1
+LEFT OUTER JOIN
+	T_INFO_GAME T2 ON T1.GM_CD = T2.GM_CD
+WHERE 
+	GM_END = 'Y'
+	AND
+	(
+		(BET_RT_WIN >= 60 AND MC_RESULT != 'W')
+		OR
+		(BET_RT_DRAW >= 60 AND MC_RESULT != 'D')
+		OR
+		(BET_RT_LOSE >= 60 AND MC_RESULT != 'L')
+	)
+	AND 
+	(
+		TM_CD_H = #tmCd#
+		OR 
+		TM_CD_A = #tmCd#
+	)
+ORDER BY MC_DATE DESC
+</select>
+
+<!-- 
+<select id="selectAmazingList" parameterClass="String" resultClass="tadata" >
 	SELECT 
 		* 
 	FROM (
@@ -209,5 +272,6 @@ WHERE A.GM_CD = B.GM_CD
 	ORDER BY A.MC_DATE DESC
 	LIMIT 0, 5
 </select>
-
+ -->
+ 
 </sqlMap>
